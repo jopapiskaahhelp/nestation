@@ -1,6 +1,6 @@
 - type: satiation
   id: NormalSatiationHunger
-  baseChangeRate: -0.01666666666
+  baseChangeRate: -0.04166666665 # x2.5 faster (was -0.01666666666)
   maximumValue: 200
   thresholds:
     Overfed: 200
@@ -92,4 +92,4 @@
 - type: satiation
   id: DionaHunger
   parent: NormalSatiationHunger
-  baseChangeRate: -0.0083
+  baseChangeRate: -0.02075 # x2.5 faster (was -0.0083)

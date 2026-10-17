@@ -1,3 +1,4 @@
+# Nestation Anarhey CC BY-NC 3.0
 - type: job
   id: Captain
   name: job-name-captain
@@ -43,14 +44,8 @@
   id: CaptainGear
   equipment:
     shoes: ClothingShoesBootsLaceup
-    eyes: ClothingEyesGlassesCommand
-    gloves: ClothingHandsGlovesCaptain
     id: CaptainPDA
-    ears: ClothingHeadsetAltCommand
-  storage:
-    back:
-    - Flash
-    # - StationCharter
+    pocket1: FlashlightSeclite
 
 - type: chameleonOutfit
   id: CaptainChameleonOutfit

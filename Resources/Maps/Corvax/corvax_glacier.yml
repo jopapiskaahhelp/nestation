@@ -294,7 +294,6 @@ entities:
       minLightLevel: 0.5
       minLevel: '#333D80FF'
       maxLevel: '#6B75B3FF'
-      duration: 900
       clipLevel: '#E0C090FF'
     - type: ChunkContainer
       chunkEntities: []

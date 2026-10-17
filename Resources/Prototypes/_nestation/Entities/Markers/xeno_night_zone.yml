@@ -1,0 +1,20 @@
+# Nestation Anarhey CC BY-NC 3.0
+- type: entity
+  parent: MarkerBase
+  id: XenoNightSpawnZone
+  name: xeno night spawn zone
+  components:
+    - type: Sprite
+      layers:
+        - state: green
+    - type: XenoNightSpawner
+      radius: 8
+      spawnInterval: 300
+      maxAlive: 4
+      spawns:
+        MobXeno: 3
+        MobXenoDrone: 3
+        MobXenoRunner: 2
+        MobXenoPraetorian: 1.5
+        MobXenoRavager: 1.5
+        MobXenoQueen: 0.2

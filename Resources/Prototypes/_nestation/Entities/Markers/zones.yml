@@ -1,0 +1,63 @@
+# Nestation Anarhey CC BY-NC 3.0
+- type: entity
+  id: ZoneAreaMarkerBase
+  parent: MarkerBase
+  abstract: true
+  components:
+  - type: ZoneArea
+
+- type: entity
+  id: ZoneAreaMine
+  parent: ZoneAreaMarkerBase
+  components:
+  - type: ZoneArea
+    name: zone-name-mine
+
+- type: entity
+  id: ZoneAreaCity
+  parent: ZoneAreaMarkerBase
+  components:
+  - type: ZoneArea
+    name: zone-name-city
+
+- type: entity
+  id: ZoneAreaBunker
+  parent: ZoneAreaMarkerBase
+  components:
+  - type: ZoneArea
+    name: zone-name-bunker
+
+- type: entity
+  id: ZoneAreaVillage
+  parent: ZoneAreaMarkerBase
+  components:
+  - type: ZoneArea
+    name: zone-name-village
+
+- type: entity
+  id: ZoneAreaFactory
+  parent: ZoneAreaMarkerBase
+  components:
+  - type: ZoneArea
+    name: zone-name-factory
+
+- type: entity
+  id: ZoneAreaCityHall
+  parent: ZoneAreaMarkerBase
+  components:
+  - type: ZoneArea
+    name: zone-name-city-hall
+
+- type: entity
+  id: ZoneAreaPolice
+  parent: ZoneAreaMarkerBase
+  components:
+  - type: ZoneArea
+    name: zone-name-police
+
+- type: entity
+  id: ZoneAreaCave
+  parent: ZoneAreaMarkerBase
+  components:
+  - type: ZoneArea
+    name: zone-name-cave

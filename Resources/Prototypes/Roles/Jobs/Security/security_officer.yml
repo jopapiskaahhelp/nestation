@@ -1,3 +1,4 @@
+# Nestation Anarhey CC BY-NC 3.0
 - type: job
   id: SecurityOfficer
   name: job-name-security
@@ -15,12 +16,8 @@
   icon: "JobIconSecurityOfficer"
   supervisors: job-supervisors-hos
   guides: [ Security ] # TODO: should have a more specific guidebook page instead of using the department itself
-  access:
-  - Security
-  - Brig
-  - Maintenance
-  - External
-  - Cryogenics
+  accessGroups:
+  - AllAccess
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
@@ -28,13 +25,9 @@
 - type: startingGear
   id: SecurityOfficerGear
   equipment:
-    eyes: ClothingEyesGlassesSecurity
-    ears: ClothingHeadsetSecurity
-    pocket1: WeaponPistolMk58
-  storage:
-    back:
-    - Flash
-    - MagazinePistol
+    id: CaptainPDA
+    outerClothing: ClothingOuterArmorBasic
+    pocket1: FlashlightSeclite
 
 - type: chameleonOutfit
   id: SecurityOfficerChameleonOutfit

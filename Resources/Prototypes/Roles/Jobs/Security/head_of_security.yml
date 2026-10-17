@@ -1,3 +1,4 @@
+# Nestation Anarhey CC BY-NC 3.0
 - type: job
   id: HeadOfSecurity
   name: job-name-hos
@@ -24,18 +25,8 @@
   icon: "JobIconHeadOfSecurity"
   supervisors: job-supervisors-captain
   guides: [ Command ] # TODO: should have a more specific guidebook page instead of using the department itself
-  access:
-  - HeadOfSecurity
-  - Command
-  - Brig
-  - Security
-  - Armory
-  - Maintenance
-  - External
-  - Detective
-  - Cryogenics
-  - GenpopEnter
-  - GenpopLeave
+  accessGroups:
+  - AllAccess
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
@@ -46,15 +37,9 @@
 - type: startingGear
   id: HoSGear
   equipment:
-    eyes: ClothingEyesGlassesSecurity
-    id: HoSPDA
-    gloves: ClothingHandsGlovesCombat
-    ears: ClothingHeadsetAltSecurity
-    pocket1: WeaponPistolMk58
-  storage:
-    back:
-    - Flash
-    - MagazinePistol
+    id: CaptainPDA
+    outerClothing: ClothingOuterArmorBasic
+    pocket1: FlashlightSeclite
 
 - type: chameleonOutfit
   id: HeadOfSecurityChameleonOutfit

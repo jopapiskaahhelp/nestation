@@ -1,18 +1,9 @@
+# Nestation Anarhey CC BY-NC 3.0
 # Command
 - type: roleLoadout
   id: JobCaptain
   groups:
-  - Inventory # Corvax-Loadouts
-  - CaptainHead
-  - CaptainNeck
   - CaptainJumpsuit
-  - CaptainBackpack
-  - CaptainOuterClothing
-  - AssistiveItems
-  - Survival
-  - Trinkets
-  #- CaptainJobTrinkets
-  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobHeadOfPersonnel
@@ -46,21 +37,8 @@
 - type: roleLoadout
   id: JobPassenger
   groups:
-  - Inventory # Corvax-Loadouts
-  - GroupTankHarness
   - PassengerJumpsuit
-  - CommonBackpack
-  - PassengerNeck
-  - PassengerFace
-  - PassengerGloves
-  - PassengerOuterClothing
   - PassengerShoes
-  - Glasses
-  - AssistiveItems
-  - Survival
-  - Trinkets
-  #- PassengerJobTrinkets
-  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobBartender
@@ -417,19 +395,8 @@
 - type: roleLoadout
   id: JobHeadOfSecurity
   groups:
-  - Inventory # Corvax-Loadouts
-  - HeadofSecurityHead
-  - HeadofSecurityNeck
   - HeadofSecurityJumpsuit
-  - SecurityBackpack
-  - SecurityBelt
-  - HeadofSecurityOuterClothing
   - SecurityShoes
-  - AssistiveItems
-  - SurvivalSecurity
-  - Trinkets
-  - HeadofSecurityJobTrinkets
-  - GroupSpeciesBreathToolSecurity
 
 - type: roleLoadout
   id: JobWarden
@@ -450,19 +417,8 @@
 - type: roleLoadout
   id: JobSecurityOfficer
   groups:
-  - Inventory # Corvax-Loadouts
-  - SecurityHead
   - SecurityJumpsuit
-  - SecurityBackpack
-  - SecurityOuterClothing
   - SecurityShoes
-  - SecurityPDA
-  - SecurityBelt
-  - AssistiveItems
-  - SurvivalSecurity
-  - Trinkets
-  - SecurityJobTrinkets
-  - GroupSpeciesBreathToolSecurity
 
 - type: roleLoadout
   id: JobDetective

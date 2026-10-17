@@ -1,54 +1,674 @@
+# SPDX-FileCopyrightText: 2019 DamianX <DamianX@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2019 Ephememory <yetanotherscuffed@gmail.com>
+# SPDX-FileCopyrightText: 2019 Injazz <43905364+Injazz@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2019 Pieter-Jan Briers <pieterjan.briers@gmail.com>
+# SPDX-FileCopyrightText: 2019 PrPleGoo <felix.leeuwen@gmail.com>
+# SPDX-FileCopyrightText: 2020 DrSmugleaf <DrSmugleaf@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2020 FL-OZ <58238103+FL-OZ@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2020 FL-OZ <anotherscuffed@gmail.com>
+# SPDX-FileCopyrightText: 2020 Git-Nivrak <59925169+Git-Nivrak@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2020 Paul Ritter <ritter.paul1@googlemail.com>
+# SPDX-FileCopyrightText: 2020 Rohesie <rohesie@gmail.com>
+# SPDX-FileCopyrightText: 2020 Swept <jamesurquhartwebb@gmail.com>
+# SPDX-FileCopyrightText: 2020 Víctor Aguilera Puerto <6766154+Zumorica@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2021 AJCM-git <60196617+AJCM-git@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2021 AndrewUnderscore <71723495+UnderscoreX5@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2021 Galactic Chimp <GalacticChimpanzee@gmail.com>
+# SPDX-FileCopyrightText: 2021 Swept <sweptwastaken@protonmail.com>
+# SPDX-FileCopyrightText: 2021 UnderscoreX5 <andrea.bisesti66@protonmail.com>
+# SPDX-FileCopyrightText: 2021 Vera Aguilera Puerto <6766154+Zumorica@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2021 Vera Aguilera Puerto <gradientvera@outlook.com>
+# SPDX-FileCopyrightText: 2022 Moony <moonheart08@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2022 Moony <moony@hellomouse.net>
+# SPDX-FileCopyrightText: 2022 Morb <14136326+Morb0@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2022 Pancake <Pangogie@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2022 Peptide90 <78795277+Peptide90@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2022 Rane <60792108+Elijahrane@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2022 brainfood1183 <113240905+brainfood1183@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2022 moonheart08 <moonheart08@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2022 wrexbe <81056464+wrexbe@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2023 20kdc <asdd2808@gmail.com>
+# SPDX-FileCopyrightText: 2023 I.K <45953835+notquitehadouken@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2023 Kara <lunarautomaton6@gmail.com>
+# SPDX-FileCopyrightText: 2023 Kit0vras <123590995+Kit0vras@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2023 NULL882 <104377798+NULL882@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2023 PixelTK <85175107+PixelTheKermit@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2023 Vordenburg <114301317+Vordenburg@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2023 metalgearsloth <metalgearsloth@gmail.com>
+# SPDX-FileCopyrightText: 2023 potato1234_x <79580518+potato1234x@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 AJCM <AJCM@tutanota.com>
+# SPDX-FileCopyrightText: 2024 Aiden <aiden@djkraz.com>
+# SPDX-FileCopyrightText: 2024 Alex Evgrashin <aevgrashin@yandex.ru>
+# SPDX-FileCopyrightText: 2024 Alex Pavlenko <diraven@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Alice "Arimah" Heurlin <30327355+arimah@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 ArkiveDev <95712736+ArkiveDev@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Boaz1111 <149967078+Boaz1111@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Brandon Hu <103440971+Brandon-Huu@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Chief-Engineer <119664036+Chief-Engineer@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Cojoke <83733158+Cojoke-dot@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Doomsdrayk <robotdoughnut@comcast.net>
+# SPDX-FileCopyrightText: 2024 DrEnzyme <DrEnzyme@gmail.com>
+# SPDX-FileCopyrightText: 2024 DrSmugleaf <10968691+DrSmugleaf@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Ed <96445749+TheShuEd@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Elysium206 <151651971+Elysium206@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Emisse <99158783+Emisse@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Eoin Mcloughlin <helloworld@eoinrul.es>
+# SPDX-FileCopyrightText: 2024 Errant <35878406+Errant-4@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Fishbait <Fishbait@git.ml>
+# SPDX-FileCopyrightText: 2024 Flareguy <78941145+Flareguy@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Floofi <126319569+Shadowtheprotogen546@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 FoxxoTrystan <45297731+FoxxoTrystan@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Ghagliiarghii <68826635+Ghagliiarghii@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 HS <81934438+HolySSSS@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 IProduceWidgets <107586145+IProduceWidgets@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 K-Dynamic <20566341+K-Dynamic@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Kevin Zheng <kevinz5000@gmail.com>
+# SPDX-FileCopyrightText: 2024 Ko4ergaPunk <62609550+Ko4ergaPunk@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Leon Friedrich <60421075+ElectroJr@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 MACMAN2003 <macman2003c@gmail.com>
+# SPDX-FileCopyrightText: 2024 MetalSage <74924875+MetalSage@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 MetalSage <metalsage.official@gmail.com>
+# SPDX-FileCopyrightText: 2024 MilenVolf <63782763+MilenVolf@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Mr. 27 <45323883+Dutch-VanDerLinde@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 MureixloI <132683811+MureixloI@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Nemanja <98561806+EmoGarbage404@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 NotSoDamn <75203942+NotSoDana@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 PJBot <pieterjan.briers+bot@gmail.com>
+# SPDX-FileCopyrightText: 2024 Partmedia <kevinz5000@gmail.com>
+# SPDX-FileCopyrightText: 2024 Pieter-Jan Briers <pieterjan.briers+git@gmail.com>
+# SPDX-FileCopyrightText: 2024 Piras314 <p1r4s@proton.me>
+# SPDX-FileCopyrightText: 2024 Plykiya <58439124+Plykiya@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Ps3Moira <113228053+ps3moira@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Pspritechologist <naaronn@gmail.com>
+# SPDX-FileCopyrightText: 2024 Redfire1331 <125223432+Redfire1331@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Rouge2t7 <81053047+Sarahon@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 TakoDragon <69509841+BackeTako@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Tayrtahn <tayrtahn@gmail.com>
+# SPDX-FileCopyrightText: 2024 Truoizys <153248924+Truoizys@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 TsjipTsjip <19798667+TsjipTsjip@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Ubaser <134914314+UbaserB@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 VMSolidus <evilexecutive@gmail.com>
+# SPDX-FileCopyrightText: 2024 Vasilis <vasilis@pikachu.systems>
+# SPDX-FileCopyrightText: 2024 WarMechanic <69510347+WarMechanic@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 beck-thompson <107373427+beck-thompson@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 deathride58 <deathride58@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 deltanedas <39013340+deltanedas@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 deltanedas <@deltanedas:kde.org>
+# SPDX-FileCopyrightText: 2024 eoineoineoin <github@eoinrul.es>
+# SPDX-FileCopyrightText: 2024 github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 ike709 <ike709@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 lzk <124214523+lzk228@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 marbow <152051971+marboww@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 metalgearsloth <31366439+metalgearsloth@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 metalgearsloth <comedian_vs_clown@hotmail.com>
+# SPDX-FileCopyrightText: 2024 mhamster <81412348+mhamsterr@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 neutrino <67447925+neutrino-laser@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 nikthechampiongr <32041239+nikthechampiongr@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 osjarw <62134478+osjarw@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 plykiya <plykiya@protonmail.com>
+# SPDX-FileCopyrightText: 2024 redfire1331 <Redfire1331@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 slarticodefast <161409025+slarticodefast@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 themias <89101928+themias@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2024 Арт <123451459+JustArt1m@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2025 Aiden <28298836+Aidenkrz@users.noreply.github.com>
+
+
+# SPDX-FileCopyrightText: 2025 GoobBot <uristmchands@proton.me>
+# SPDX-FileCopyrightText: 2025 Princess Cheeseballs <66055347+Pronana@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2025 SX-7 <sn1.test.preria.2002@gmail.com>
+# SPDX-FileCopyrightText: 2025 Southbridge <7013162+southbridge-fur@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2025 Thomas <87614336+Aeshus@users.noreply.github.com>
+
+# SPDX-FileCopyrightText: 2025 Weax <59857479+ImWeax@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2025 cohanna <conornhanna@gmail.com>
+
+# SPDX-FileCopyrightText: 2025 kosticia <kosticia46@gmail.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 - type: tile
-  abstract: true
   id: BaseStationTile
+  abstract: true
   isSubfloor: false
   deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepFloor
   heatCapacity: 10000
-  weather: false
+  tileRipResistance: 4500 # Goob
   baseTurf: Plating
   baseWhitelist:
+  - PlatingBrass
   - FloorAsteroidIronsand
   - FloorAsteroidSand
   - FloorAsteroidSandBorderless
   - FloorAsteroidIronsandBorderless
+  - FloorAsteroidSandRedBorderless
   - PlatingAsteroid
   - PlatingSnow
   - FloorPlanetDirt
   - FloorDesert
+  - FloorLowDesert
   - FloorPlanetGrass
   - FloorSnow
   - FloorDirt
   - PlatingRCD
   - FloorHullReinforced
-  materialComposition:
-    Steel: 100 # 0.5 for lattice, 0.25 for plating, 0.25 for tile
+  - FloorBasaltLavaland
+  - FloorPlanetAsh
+  - FloorPlanetGrassLight
+
+- type: tile
+  id: FloorSteel
+  parent: BaseStationTile
+  name: tiles-steel-floor
+  sprite: /Textures/Tiles/steel.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemSteel
 
 - type: tile
   id: FloorSteelCheckerLight
   parent: BaseStationTile
   name: tiles-steel-floor-checker-light
-  sprite: /Textures/Tiles/Checker/checker-light.png
+  sprite: /Textures/Tiles/cafeteria.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   itemDrop: FloorTileItemSteelCheckerLight
 
 - type: tile
   id: FloorSteelCheckerDark
   parent: BaseStationTile
   name: tiles-steel-floor-checker-dark
-  sprite: /Textures/Tiles/Checker/checker-dark.png
+  sprite: /Textures/Tiles/checker_dark.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   itemDrop: FloorTileItemSteelCheckerDark
+
+- type: tile
+  id: FloorSteelMini
+  parent: BaseStationTile
+  name: tiles-steel-floor-mini
+  sprite: /Textures/Tiles/steel_mini.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemSteelMini
+
+- type: tile
+  id: FloorSteelPavement
+  parent: BaseStationTile
+  name: tiles-steel-floor-pavement
+  sprite: /Textures/Tiles/steel_pavement.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemSteelPavement
+
+- type: tile
+  id: FloorSteelDiagonal
+  parent: BaseStationTile
+  name: tiles-steel-floor-diagonal
+  sprite: /Textures/Tiles/steel_diagonal.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemSteelDiagonal
+
+- type: tile
+  id: FloorSteelOffset
+  parent: BaseStationTile
+  name: tiles-steel-floor-offset
+  sprite: /Textures/Tiles/steel_offset.png
+  itemDrop: FloorTileItemSteelOffset
+
+- type: tile
+  id: FloorSteelMono
+  parent: BaseStationTile
+  name: tiles-steel-floor-mono
+  sprite: /Textures/Tiles/steel_mono.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemSteelMono
+
+- type: tile
+  id: FloorSteelPavementVertical
+  parent: BaseStationTile
+  name: tiles-steel-floor-pavement-vertical
+  sprite: /Textures/Tiles/steel_pavement_vertical.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemSteelPavementVertical
+
+- type: tile
+  id: FloorSteelHerringbone
+  parent: BaseStationTile
+  name: tiles-steel-floor-herringbone
+  sprite: /Textures/Tiles/steel_herringbone.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemSteelHerringbone
+
+- type: tile
+  id: FloorSteelDiagonalMini
+  parent: BaseStationTile
+  name: tiles-steel-floor-diagonal-mini
+  sprite: /Textures/Tiles/steel_diagonal_mini.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemSteelDiagonalMini
+
+- type: tile
+  id: FloorBrassFilled
+  parent: BaseStationTile
+  name: tiles-brass-floor-filled
+  sprite: /Textures/Tiles/Misc/clockwork/clockwork_floor_filled.png
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemBrassFilled
+
+- type: tile
+  id: FloorBrassReebe
+  parent: BaseStationTile
+  name: tiles-brass-floor-reebe
+  sprite: /Textures/Tiles/Misc/clockwork/reebe.png
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemBrassReebe
+
+- type: tile
+  id: FloorPlastic
+  parent: BaseStationTile
+  name: tiles-plastic-floor
+  sprite: /Textures/Tiles/plastic.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemSteel
+  tileRipResistance: 80 # Goob
 
 - type: tile
   id: FloorWood
   parent: BaseStationTile
   name: tiles-wood
-  sprite: /Textures/Tiles/Wood/wood.png
+  sprite: /Textures/Tiles/wood.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   footstepSounds:
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
   itemDrop: FloorTileItemWood
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorWhite
+  parent: BaseStationTile
+  name: tiles-white-floor
+  sprite: /Textures/Tiles/white.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemWhite
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorWhiteMini
+  parent: BaseStationTile
+  name: tiles-white-floor-mini
+  sprite: /Textures/Tiles/white_mini.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemWhiteMini
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorWhitePavement
+  parent: BaseStationTile
+  name: tiles-white-floor-pavement
+  sprite: /Textures/Tiles/white_pavement.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemWhitePavement
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorWhiteDiagonal
+  parent: BaseStationTile
+  name: tiles-white-floor-diagonal
+  sprite: /Textures/Tiles/white_diagonal.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemWhiteDiagonal
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorWhiteOffset
+  parent: BaseStationTile
+  name: tiles-white-floor-offset
+  sprite: /Textures/Tiles/white_offset.png
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemWhiteOffset
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorWhiteMono
+  parent: BaseStationTile
+  name: tiles-white-floor-mono
+  sprite: /Textures/Tiles/white_mono.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemWhiteMono
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorWhitePavementVertical
+  parent: BaseStationTile
+  name: tiles-white-floor-pavement-vertical
+  sprite: /Textures/Tiles/white_pavement_vertical.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemWhitePavementVertical
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorWhiteHerringbone
+  parent: BaseStationTile
+  name: tiles-white-floor-herringbone
+  sprite: /Textures/Tiles/white_herringbone.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemWhiteHerringbone
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorWhiteDiagonalMini
+  parent: BaseStationTile
+  name: tiles-white-floor-diagonal-mini
+  sprite: /Textures/Tiles/white_diagonal_mini.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemWhiteDiagonalMini
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorWhitePlastic
+  parent: BaseStationTile
+  name: tiles-plastic-white-floor
+  sprite: /Textures/Tiles/white_plastic.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemWhite
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorDark
+  parent: BaseStationTile
+  name: tiles-dark-floor
+  sprite: /Textures/Tiles/dark.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemDark
+  tileRipResistance: 100 # Goob
+- type: tile
+  id: FloorDarkMini
+  parent: BaseStationTile
+  name: tiles-dark-floor-mini
+  sprite: /Textures/Tiles/dark_mini.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemDarkMini
+
+- type: tile
+  id: FloorDarkPavement
+  parent: BaseStationTile
+  name: tiles-dark-floor-pavement
+  sprite: /Textures/Tiles/dark_pavement.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemDarkPavement
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorDarkDiagonal
+  parent: BaseStationTile
+  name: tiles-dark-floor-diagonal
+  sprite: /Textures/Tiles/dark_diagonal.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemDarkDiagonal
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorDarkOffset
+  parent: BaseStationTile
+  name: tiles-dark-floor-offset
+  sprite: /Textures/Tiles/dark_offset.png
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemDarkOffset
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorDarkMono
+  parent: BaseStationTile
+  name: tiles-dark-floor-mono
+  sprite: /Textures/Tiles/dark_mono.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemDarkMono
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorDarkPavementVertical
+  parent: BaseStationTile
+  name: tiles-dark-floor-pavement-vertical
+  sprite: /Textures/Tiles/dark_pavement_vertical.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemDarkPavementVertical
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorDarkHerringbone
+  parent: BaseStationTile
+  name: tiles-dark-floor-herringbone
+  sprite: /Textures/Tiles/dark_herringbone.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemDarkHerringbone
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorDarkDiagonalMini
+  parent: BaseStationTile
+  name: tiles-dark-floor-diagonal-mini
+  sprite: /Textures/Tiles/dark_diagonal_mini.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemDarkDiagonalMini
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorDarkPlastic
+  parent: BaseStationTile
+  name: tiles-plastic-dark-floor
+  sprite: /Textures/Tiles/dark_plastic.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemDark
+  tileRipResistance: 50 # Goob
+
+- type: tile
+  id: FloorTechMaint
+  parent: BaseStationTile
+  name: tiles-techmaint-floor
+  sprite: /Textures/Tiles/tech_maint.png
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemTechmaint
+  tileRipResistance: 250 # Goob
+
+- type: tile
+  id: FloorTechMaintDark
+  parent: BaseStationTile
+  name: tiles-techmaint-floor-dark
+  sprite: /Textures/Tiles/tech_maint_dark.png
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemTechmaintDark
+  tileRipResistance: 250 # Goob
 
 - type: tile
   id: FloorReinforced
@@ -58,6 +678,17 @@
   footstepSounds:
     collection: FootstepHull
   itemDrop: PartRodMetal1
+  reinforced: true # Goob
+
+- type: tile
+  id: FloorMono
+  parent: BaseStationTile
+  name: tiles-mono-floor
+  sprite: /Textures/Tiles/mono.png
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemMono
+  tileRipResistance: 100 # Goob
 
 - type: tile
   id: FloorLino
@@ -67,6 +698,31 @@
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemLino
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorSteelDirty
+  parent: BaseStationTile
+  name: tiles-dirty-steel-floor
+  sprite: /Textures/Tiles/steel_dirty.png
+  #variants: 4 # Trauma - no
+  ##placementVariants:
+  #- 1.0
+  #- 1.0
+  #- 1.0
+  #- 1.0
+  footstepSounds:
+    collection: FootstepPlating
+  itemDrop: FloorTileItemDirty
+
+- type: tile
+  id: FloorElevatorShaft
+  parent: BaseStationTile
+  name: tiles-elevator-shaft
+  sprite: /Textures/Tiles/elevator_shaft.png
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemElevatorShaft
 
 - type: tile
   id: FloorMetalDiamond
@@ -78,6 +734,16 @@
   itemDrop: FloorTileItemMetalDiamond
 
 - type: tile
+  id: FloorRockVault
+  parent: BaseStationTile
+  name: tiles-rock-floor
+  sprite: /Textures/Tiles/rock_vault.png
+  footstepSounds:
+    collection: FootstepAsteroid
+  itemDrop: FloorTileItemRockVault
+  tileRipResistance: 400 # Goob
+
+- type: tile
   id: FloorBlue
   parent: BaseStationTile
   name: tiles-blue-tile
@@ -85,13 +751,50 @@
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemBlue
+  tileRipResistance: 50 # Goob
 
 - type: tile
   id: FloorSteelLime
   parent: BaseStationTile
   name: tiles-lime-floor
   sprite: /Textures/Tiles/lime.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   itemDrop: FloorTileItemLime
+
+- type: tile
+  id: FloorMining
+  parent: BaseStationTile
+  name: tiles-mining-tile
+  sprite: /Textures/Tiles/mining_floor.png
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemMining
+  tileRipResistance: 250 # Goob
+
+- type: tile
+  id: FloorMiningDark
+  parent: BaseStationTile
+  name: tiles-mining-dark-tile
+  sprite: /Textures/Tiles/mining_floor_dark.png
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemMiningDark
+  tileRipResistance: 250 # Goob
+
+- type: tile
+  id: FloorMiningLight
+  parent: BaseStationTile
+  name: tiles-mining-light-tile
+  sprite: /Textures/Tiles/mining_floor_light.png
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemMiningLight
+  tileRipResistance: 250 # Goob
 
 # Departmental
 - type: tile
@@ -102,45 +805,233 @@
   footstepSounds:
     collection: FootstepHull
   itemDrop: FloorTileItemFreezer
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorShowroom
+  parent: BaseStationTile
+  name: tiles-showroom-floor
+  sprite: /Textures/Tiles/showroom.png
+  itemDrop: FloorTileItemShowroom
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorHydro
+  parent: BaseStationTile
+  name: tiles-hydro-floor
+  sprite: /Textures/Tiles/hydro.png
+  itemDrop: FloorTileItemHydro
+  tileRipResistance: 50 # Goob
 
 - type: tile
   id: FloorBar
   parent: BaseStationTile
   name: tiles-bar-floor
-  sprite: /Textures/Tiles/Checker/checker-bar.png
+  sprite: /Textures/Tiles/bar.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   itemDrop: FloorTileItemBar
+  tileRipResistance: 100 # Goob
 
 - type: tile
   id: FloorClown
   parent: BaseStationTile
   name: tiles-clown-floor
-  sprite: /Textures/Tiles/Checker/checker-clown.png
+  sprite: /Textures/Tiles/clown.png
   itemDrop: FloorTileItemClown
+  tileRipResistance: 50 # Goob
 
 - type: tile
   id: FloorMime
   parent: BaseStationTile
   name: tiles-mime-floor
-  sprite: /Textures/Tiles/Checker/checker-mime.png
+  sprite: /Textures/Tiles/mime.png
   itemDrop: FloorTileItemMime
+  tileRipResistance: 50 # Goob
 
 - type: tile
   id: FloorKitchen
   parent: BaseStationTile
   name: tiles-kitchen-floor
-  sprite: /Textures/Tiles/Checker/checker-kitchen.png
+  sprite: /Textures/Tiles/kitchen.png
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemKitchen
+  tileRipResistance: 50 # Goob
 
 - type: tile
   id: FloorLaundry
   parent: BaseStationTile
   name: tiles-laundry-floor
-  sprite: /Textures/Tiles/Checker/checker-laundry.png
+  sprite: /Textures/Tiles/laundry.png
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemLaundry
+  tileRipResistance: 50 # Goob
+
+- type: tile
+  id: FloorSteelDamaged
+  parent: BaseStationTile
+  name: tiles-steel-floor
+  sprite: /Textures/Tiles/steel_damaged.png
+  variants: 5
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemSteel #This should probably be made null when it becomes possible to make it such, in SS13 prying destroyed tiles wouldn't give you anything.
+  tileRipResistance: 175 # Goob
+
+# Concrete
+- type: tile
+  id: FloorConcrete
+  parent: BaseStationTile
+  name: tiles-concrete-tile
+  sprite: /Textures/Tiles/Planet/Concrete/concrete.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemConcrete
+  tileRipResistance: 300 # Goob
+
+- type: tile
+  id: FloorConcreteMono
+  parent: BaseStationTile
+  name: tiles-concrete-slab
+  sprite: /Textures/Tiles/Planet/Concrete/concrete_mono.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemConcreteMono
+  tileRipResistance: 300 # Goob
+
+- type: tile
+  id: FloorConcreteSmooth
+  parent: BaseStationTile
+  name: tiles-concrete-smooth
+  sprite: /Textures/Tiles/Planet/Concrete/concrete_smooth.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemConcreteSmooth
+  tileRipResistance: 300 # Goob
+
+- type: tile
+  id: FloorGrayConcrete
+  parent: BaseStationTile
+  name: tiles-gray-concrete-tile
+  sprite: /Textures/Tiles/Planet/Concrete/grayconcrete.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemGrayConcrete
+  tileRipResistance: 300 # Goob
+
+- type: tile
+  id: FloorGrayConcreteMono
+  parent: BaseStationTile
+  name: tiles-gray-concrete-slab
+  sprite: /Textures/Tiles/Planet/Concrete/grayconcrete_mono.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemGrayConcreteMono
+  tileRipResistance: 300 # Goob
+
+- type: tile
+  id: FloorGrayConcreteSmooth
+  parent: BaseStationTile
+  name: tiles-gray-concrete-smooth
+  sprite: /Textures/Tiles/Planet/Concrete/grayconcrete_smooth.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemGrayConcreteSmooth
+  tileRipResistance: 300 # Goob
+
+- type: tile
+  id: FloorOldConcrete
+  parent: BaseStationTile
+  name: tiles-old-concrete-tile
+  sprite: /Textures/Tiles/Planet/Concrete/oldconcrete.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemOldConcrete
+  tileRipResistance: 300 # Goob
+
+- type: tile
+  id: FloorOldConcreteMono
+  parent: BaseStationTile
+  name: tiles-old-concrete-slab
+  sprite: /Textures/Tiles/Planet/Concrete/oldconcrete_mono.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemOldConcreteMono
+  tileRipResistance: 300 # Goob
+
+- type: tile
+  id: FloorOldConcreteSmooth
+  parent: BaseStationTile
+  name: tiles-old-concrete-smooth
+  sprite: /Textures/Tiles/Planet/Concrete/oldconcrete_smooth.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemOldConcreteSmooth
+  tileRipResistance: 300 # Goob
 
 # Carpets (non smoothing)
 - type: tile
@@ -154,6 +1045,20 @@
     collection: BarestepCarpet
   friction: 1.25
   itemDrop: FloorTileItemArcadeBlue
+  tileRipResistance: 75 # Goob
+
+- type: tile
+  id: FloorArcadeBlue2
+  parent: BaseStationTile
+  name: tiles-blue-arcade-floor
+  sprite: /Textures/Tiles/arcadeblue2.png
+  footstepSounds:
+    collection: FootstepCarpet
+  barestepSounds:
+    collection: BarestepCarpet
+  friction: 1.25
+  itemDrop: FloorTileItemArcadeBlue2
+  tileRipResistance: 75 # Goob
 
 - type: tile
   id: FloorArcadeRed
@@ -166,6 +1071,20 @@
     collection: BarestepCarpet
   friction: 1.25
   itemDrop: FloorTileItemArcadeRed
+  tileRipResistance: 75 # Goob
+
+- type: tile
+  id: FloorEighties
+  parent: BaseStationTile
+  name: tiles-eighties-floor
+  sprite: /Textures/Tiles/eighties.png
+  footstepSounds:
+    collection: FootstepCarpet
+  barestepSounds:
+    collection: BarestepCarpet
+  friction: 1.25
+  itemDrop: FloorTileItemEighties
+  tileRipResistance: 75 # Goob
 
 - type: tile
   id: FloorCarpetClown
@@ -178,6 +1097,7 @@
     collection: BarestepCarpet
   friction: 1.25
   itemDrop: FloorTileItemCarpetClown
+  tileRipResistance: 75 # Goob
 
 - type: tile
   id: FloorCarpetOffice
@@ -190,6 +1110,7 @@
     collection: BarestepCarpet
   friction: 1.25
   itemDrop: FloorTileItemCarpetOffice
+  tileRipResistance: 75 # Goob
 
 - type: tile
   id: FloorBoxing
@@ -197,8 +1118,14 @@
   name: tiles-boxing-ring-floor
   sprite: /Textures/Tiles/boxing.png
   variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   friction: 1.25
   itemDrop: FloorTileItemBoxing
+  tileRipResistance: 50 # Goob
 
 - type: tile
   id: FloorGym
@@ -206,8 +1133,107 @@
   name: tiles-gym-floor
   sprite: /Textures/Tiles/gym.png
   variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   friction: 1.25
   itemDrop: FloorTileItemGym
+  tileRipResistance: 50 # Goob
+
+# Shuttle
+- type: tile
+  id: FloorShuttleWhite
+  parent: BaseStationTile
+  name: tiles-white-shuttle-floor
+  sprite: /Textures/Tiles/shuttlewhite.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemShuttleWhite
+
+- type: tile
+  id: FloorShuttleGrey
+  parent: BaseStationTile
+  name: tiles-grey-shuttle-floor
+  sprite: /Textures/Tiles/shuttlegrey.png
+  #variants: 4 # Trauma - no
+  #placementVariants:
+  #- 1.0
+  #- 1.0
+  #- 1.0
+  #- 1.0
+  itemDrop: FloorTileItemShuttleGrey
+
+- type: tile
+  id: FloorShuttleBlack
+  parent: BaseStationTile
+  name: tiles-black-shuttle-floor
+  sprite: /Textures/Tiles/shuttleblack.png
+  #variants: 4 # Trauma - no
+  #placementVariants:
+  #- 1.0
+  #- 1.0
+  #- 1.0
+  #- 1.0
+  itemDrop: FloorTileItemShuttleBlack
+
+- type: tile
+  id: FloorShuttleBlue
+  parent: BaseStationTile
+  name: tiles-blue-shuttle-floor
+  sprite: /Textures/Tiles/shuttleblue.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemShuttleBlue
+
+- type: tile
+  id: FloorShuttleOrange
+  parent: BaseStationTile
+  name: tiles-orange-shuttle-floor
+  sprite: /Textures/Tiles/shuttleorange.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemShuttleOrange
+
+- type: tile
+  id: FloorShuttlePurple
+  parent: BaseStationTile
+  name: tiles-purple-shuttle-floor
+  sprite: /Textures/Tiles/shuttlepurple.png
+  #variants: 4 # Trauma - no
+  #placementVariants:
+  #- 1.0
+  #- 1.0
+  #- 1.0
+  #- 1.0
+  itemDrop: FloorTileItemShuttlePurple
+
+- type: tile
+  id: FloorShuttleRed
+  parent: BaseStationTile
+  name: tiles-red-shuttle-floor
+  sprite: /Textures/Tiles/shuttlered.png
+  #variants: 4 # Trauma - no
+  #placementVariants:
+  #- 1.0
+  #- 1.0
+  #- 1.0
+  #- 1.0
+  itemDrop: FloorTileItemShuttleRed
+
 
 # Materials
 - type: tile
@@ -218,6 +1244,7 @@
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemGold
+  tileRipResistance: 600 # Goob
 
 - type: tile
   id: FloorSilver
@@ -227,31 +1254,432 @@
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemSilver
+  tileRipResistance: 500 # Goob
+
+- type: tile
+  id: FloorGlass
+  parent: BaseStationTile
+  name: tiles-glass-floor
+  sprite: /Textures/Tiles/glass.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: SheetGlass1
+  tileRipResistance: 150 # Goob
+
+- type: tile
+  id: FloorRGlass
+  parent: BaseStationTile
+  name: tiles-reinforced-glass-floor
+  sprite: /Textures/Tiles/rglass.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: SheetRGlass1
+  tileRipResistance: 175 # Goob
 
 - type: tile
   id: FloorMetalFoam
   parent: BaseStationTile
   name: tiles-metal-foam
   sprite: /Textures/Tiles/foammetal.png
+  variants: 1
+  placementVariants:
+  - 1.0
   footstepSounds:
     collection: FootstepHull
   itemDrop: SheetSteel1
+
+# Circuits
+- type: tile
+  id: FloorGreenCircuit
+  parent: BaseStationTile
+  name: tiles-green-circuit-floor
+  sprite: /Textures/Tiles/green_circuit.png
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemGCircuit
+  tileRipResistance: 225 # Goob
+
+- type: tile
+  id: FloorBlueCircuit
+  parent: BaseStationTile
+  name: tiles-blue-circuit-floor
+  sprite: /Textures/Tiles/blue_circuit.png
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemBCircuit
+  tileRipResistance: 225 # Goob
+
+- type: tile
+  id: FloorRedCircuit
+  parent: BaseStationTile
+  name: tiles-red-circuit-floor
+  sprite: /Textures/Tiles/red_circuit.png
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemRCircuit
+
+# Terrain
+- type: tile
+  id: FloorAsphalt
+  name: tiles-asphalt
+  sprite: /Textures/Tiles/Planet/Concrete/asphalt.png
+  variants: 10
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: FloorDirt
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepTile
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorGrass
+  name: tiles-planet-grass-floor
+  sprite: /Textures/Tiles/grass.png
+  baseTurf: FloorDirt
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepGrass
+  itemDrop: FloorTileItemGrass
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorGrassJungle
+  name: tiles-jungle-grass-floor
+  sprite: /Textures/Tiles/grassjungle.png
+  baseTurf: FloorDirt
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepGrass
+  itemDrop: FloorTileItemGrassJungle
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorGrassDark
+  name: tiles-dark-grass-floor
+  sprite: /Textures/Tiles/grassdark.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: FloorDirt
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepGrass
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorGrassLight
+  name: tiles-light-grass-floor
+  sprite: /Textures/Tiles/grasslight.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: FloorDirt
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepGrass
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorDirt
+  name: tiles-dirt-floor
+  sprite: /Textures/Tiles/dirt.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+# Asteroid
+
+- type: tile
+  id: FloorAsteroidSandBorderless
+  name: tiles-asteroid-sand-borderless
+  sprite: /Textures/Tiles/Asteroid/asteroid.png
+  variants: 13
+  placementVariants:
+    - 0.8
+    - 0.0166 #Should be roughly 20%.... I think??? I don't know dude, I'm just a YAML monkey.
+    - 0.0166
+    - 0.0166
+    - 0.0166
+    - 0.0166
+    - 0.0166
+    - 0.0166
+    - 0.0166
+    - 0.0166
+    - 0.0166
+    - 0.0116
+    - 0.0116
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorAsteroidSand
+  parent: FloorAsteroidSandBorderless
+  name: tiles-asteroid-sand
+  edgeSpritePriority: 1
+  edgeSprites:
+    SouthEast: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    NorthEast: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    NorthWest: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    SouthWest: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    South: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    East: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    North: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    West: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+
+- type: tile
+  id: FloorAsteroidSandDugBorderless
+  name: tiles-asteroid-sand-borderless
+  sprite: /Textures/Tiles/Asteroid/asteroid_dug.png
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorAsteroidSandDug
+  parent: FloorAsteroidSandDugBorderless
+  name: tiles-asteroid-sand
+  edgeSpritePriority: 1
+  edgeSprites:
+    SouthEast: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    NorthEast: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    NorthWest: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    SouthWest: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    South: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    East: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    North: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    West: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+
+- type: tile
+  id: FloorAsteroidSandRedBorderless
+  name: tiles-asteroid-sand-borderless
+  sprite: /Textures/Tiles/Asteroid/asteroid_red.png
+  variants: 13
+  placementVariants:
+  - 0.8
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0166
+  - 0.0116
+  - 0.0116
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorAsteroidSandRed
+  parent: FloorAsteroidSandRedBorderless
+  name: tiles-asteroid-sand
+  edgeSpritePriority: 1
+  edgeSprites:
+    SouthEast: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    NorthEast: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    NorthWest: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    SouthWest: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    South: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    East: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    North: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    West: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+
+- type: tile
+  id: FloorAsteroidTile
+  name: tiles-asteroid-tile
+  sprite: /Textures/Tiles/Asteroid/asteroid_tile.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorAsteroidIronsandBorderless
+  name: tiles-asteroid-ironsand-borderless
+  sprite: /Textures/Tiles/Asteroid/ironsand.png
+  variants: 15
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorAsteroidIronsand
+  parent: FloorAsteroidIronsandBorderless
+  name: tiles-asteroid-ironsand
+  edgeSpritePriority: 1
+  edgeSprites:
+    SouthEast: /Textures/Tiles/Asteroid/iron_single_edge.png
+    NorthEast: /Textures/Tiles/Asteroid/iron_single_edge.png
+    NorthWest: /Textures/Tiles/Asteroid/iron_single_edge.png
+    SouthWest: /Textures/Tiles/Asteroid/iron_single_edge.png
+    South: /Textures/Tiles/Asteroid/iron_double_edge.png
+    East: /Textures/Tiles/Asteroid/iron_double_edge.png
+    North: /Textures/Tiles/Asteroid/iron_double_edge.png
+    West: /Textures/Tiles/Asteroid/iron_double_edge.png
+
+- type: tile
+  id: FloorAsteroidSandUnvariantizedBorderless
+  name: tiles-asteroid-sand-borderless
+  sprite: /Textures/Tiles/Asteroid/asteroid0.png
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorAsteroidSandUnvariantized
+  parent: FloorAsteroidSandUnvariantizedBorderless
+  name: tiles-asteroid-sand
+  edgeSpritePriority: 1
+  edgeSprites:
+    SouthEast: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    NorthEast: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    NorthWest: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    SouthWest: /Textures/Tiles/Asteroid/asteroid_single_edge.png
+    South: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    East: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    North: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+    West: /Textures/Tiles/Asteroid/asteroid_double_edge.png
+
+- type: tile
+  id: FloorAsteroidIronsandUnvariantizedBorderless
+  name: tiles-asteroid-ironsand-borderless
+  sprite: /Textures/Tiles/Asteroid/ironsand0.png
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorAsteroidIronsandUnvariantized
+  parent: FloorAsteroidIronsandUnvariantizedBorderless
+  name: tiles-asteroid-ironsand
+  edgeSpritePriority: 1
+  edgeSprites:
+    SouthEast: /Textures/Tiles/Asteroid/iron_single_edge.png
+    NorthEast: /Textures/Tiles/Asteroid/iron_single_edge.png
+    NorthWest: /Textures/Tiles/Asteroid/iron_single_edge.png
+    SouthWest: /Textures/Tiles/Asteroid/iron_single_edge.png
+    South: /Textures/Tiles/Asteroid/iron_double_edge.png
+    East: /Textures/Tiles/Asteroid/iron_double_edge.png
+    North: /Textures/Tiles/Asteroid/iron_double_edge.png
+    West: /Textures/Tiles/Asteroid/iron_double_edge.png
 
 # Caves
 - type: tile
   id: FloorCave
   name: tiles-cave
-  sprite: /Textures/Tiles/Cave/cave.png
-  edgeSpritePriority: 5
-  edgeSprites:
-    SouthEast: /Textures/Tiles/Cave/single_edge_SE.png
-    NorthEast: /Textures/Tiles/Cave/single_edge_NE.png
-    NorthWest: /Textures/Tiles/Cave/single_edge_NW.png
-    SouthWest: /Textures/Tiles/Cave/single_edge_SW.png
-    South: /Textures/Tiles/Cave/double_edge_S.png
-    East: /Textures/Tiles/Cave/double_edge_E.png
-    North: /Textures/Tiles/Cave/double_edge_N.png
-    West: /Textures/Tiles/Cave/double_edge_W.png
+  sprite: /Textures/Tiles/cave.png
+  variants: 7
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorCaveDrought
+  name: tiles-cave-drought
+  sprite: /Textures/Tiles/cavedrought.png
+  variants: 8
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   baseTurf: Space
   isSubfloor: true
   footstepSounds:
@@ -263,80 +1691,108 @@
   parent: BaseStationTile
   name: tiles-flesh-floor
   sprite: /Textures/Tiles/meat.png
-  variants: 2
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   footstepSounds:
     collection: FootstepBlood
   itemDrop: FloorTileItemFlesh
-  friction: 0.25 #slippy
+  #friction: 0.25 # Goob - not slippy
+  tileRipResistance: 80 # Goob
+
+- type: tile
+  id: FloorTechMaint2
+  parent: BaseStationTile
+  name: tiles-techmaint2-floor
+  sprite: /Textures/Tiles/steel_maint.png
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemSteelMaint
+  tileRipResistance: 225 # Goob
 
 - type: tile
   id: FloorTechMaint3
   parent: BaseStationTile
   name: tiles-techmaint3-floor
-  sprite: /Textures/Tiles/grating-maint.png
+  sprite: /Textures/Tiles/grating_maint.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   footstepSounds:
     collection: FootstepHull
   itemDrop: FloorTileItemGratingMaint
+  tileRipResistance: 225 # Goob
 
 - type: tile
   id: FloorWoodTile
   parent: BaseStationTile
   name: tiles-wood2
-  sprite: /Textures/Tiles/Wood/wood-tile.png
+  sprite: /Textures/Tiles/wood_tile.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   footstepSounds:
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
   itemDrop: FloorTileItemWoodPattern
+  tileRipResistance: 75 # Goob
 
 - type: tile
   id: FloorBrokenWood
   parent: BaseStationTile
   name: tiles-wood3
-  sprite: /Textures/Tiles/Wood/wood-broken.png
+  sprite: /Textures/Tiles/wood_broken.png
   variants: 7
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   footstepSounds:
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
   itemDrop: MaterialWoodPlank1
-
-- type: tile
-  id: FloorWoodLarge
-  parent: BaseStationTile
-  name: tiles-wood-large
-  sprite: /Textures/Tiles/Wood/wood-large.png
-  footstepSounds:
-    collection: FootstepWood
-  barestepSounds:
-    collection: BarestepWood
-  itemDrop: FloorTileItemWoodLarge
+  tileRipResistance: 60 # Goob
 
 - type: tile
   id: FloorWebTile
   parent: BaseStationTile
   name: tiles-web
-  sprite: /Textures/Tiles/web.png
+  sprite: /Textures/Tiles/Misc/Web/web_tile.png
   footstepSounds:
     collection: FootstepCarpet
   barestepSounds:
     collection: BarestepCarpet
   itemDrop: FloorTileItemWeb
+  tileRipResistance: 30 # Goob
 
 - type: tile
   id: FloorChromite
   name: tiles-chromite
-  sprite: /Textures/Tiles/Chromite/chromite.png
-  edgeSpritePriority: 5
-  edgeSprites:
-    SouthEast: /Textures/Tiles/Chromite/single_edge_SE.png
-    NorthEast: /Textures/Tiles/Chromite/single_edge_NE.png
-    NorthWest: /Textures/Tiles/Chromite/single_edge_NW.png
-    SouthWest: /Textures/Tiles/Chromite/single_edge_SW.png
-    South: /Textures/Tiles/Chromite/double_edge_S.png
-    East: /Textures/Tiles/Chromite/double_edge_E.png
-    North: /Textures/Tiles/Chromite/double_edge_N.png
-    West: /Textures/Tiles/Chromite/double_edge_W.png
+  sprite: /Textures/Tiles/chromite.png
+  variants: 7
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   baseTurf: Space
   isSubfloor: true
   footstepSounds:
@@ -352,6 +1808,7 @@
   footstepSounds:
     collection: FootstepHull
   itemDrop: FloorTileItemSteel #probably should not be normally obtainable, but the game shits itself and dies when you try to put null here
+  tileRipResistance: 500 # Goob
 
 - type: tile
   id: FloorReinforcedHardened
@@ -362,3 +1819,300 @@
     collection: FootstepHull
   itemDrop: PartRodMetal1 #same case as FloorHull
 
+# Faux sci tiles
+
+# Grass
+- type: tile
+  id: FloorAstroGrass
+  parent: BaseStationTile
+  name: tiles-astro-grass
+  sprite: /Textures/Tiles/Planet/Grass/grass.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  edgeSpritePriority: 1
+  edgeSprites:
+    SouthEast: /Textures/Tiles/Planet/Grass/single_edge.png
+    NorthEast: /Textures/Tiles/Planet/Grass/single_edge.png
+    NorthWest: /Textures/Tiles/Planet/Grass/single_edge.png
+    SouthWest: /Textures/Tiles/Planet/Grass/single_edge.png
+    South: /Textures/Tiles/Planet/Grass/double_edge.png
+    East: /Textures/Tiles/Planet/Grass/double_edge.png
+    North: /Textures/Tiles/Planet/Grass/double_edge.png
+    West: /Textures/Tiles/Planet/Grass/double_edge.png
+  deconstructTools: [ Cutting ]
+  footstepSounds:
+    collection: FootstepGrass
+  itemDrop: FloorTileItemAstroGrass
+  tileRipResistance: 50 # Goob
+
+- type: tile
+  id: FloorMowedAstroGrass
+  parent: [ BaseStationTile, FloorGrass ]
+  name: tiles-mowed-astro-grass
+  isSubfloor: false
+  deconstructTools: [ Cutting ]
+  itemDrop: FloorTileItemMowedAstroGrass
+  tileRipResistance: 50
+
+- type: tile
+  id: FloorJungleAstroGrass
+  parent: [ BaseStationTile, FloorGrassJungle ]
+  name: tiles-jungle-astro-grass
+  isSubfloor: false
+  deconstructTools: [ Cutting ]
+  itemDrop: FloorTileItemJungleAstroGrass
+  tileRipResistance: 50
+
+- type: tile
+  parent: FloorGrassDark
+  id: FloorDarkAstroGrass
+  name: tiles-dark-astro-grass
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Cutting ]
+  itemDrop: FloorTileItemDarkAstroGrass
+
+- type: tile
+  parent: FloorGrassLight
+  id: FloorLightAstroGrass
+  name: tiles-light-astro-grass
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Cutting ]
+  itemDrop: FloorTileItemLightAstroGrass
+
+# Ice
+- type: tile
+  id: FloorAstroIce
+  parent: BaseStationTile
+  name: tiles-astro-ice
+  sprite: /Textures/Tiles/Planet/Snow/ice.png
+  friction: 0.05
+  mobFriction: 0.05
+  mobAcceleration: 0.1
+  itemDrop: FloorTileItemAstroIce
+  tileRipResistance: 50
+
+- type: tile
+  id: FloorAstroSnow
+  parent: [ BaseStationTile, FloorSnow ]
+  name: tiles-astro-snow
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  itemDrop: FloorTileItemAstroSnow
+  tileRipResistance: 50
+
+# Asteroid Sand
+- type: tile
+  id: FloorAstroAsteroidSand
+  parent: [ BaseStationTile, FloorAsteroidSand ]
+  name: tiles-astro-asteroid-sand
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  itemDrop: FloorTileItemAstroAsteroidSand
+  weather: false
+
+- type: tile
+  id: FloorAstroAsteroidSandBorderless
+  parent: [ BaseStationTile, FloorAsteroidSandBorderless ]
+  name: tiles-astro-asteroid-sand-borderless
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  itemDrop: FloorTileItemAstroAsteroidSand
+  weather: false
+
+- type: tile
+  parent: FloorDesert
+  id: FloorDesertAstroSand
+  name: tiles-desert-astro-sand
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  itemDrop: FloorTileItemDesertAstroSand
+  weather: false
+
+- type: tile
+  id: FloorAstroIronsand
+  name: tiles-astro-ironsand
+  parent: FloorAsteroidIronsand
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  itemDrop: FloorTileItemAstroIronsand
+  weather: false
+
+- type: tile
+  id: FloorAstroIronsandBorderless
+  name: tiles-astro-ironsand-borderless
+  parent: FloorAsteroidIronsandBorderless
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  itemDrop: FloorTileItemAstroIronsandBorderless
+  weather: false
+
+- type: tile
+  id: FloorWoodLarge
+  parent: BaseStationTile
+  name: tiles-wood-large
+  sprite: /Textures/Tiles/wood_large.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepWood
+  barestepSounds:
+    collection: BarestepWood
+  itemDrop: FloorTileItemWoodLarge
+  tileRipResistance: 100 # Goob
+
+- type: tile
+  id: FloorXenoborg
+  name: tiles-xenoborg-floor
+  sprite: /Textures/Tiles/exoborg.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemXenoborg
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorXeno
+  parent: BaseStationTile
+  name: tiles-xeno-floor
+  sprite: /Textures/Tiles/xeno_flooring.png
+  footstepSounds:
+    collection: FootstepBlood
+  itemDrop: FloorTileItemXeno
+
+- type: tile
+  id: FloorXenoSteel
+  parent: BaseStationTile
+  name: tiles-xeno-steel
+  sprite: /Textures/Tiles/xeno_steel.png
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemXenoSteel
+  allowRotationMirror: true
+
+- type: tile
+  id: FloorXenoSteelCorner
+  parent: BaseStationTile
+  name: tiles-xeno-steel-corner
+  sprite: /Textures/Tiles/xeno_steel_corner.png
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemXenoSteelCorner
+  allowRotationMirror: true
+
+- type: tile
+  id: FloorDarkSquiggly
+  parent: BaseStationTile
+  name: tiles-dark-squiggly
+  sprite: /Textures/Tiles/dark_squiggly.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  itemDrop: FloorTileItemDarkSquiggly
+  allowRotationMirror: true
+
+- type: tile
+  id: FloorXenoMaint
+  parent: BaseStationTile
+  name: tiles-xeno-maint
+  sprite: /Textures/Tiles/xeno_maint.png
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemXenoMaint
+
+- type: tile
+  id: FloorWhiteMarble
+  parent: BaseStationTile
+  name: tiles-white-marble
+  sprite: /Textures/Tiles/white_marble.png
+  variants: 8
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  friction: 0.8
+  itemDrop: FloorTileItemWhiteMarble
+
+- type: tile
+  id: FloorDarkMarble
+  parent: BaseStationTile
+  name: tiles-dark-marble
+  sprite: /Textures/Tiles/dark_marble.png
+  variants: 8
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  friction: 0.8
+  itemDrop: FloorTileItemDarkMarble
+
+- type: tile
+  id: FloorPlasmaMarble
+  parent: BaseStationTile
+  name: tiles-plasma-marble
+  sprite: /Textures/Tiles/plasmarble.png
+  variants: 8
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  friction: 0.8
+  itemDrop: FloorTileItemPlasmaMarble
+
+- type: tile
+  id: FloorUraniumMarble
+  parent: BaseStationTile
+  name: tiles-uranium-marble
+  sprite: /Textures/Tiles/uranium_marble.png
+  variants: 8
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  footstepSounds:
+    collection: FootstepTile
+  friction: 0.8
+  itemDrop: FloorTileItemUraniumMarble

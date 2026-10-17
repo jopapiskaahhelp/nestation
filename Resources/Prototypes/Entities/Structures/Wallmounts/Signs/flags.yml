@@ -52,3 +52,22 @@
   components:
   - type: Sprite
     state: pirate_flag
+
+- type: entity
+  parent: BaseFlag
+  id: AnarheyFlag
+  name: левый флаг
+  description: Демократия - худшая форма правления, если не считать всех остальных
+  components:
+  - type: Sprite
+    state: anarhey
+
+- type: entity
+  parent: BaseFlag
+  id: PoryadokFlag
+  name: правый флаг
+  description: Железный порядок - сильное государство
+  components:
+  - type: Sprite
+    state: poryadok
+

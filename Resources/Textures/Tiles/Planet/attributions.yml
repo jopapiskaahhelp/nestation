@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 - files: ["basalt.png"]
   license: "CC-BY-SA-3.0"
   copyright: "Taken from tgstation"

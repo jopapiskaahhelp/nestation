@@ -1,3 +1,4 @@
+// Nestation Anarhey CC BY-NC 3.0
 using System.Threading;
 using Content.Server.Administration.Logs;
 using Content.Shared.AlertLevel;
@@ -62,6 +63,10 @@ namespace Content.Server.RoundEnd
         public TimeSpan AutoCallStartTime;
         private bool _autoCalledBefore = false;
 
+        private static readonly TimeSpan RoundMaxDuration = TimeSpan.FromHours(4) + TimeSpan.FromMinutes(30);
+        private static readonly TimeSpan RestartWarningBefore = TimeSpan.FromMinutes(10);
+        private bool _restartWarned = false;
+
         public override void Initialize()
         {
             base.Initialize();
@@ -94,6 +99,7 @@ namespace Content.Server.RoundEnd
             ExpectedCountdownEnd = null;
             SetAutoCallTime();
             _autoCalledBefore = false;
+            _restartWarned = false;
             RaiseLocalEvent(RoundEndSystemChangedEvent.Default);
         }
 
@@ -375,20 +381,22 @@ namespace Content.Server.RoundEnd
 
         public override void Update(float frameTime)
         {
-            // Check if we should auto-call.
-            int mins = _autoCalledBefore ? _cfg.GetCVar(CCVars.EmergencyShuttleAutoCallExtensionTime)
-                                        : _cfg.GetCVar(CCVars.EmergencyShuttleAutoCallTime);
-            if (mins != 0 && _gameTiming.CurTime - AutoCallStartTime > TimeSpan.FromMinutes(mins))
-            {
-                if (!_shuttle.EmergencyShuttleArrived && ExpectedCountdownEnd is null)
-                {
-                    _autoCalledBefore = true; // Corvax-Announcements: Move before call RequestRoundEnd to play correct announcement sound type
-                    RequestRoundEnd(checkCooldown: false, text: "round-end-system-shuttle-auto-called-announcement");
-                }
+            if (_gameTicker.RunLevel != GameRunLevel.InRound)
+                return;
 
-                // Always reset auto-call in case of a recall.
-                SetAutoCallTime();
+            var duration = _gameTicker.RoundDuration();
+
+            if (!_restartWarned && duration >= RoundMaxDuration - RestartWarningBefore)
+            {
+                _restartWarned = true;
+                _chatSystem.DispatchGlobalAnnouncement(
+                    "Рестарт через 10 минут",
+                    Loc.GetString("comms-console-announcement-title-centcom"),
+                    colorOverride: Color.Gold);
             }
+
+            if (duration >= RoundMaxDuration)
+                EndRound();
         }
     }
 

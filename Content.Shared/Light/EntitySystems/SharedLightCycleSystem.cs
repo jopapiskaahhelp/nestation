@@ -56,48 +56,66 @@ public abstract class SharedLightCycleSystem : EntitySystem
     }
 
     /// <summary>
+    /// How "daytime" it is at the given time: 0 = full night, 1 = full day, smoothly changing during dawn and dusk.
+    /// The cycle repeats forever: night (middle of it at t=0) -> dawn -> day -> dusk -> night.
+    /// With the default values: 20 min night, 5 min dawn, 20 min full day, 5 min dusk (50 min total).
+    /// </summary>
+    public static float CalculateDayFactor(LightCycleComponent comp, float time)
+    {
+        var total = MathF.Max(1f, (float) comp.Duration.TotalSeconds);
+        var nightFrac = Math.Clamp((float) comp.NightDuration.TotalSeconds / total, 0f, 1f);
+        var transFrac = Math.Clamp((float) comp.TransitionDuration.TotalSeconds / total, 0f, (1f - nightFrac) / 2f);
+
+        // Position inside the cycle, mirrored so that dawn and dusk are symmetric:
+        // 0 = middle of the night, 0.5 = middle of the day.
+        var pos = time / total;
+        pos -= MathF.Floor(pos);
+        if (pos > 0.5f)
+            pos = 1f - pos;
+
+        var dawnStart = nightFrac / 2f;
+        if (pos <= dawnStart)
+            return 0f;
+
+        if (transFrac <= 0f)
+            return 1f;
+
+        var t = (pos - dawnStart) / transFrac;
+        if (t >= 1f)
+            return 1f;
+
+        return t * t * (3f - 2f * t); // smoothstep
+    }
+
+    /// <summary>
     /// Calculates light intensity as a function of time.
     /// </summary>
     public static double CalculateLightLevel(LightCycleComponent comp, float time)
     {
-        var waveLength = MathF.Max(1, (float) comp.Duration.TotalSeconds);
+        var day = CalculateDayFactor(comp, time);
         var crest = MathF.Max(0f, comp.MaxLightLevel);
         var shift = MathF.Max(0f, comp.MinLightLevel);
-        return Math.Min(comp.ClipLight, CalculateCurve(time, waveLength, crest, shift, 6));
+        return Math.Min(comp.ClipLight, (crest - shift) * day + shift);
     }
 
     /// <summary>
-    /// It is important to note that each color must have a different exponent, to modify how early or late one color should stand out in relation to another.
-    /// This "simulates" what the atmosphere does and is what generates the effect of dawn and dusk.
-    /// The blue component must be a cosine function with half period, so that its minimum is at dawn and dusk, generating the "warm" color corresponding to these periods.
-    /// As you can see in the values, the maximums of the function serve more to define the curve behavior,
-    /// they must be "clipped" so as not to distort the original color of the lighting. In practice, the maximum values, in fact, are the clip thresholds.
+    /// Each color channel follows the day factor differently, which "simulates" the atmosphere and creates the dawn and dusk tint:
+    /// green lags behind red when the sun rises (so it is red/orange at dawn), and the blue component dips in the middle of
+    /// dawn and dusk (warm color) while being at its maximum at night and at day. Maximums serve as clip thresholds.
     /// </summary>
     public static Color CalculateColorLevel(LightCycleComponent comp, float time)
     {
-        var waveLength = MathF.Max(1f, (float) comp.Duration.TotalSeconds);
+        var day = CalculateDayFactor(comp, time);
+        var blueCurve = (2f * day - 1f) * (2f * day - 1f); // 1 at full night / full day, 0 in the middle of dawn / dusk
 
         var red = MathF.Min(comp.ClipLevel.R,
-            CalculateCurve(time,
-                waveLength,
-                MathF.Max(0f, comp.MaxLevel.R),
-                MathF.Max(0f, comp.MinLevel.R),
-                4f));
+            MathF.Max(0f, comp.MinLevel.R) + (MathF.Max(0f, comp.MaxLevel.R) - MathF.Max(0f, comp.MinLevel.R)) * day);
 
         var green = MathF.Min(comp.ClipLevel.G,
-            CalculateCurve(time,
-                waveLength,
-                MathF.Max(0f, comp.MaxLevel.G),
-                MathF.Max(0f, comp.MinLevel.G),
-                10f));
+            MathF.Max(0f, comp.MinLevel.G) + (MathF.Max(0f, comp.MaxLevel.G) - MathF.Max(0f, comp.MinLevel.G)) * day * day);
 
         var blue = MathF.Min(comp.ClipLevel.B,
-            CalculateCurve(time,
-                waveLength / 2f,
-                MathF.Max(0f, comp.MaxLevel.B),
-                MathF.Max(0f, comp.MinLevel.B),
-                2,
-                waveLength / 4f));
+            MathF.Max(0f, comp.MinLevel.B) + (MathF.Max(0f, comp.MaxLevel.B) - MathF.Max(0f, comp.MinLevel.B)) * blueCurve);
 
         return new Color(red, green, blue);
     }

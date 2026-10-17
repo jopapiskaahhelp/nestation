@@ -13,10 +13,23 @@ public sealed partial class LightCycleComponent : Component
     public Color OriginalColor = Color.Transparent;
 
     /// <summary>
-    /// How long an entire cycle lasts
+    /// How long an entire cycle lasts (day + night). By default 30 minutes of day
+    /// (including dawn and dusk) + 20 minutes of night = 50 minutes.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public TimeSpan Duration = TimeSpan.FromMinutes(30);
+    public TimeSpan Duration = TimeSpan.FromMinutes(50);
+
+    /// <summary>
+    /// How much of <see cref="Duration"/> is night. The rest is day (including dawn and dusk).
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan NightDuration = TimeSpan.FromMinutes(20);
+
+    /// <summary>
+    /// Length of the dawn and of the dusk (each). They are part of the day, not added on top of it.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan TransitionDuration = TimeSpan.FromMinutes(5);
 
     [DataField, AutoNetworkedField]
     public TimeSpan Offset;

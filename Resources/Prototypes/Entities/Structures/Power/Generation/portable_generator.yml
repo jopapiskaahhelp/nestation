@@ -124,7 +124,7 @@
     Runs off solid plasma sheets and is rated for up to 30 kW.
   parent: PortableGeneratorSwitchableBase
   id: PortableGeneratorPacman
-  suffix: Plasma, 30 kW
+  suffix: Plasma, 4 kW
   components:
     - type: Sprite
       layers:
@@ -147,10 +147,10 @@
     - type: Machine
       board: PortableGeneratorPacmanMachineCircuitboard
     - type: FuelGenerator
-      minTargetPower: 5000
-      maxTargetPower: 30000
-      targetPower: 30000
-      optimalPower: 30000
+      minTargetPower: 650
+      maxTargetPower: 4000
+      targetPower: 4000
+      optimalPower: 4000
       # 15 minutes at max output
       optimalBurnRate: 0.0333333
       # a decent curve that goes up to about an hour at 5 kW.
@@ -185,7 +185,7 @@
     Runs off uranium sheets and is rated for up to 50 kW.
   parent: PortableGeneratorSwitchableBase
   id: PortableGeneratorSuperPacman
-  suffix: Uranium, 50 kW
+  suffix: Uranium, 6 kW
   components:
     - type: Sprite
       layers:
@@ -208,10 +208,10 @@
     - type: Machine
       board: PortableGeneratorSuperPacmanMachineCircuitboard
     - type: FuelGenerator
-      minTargetPower: 10000
-      maxTargetPower: 50000
-      targetPower: 50000
-      optimalPower: 50000
+      minTargetPower: 1000
+      maxTargetPower: 6000
+      targetPower: 6000
+      optimalPower: 6000
       # 30 minutes at full power
       optimalBurnRate: 0.016666666
       # Barely save any fuel from reducing power output

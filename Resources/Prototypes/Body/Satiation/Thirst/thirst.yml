@@ -1,6 +1,6 @@
 - type: satiation
   id: NormalSatiationThirst
-  baseChangeRate: -0.1
+  baseChangeRate: -0.2 # x2 faster (was -0.1)
   maximumValue: 600
   thresholds:
     Overhydrated: 600
@@ -57,7 +57,7 @@
 - type: satiation
   id: DionaThirst
   parent: NormalSatiationThirst
-  baseChangeRate: -0.2
+  baseChangeRate: -0.4 # x2 faster (was -0.2)
 
 - type: entity
   abstract: true

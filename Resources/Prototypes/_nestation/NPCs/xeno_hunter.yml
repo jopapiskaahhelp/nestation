@@ -1,0 +1,369 @@
+# Nestation Anarhey CC BY-NC 3.0
+- type: htnCompound
+  id: XenoCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: XenoDetourCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: XenoRetreatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: XenoAmbushCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: XenoKiteCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: XenoRallyCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: XenoHuntCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: XenoRoamCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: XenoPauseCompound
+
+- type: htnCompound
+  id: XenoPauseCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:XenoHoldOperator
+            maxSeconds: 0.3
+
+- type: htnCompound
+  id: XenoDetourCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickDetourPointOperator
+            targetKey: DetourCoordinates
+            rank: 0
+            modes: [ Detour ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: DetourCoordinates
+            pathfindKey: DetourPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Detour ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickDetourPointOperator
+            targetKey: DetourCoordinates
+            rank: 1
+            modes: [ Detour ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: DetourCoordinates
+            pathfindKey: DetourPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Detour ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickDetourPointOperator
+            targetKey: DetourCoordinates
+            rank: 2
+            modes: [ Detour ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: DetourCoordinates
+            pathfindKey: DetourPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Detour ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickDetourPointOperator
+            targetKey: DetourCoordinates
+            rank: 3
+            modes: [ Detour ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: DetourCoordinates
+            pathfindKey: DetourPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Detour ]
+
+- type: htnCompound
+  id: XenoRetreatCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickCoverSpotOperator
+            targetKey: RetreatCoordinates
+            rank: 0
+            modes: [ Retreat ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: RetreatCoordinates
+            pathfindKey: RetreatPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Retreat ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickCoverSpotOperator
+            targetKey: RetreatCoordinates
+            rank: 1
+            modes: [ Retreat ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: RetreatCoordinates
+            pathfindKey: RetreatPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Retreat ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickCoverSpotOperator
+            targetKey: RetreatCoordinates
+            rank: 2
+            modes: [ Retreat ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: RetreatCoordinates
+            pathfindKey: RetreatPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Retreat ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickCoverSpotOperator
+            targetKey: RetreatCoordinates
+            flee: true
+            rank: 0
+            modes: [ Retreat ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: RetreatCoordinates
+            pathfindKey: RetreatPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Retreat ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickCoverSpotOperator
+            targetKey: RetreatCoordinates
+            flee: true
+            rank: 1
+            modes: [ Retreat ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: RetreatCoordinates
+            pathfindKey: RetreatPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Retreat ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:XenoHoldOperator
+            modes: [ Retreat ]
+            maxSeconds: 0.5
+
+- type: htnCompound
+  id: XenoAmbushCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:XenoHoldOperator
+            modes: [ Ambush ]
+
+- type: htnCompound
+  id: XenoKiteCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickKitePointOperator
+            targetKey: KiteCoordinates
+            modes: [ Kite ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: KiteCoordinates
+            pathfindKey: KitePathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Kite ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickKitePointOperator
+            targetKey: KiteCoordinates
+            modes: [ Kite ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: KiteCoordinates
+            pathfindKey: KitePathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Kite ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:XenoHoldOperator
+            modes: [ Kite ]
+            maxSeconds: 0.5
+
+- type: htnCompound
+  id: XenoRallyCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickRallyPointOperator
+            targetKey: RallyCoordinates
+            rangeKey: RallyRange
+            range: 4.5
+            modes: [ Rally ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: RallyCoordinates
+            pathfindKey: RallyPathfind
+            rangeKey: RallyRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Rally ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:XenoHoldOperator
+            modes: [ Rally ]
+            maxSeconds: 0.4
+
+- type: htnCompound
+  id: XenoHuntCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickBrainTargetOperator
+            targetKey: Target
+            targetCoordinatesKey: TargetCoordinates
+            modes: [ Attack, Detour ]
+        - !type:HTNPrimitiveTask
+          operator: !type:XenoStrikeOperator
+            modes: [ Attack, Detour ]
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Attack, Detour ]
+            - !type:XenoTargetDistPrecondition
+              max: 11.5
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickBrainTargetOperator
+            targetKey: Target
+            targetCoordinatesKey: TargetCoordinates
+            modes: [ Attack, Detour ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: TargetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Attack, Detour ]
+            - !type:XenoTargetDistPrecondition
+              min: 9
+
+- type: htnCompound
+  id: XenoRoamCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickRoamPointOperator
+            targetKey: RoamCoordinates
+            modes: [ Patrol, Detour ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: RoamCoordinates
+            pathfindKey: RoamPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Patrol, Detour ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickRoamPointOperator
+            targetKey: RoamCoordinates
+            modes: [ Patrol, Detour ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: RoamCoordinates
+            pathfindKey: RoamPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Patrol, Detour ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickRoamPointOperator
+            targetKey: RoamCoordinates
+            modes: [ Patrol, Detour ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: RoamCoordinates
+            pathfindKey: RoamPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Patrol, Detour ]

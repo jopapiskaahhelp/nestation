@@ -155,13 +155,12 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
 
         var key = _cfg.GetCVar(CCVars.AdminShowPIIOnBan) ? "server-ban-string" : "server-ban-string-no-pii";
 
-        var logMessage = Loc.GetString(
+        var logMessage = Loc.GetString( // Nestation Anarhey гарантия на удаление айпи адреса
             key,
             ("admin", adminName),
             ("severity", banDef.Severity),
             ("expires", expiresString),
             ("name", targetName),
-            ("ip", addressRangeString),
             ("hwid", hwidString),
             ("reason", banInfo.Reason));
 

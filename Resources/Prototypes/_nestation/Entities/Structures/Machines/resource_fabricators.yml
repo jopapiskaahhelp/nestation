@@ -1,0 +1,80 @@
+# Nestation Anarhey CC BY-NC 3.0
+- type: entity
+  parent: BaseMachinePowered
+  id: ResourceFabricatorGlass
+  name: стеклянная установка
+  description: Автоматически производит листы стекла. Требует электропитания.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/resource_fabricators/glass.rsi
+    state: glass
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+  - type: ResourceFabricator
+    resource: SheetGlass1
+    amount: 5
+    intervalSeconds: 60
+
+- type: entity
+  parent: BaseMachinePowered
+  id: ResourceFabricatorPlastic1
+  name: пластиковая установка
+  description: Автоматически производит листы пластика. Требует электропитания.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/resource_fabricators/plastic1.rsi
+    state: plastic1
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+  - type: ResourceFabricator
+    resource: SheetPlastic1
+    amount: 3
+    intervalSeconds: 60
+
+- type: entity
+  parent: BaseMachinePowered
+  id: ResourceFabricatorSteel
+  name: стальная установка
+  description: Автоматически производит листы стали. Требует электропитания.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/resource_fabricators/steel.rsi
+    state: steel
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+  - type: ResourceFabricator
+    resource: SheetSteel1
+    amount: 5
+    intervalSeconds: 60
+
+- type: entity
+  parent: BaseMachinePowered
+  id: ResourceFabricatorPlasma
+  name: плазменная установка
+  description: Автоматически производит листы плазмы. Требует электропитания.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/resource_fabricators/plasma.rsi
+    state: plasma
+  - type: ApcPowerReceiver
+    powerLoad: 6000
+  - type: ResourceFabricator
+    resource: SheetPlasma1
+    amount: 4
+    intervalSeconds: 180
+
+- type: entity
+  parent: BaseMachinePowered
+  id: ResourceFabricatorUranium
+  name: урановая установка
+  description: Автоматически производит листы урана. Требует электропитания.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/resource_fabricators/uranium.rsi
+    state: uranium
+  - type: ApcPowerReceiver
+    powerLoad: 6000
+  - type: ResourceFabricator
+    resource: SheetUranium1
+    amount: 3
+    intervalSeconds: 120

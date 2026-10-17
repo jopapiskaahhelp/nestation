@@ -1,0 +1,20 @@
+- type: gameMap
+  id: AnarheyCity
+  mapName: Anarhey City
+  mapPath: /Maps/Corvax/AnarheyCity.yml
+  minPlayers: 0
+  stations:
+    AnarheyCity:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Anarhey City {1}"
+          nameGenerator:
+            !type:NanotrasenNameGenerator
+            prefixCreator: "AC"
+        - type: StationJobs
+          availableJobs:
+            Passenger: [ -1, -1 ]
+            Captain: [ 1, 1 ]
+            SecurityOfficer: [ 2, 2 ]
+            HeadOfSecurity: [ 1, 1 ]
