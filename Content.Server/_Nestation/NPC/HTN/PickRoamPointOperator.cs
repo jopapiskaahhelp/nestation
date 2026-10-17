@@ -16,9 +16,9 @@ namespace Content.Server._Nestation.NPC.HTN;
 /// </summary>
 public sealed partial class PickRoamPointOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private SharedTransformSystem _transform = default!;
     private XenoBrainSystem _brainSys = default!;
 

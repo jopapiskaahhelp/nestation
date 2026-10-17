@@ -1,3 +1,4 @@
+// Nestation Anarhey CC BY-NC 3.0
 using Content.Server.Fluids.Components;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
@@ -6,9 +7,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.Fluids.EntitySystems;
 
-public sealed class BloodCleanupSystem : EntitySystem
+public sealed partial class BloodCleanupSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private TimeSpan _nextCheck;
     private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(1);

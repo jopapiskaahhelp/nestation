@@ -13,13 +13,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Nestation.XenoNight;
 
-public sealed class XenoNightSpawnerSystem : EntitySystem
+public sealed partial class XenoNightSpawnerSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     public override void Update(float frameTime)
     {

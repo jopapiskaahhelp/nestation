@@ -18,16 +18,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Nestation.XenoBrain;
 
-public sealed class XenoBrainSystem : EntitySystem
+public sealed partial class XenoBrainSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementSpeedModifierSystem _speed = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
 
     public const int BlockMask = (int) CollisionGroup.MobMask;
     public const int OpaqueMask = (int) CollisionGroup.Opaque;
@@ -922,7 +922,7 @@ public sealed class XenoBrainSystem : EntitySystem
 
         foreach (var name in b.UnbreakableComponents)
         {
-            if (_compFactory.TryGetRegistration(name, out var reg) && EntityManager.HasComponent(ob, reg.Type))
+            if (_compFactory.TryGetRegistration(name, out var reg) && HasComp(ob, reg.Type))
                 return false;
         }
 
