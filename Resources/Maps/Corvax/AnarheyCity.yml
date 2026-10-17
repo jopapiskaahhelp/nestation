@@ -534,7 +534,7 @@ entities:
     - type: Fixtures
       fixtures: {}
     - type: BecomesStation
-      id: Empty
+      id: AnarheyCity
     - type: OccluderTree
     - type: Shuttle
       dampingModifier: 0.25
@@ -3162,7 +3162,6 @@ entities:
       parent: 3
     - type: Action
       container: 3
-      attachedEntity: invalid
 - proto: AirlockAssembly
   entities:
   - uid: 5
@@ -14791,8 +14790,6 @@ entities:
       parent: 2
       pos: 50.5,3.5
     - type: Strap
-      buckledEntities:
-      - invalid
     - type: HealOnBuckle
       sleepAction: 4
     - type: HealOnBuckleHealing
