@@ -9,6 +9,7 @@ using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Content.Shared.Preferences;
 using Robust.Shared.Configuration;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
@@ -27,6 +28,7 @@ public sealed partial class GhostGoLobbySystem : EntitySystem
     private TimeSpan _deathTime;
 
     private readonly HashSet<int> _usedCharacters = new();
+    private readonly HashSet<NetUserId> _respawned = new();
 
     public bool IsCharacterUsed(HumanoidCharacterProfile profile)
     {
@@ -72,8 +74,11 @@ public sealed partial class GhostGoLobbySystem : EntitySystem
 
     private void OnRunLevelChanged(GameRunLevelChangedEvent ev)
     {
-        if (ev.New == GameRunLevel.PreRoundLobby)
-            _usedCharacters.Clear();
+        if (ev.New != GameRunLevel.PreRoundLobby)
+            return;
+
+        _usedCharacters.Clear();
+        _respawned.Clear();
     }
 
     public void OnGhostAttached(EntityUid uid, PlayerAttachedEvent args)
@@ -99,6 +104,12 @@ public sealed partial class GhostGoLobbySystem : EntitySystem
         if (!_enabled)
             return;
 
+        if (_respawned.Contains(session.UserId))
+        {
+            _popup.PopupEntity(Loc.GetString("ghost-go-lobby-once"), uid, uid);
+            return;
+        }
+
         var all = _playTime.GetOverallPlaytime(session);
         if (all < _requiredPlaytime)
         {
@@ -113,6 +124,8 @@ public sealed partial class GhostGoLobbySystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("ghost-go-lobby-deathtime", ("minutes", remaining)), uid, uid);
             return;
         }
+
+        _respawned.Add(session.UserId);
 
         _mind.WipeMind(session);
 
