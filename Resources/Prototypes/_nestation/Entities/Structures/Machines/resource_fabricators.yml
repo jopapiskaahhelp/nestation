@@ -12,7 +12,7 @@
     powerLoad: 3000
   - type: ResourceFabricator
     resource: SheetGlass1
-    amount: 5
+    amount: 10
     intervalSeconds: 60
 
 - type: entity
@@ -28,7 +28,7 @@
     powerLoad: 3000
   - type: ResourceFabricator
     resource: SheetPlastic1
-    amount: 3
+    amount: 6
     intervalSeconds: 60
 
 - type: entity
@@ -44,7 +44,7 @@
     powerLoad: 3000
   - type: ResourceFabricator
     resource: SheetSteel1
-    amount: 5
+    amount: 10
     intervalSeconds: 60
 
 - type: entity
@@ -60,7 +60,7 @@
     powerLoad: 6000
   - type: ResourceFabricator
     resource: SheetPlasma1
-    amount: 4
+    amount: 8
     intervalSeconds: 180
 
 - type: entity
@@ -76,5 +76,5 @@
     powerLoad: 6000
   - type: ResourceFabricator
     resource: SheetUranium1
-    amount: 3
+    amount: 6
     intervalSeconds: 120

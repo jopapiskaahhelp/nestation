@@ -60,6 +60,8 @@ public sealed partial class XenoBrainComponent : Component
     [DataField] public float LeapSpeed = 1.65f;
 
     [DataField] public float PlanCooldown = 0.15f;
+
+    [DataField] public float HearingRange = 15f;
     [DataField] public float LeapSeconds = 3f;
 
     [ViewVariables] public XenoMode Mode = XenoMode.Patrol;
@@ -124,6 +126,15 @@ public sealed partial class XenoBrainComponent : Component
     public Vector2 PackLeaderPos;
     public readonly List<Vector2> Allies = new();
     public float TargetDist = float.MaxValue;
+
+    public EntityUid? ForcedTarget;
+    public TimeSpan ForcedUntil;
+    public EntityUid? LuredBy;
+    public TimeSpan LuredAt;
+    public int LureHits;
+    public bool TargetRanged;
+    public Vector2 TargetFacing;
+    public TimeSpan LastSkirmishAt;
 
     public float SpeedMult = 1f;
     public int FlankSide = 1;

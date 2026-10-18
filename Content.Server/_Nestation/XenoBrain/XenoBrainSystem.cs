@@ -20,14 +20,14 @@ namespace Content.Server._Nestation.XenoBrain;
 
 public sealed partial class XenoBrainSystem : EntitySystem
 {
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private MovementSpeedModifierSystem _speed = default!;
-    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
+    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private readonly IComponentFactory _compFactory = default!;
 
     public const int BlockMask = (int) CollisionGroup.MobMask;
     public const int OpaqueMask = (int) CollisionGroup.Opaque;
@@ -66,6 +66,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        InitializeChat();
         SubscribeLocalEvent<XenoBrainComponent, DamageChangedEvent>(OnDamage);
         SubscribeLocalEvent<XenoBrainComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
     }
@@ -84,11 +85,23 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         if (HasComp<ActorComponent>(origin))
         {
+            var dmg = args.DamageDelta?.GetTotal().Float() ?? 0f;
+            var originPos = _transform.GetWorldPosition(origin);
+            var ranged = (originPos - _transform.GetWorldPosition(ent.Owner)).Length() > 3.2f;
+            LearnHit(origin, dmg, ranged, originPos, Transform(ent.Owner).MapID, now);
+
             b.RecentHits.Add(now);
             b.LastPlayerAttacker = origin;
             b.LastPlayerAttackTime = now;
-            b.ThreatPos = _transform.GetWorldPosition(origin);
-            AddThreat(origin, 0.5f);
+            b.ThreatPos = originPos;
+            AddThreat(origin, 0.3f + dmg / 30f);
+
+            if (b.LuredBy != null && (now - b.LuredAt).TotalSeconds < 15)
+            {
+                b.LureHits++;
+                if (b.LureHits >= 3)
+                    PunishLure(b);
+            }
         }
         else
         {
@@ -208,7 +221,13 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (dist >= fanSwitch)
         {
             var toLeader = b.PackLeaderPos - targetPos;
-            var bearing = toLeader.LengthSquared() > 0.01f ? MathF.Atan2(toLeader.Y, toLeader.X) : bearingMe;
+            float bearing;
+            if (b.TargetRanged && b.TargetFacing.LengthSquared() > 0.01f)
+                bearing = MathF.Atan2(-b.TargetFacing.Y, -b.TargetFacing.X);
+            else if (toLeader.LengthSquared() > 0.01f)
+                bearing = MathF.Atan2(toLeader.Y, toLeader.X);
+            else
+                bearing = bearingMe;
             var idx = b.PackIndex;
             var side = idx == 0 ? 0f : (idx % 2 == 1 ? 1f : -1f);
             var rank = (idx + 1) / 2;
@@ -319,6 +338,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
                 if (!brain.DeathRecorded)
                 {
                     brain.DeathRecorded = true;
+                    LearnFromDeath(brain, now);
                     if (brain.LastPlayerAttacker is { } killer && (now - brain.LastPlayerAttackTime).TotalSeconds < 15)
                     {
                         AddThreat(killer, 3f);
@@ -354,6 +374,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         _danger.RemoveAll(d => d.Expire < now);
         _passages.RemoveAll(p => p.Expire < now);
+        PruneLearning();
         _unbreakable.RemoveWhere(e => Deleted(e));
     }
 
@@ -476,6 +497,31 @@ public sealed partial class XenoBrainSystem : EntitySystem
             targetIsPlayer = false;
         }
 
+        if (b.ForcedTarget is { } forced)
+        {
+            if (now < b.ForcedUntil && TryGetPlayer(forced, x.Map, out var forcedInfo))
+            {
+                target = forcedInfo.Uid;
+                targetPos = forcedInfo.Pos;
+                targetIsPlayer = true;
+            }
+            else
+            {
+                if (now < b.ForcedUntil && b.LuredBy == forced)
+                    RewardLure(b);
+
+                b.ForcedTarget = null;
+            }
+        }
+
+        b.TargetRanged = false;
+        if (target != null && targetIsPlayer)
+        {
+            b.TargetRanged = IsRangedDanger(target.Value, now);
+            if (b.TargetRanged)
+                b.TargetFacing = _transform.GetWorldRotation(target.Value).ToWorldVec();
+        }
+
         b.Target = target;
         if (target != null)
             b.GoalPos = targetPos;
@@ -544,6 +590,12 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (b.Mode == XenoMode.Flank && elapsed > 12)
             b.NoFlankUntil = now + TimeSpan.FromSeconds(20);
 
+        if (b.ForcedTarget != null && now < b.ForcedUntil && c.Target == b.ForcedTarget)
+        {
+            SetMode(x, XenoMode.Attack, now);
+            return;
+        }
+
         XenoMode want;
 
         if (c.Target is not { } target)
@@ -564,7 +616,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         }
         else
         {
-            var required = RequiredPack(target, c.MapXenos);
+            var required = RequiredPack(target, c.MapXenos, b.TargetRanged);
             var engaged = false;
             foreach (var a in _pack)
             {
@@ -592,8 +644,10 @@ public sealed partial class XenoBrainSystem : EntitySystem
                     want = XenoMode.Attack;
                 }
             }
-            else if (!leaping && c.PackSize == 2 && c.TargetDist < 16f && TrySkirmish(c, out var striker))
+            else if (!leaping && (c.PackSize == 2 || (c.PackSize >= 3 && b.TargetRanged)) && c.TargetDist < 16f && TrySkirmish(c, out var striker))
             {
+                b.LastSkirmishAt = now;
+
                 if (striker == x.Uid)
                 {
                     if (c.TargetDist <= 2.8f)
@@ -605,11 +659,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
                         if ((now - b.ContactSince).TotalSeconds >= b.StrikeContactSeconds || gotHit)
                         {
                             b.ContactSince = TimeSpan.Zero;
-                            foreach (var a in _pack)
-                            {
-                                if (a.Uid != x.Uid)
-                                    c.Leader.Brain.Striker = a.Uid;
-                            }
+                            c.Leader.Brain.Striker = NextStriker(x.Uid);
 
                             want = XenoMode.Kite;
                         }
@@ -650,7 +700,13 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         if (c.Leader.Uid == c.X.Uid && c.Now >= l.SkirmishRollAt)
         {
-            l.SkirmishActive = _random.Prob(c.X.Brain.SkirmishChance);
+            l.SkirmishActive = _random.Prob(Math.Clamp(c.X.Brain.SkirmishChance + _skirmishBias, 0f, 1f));
+            l.SkirmishRollAt = c.Now + TimeSpan.FromSeconds(40);
+        }
+
+        if (c.X.Brain.TargetRanged && !l.SkirmishActive)
+        {
+            l.SkirmishActive = true;
             l.SkirmishRollAt = c.Now + TimeSpan.FromSeconds(40);
         }
 
@@ -922,7 +978,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         foreach (var name in b.UnbreakableComponents)
         {
-            if (_compFactory.TryGetRegistration(name, out var reg) && HasComp(ob, reg.Type))
+            if (_compFactory.TryGetRegistration(name, out var reg) && EntityManager.HasComponent(ob, reg.Type))
                 return false;
         }
 
@@ -1170,10 +1226,13 @@ public sealed partial class XenoBrainSystem : EntitySystem
         _speed.RefreshMovementSpeedModifiers(x.Uid);
     }
 
-    private int RequiredPack(EntityUid player, int mapXenos)
+    private int RequiredPack(EntityUid player, int mapXenos, bool ranged)
     {
         var t = GetThreat(player);
         var req = t >= 4f ? 3 : t >= 1.5f ? 2 : 1;
+        if (ranged)
+            req = Math.Max(req, 2);
+
         return Math.Min(req, Math.Max(1, mapXenos));
     }
 
