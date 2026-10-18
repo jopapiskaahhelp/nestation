@@ -11,7 +11,7 @@ namespace Content.Server._Nestation.XenoBrain;
 
 public sealed partial class XenoBrainSystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     private enum ChatIntent
     {

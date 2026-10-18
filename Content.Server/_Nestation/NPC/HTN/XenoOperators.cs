@@ -69,7 +69,7 @@ internal static class XenoOps
 
 public sealed partial class PickBrainTargetOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private IEntityManager _entMan = default!;
 
     [DataField(required: true)] public string TargetKey = string.Empty;
     [DataField(required: true)] public string TargetCoordinatesKey = string.Empty;
@@ -95,8 +95,8 @@ public sealed partial class PickBrainTargetOperator : HTNOperator
 
 public sealed partial class PickDetourPointOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private SharedTransformSystem _transform = default!;
     private XenoBrainSystem _brainSys = default!;
 
@@ -169,8 +169,8 @@ public sealed partial class PickDetourPointOperator : HTNOperator
 
 public sealed partial class PickCoverSpotOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IRobustRandom _random = default!;
     private SharedTransformSystem _transform = default!;
     private XenoBrainSystem _brainSys = default!;
 
@@ -268,7 +268,7 @@ public sealed partial class PickCoverSpotOperator : HTNOperator
 
 public sealed partial class PickRallyPointOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private IEntityManager _entMan = default!;
     private SharedTransformSystem _transform = default!;
 
     [DataField(required: true)] public string TargetKey = string.Empty;
@@ -307,8 +307,8 @@ public sealed partial class PickRallyPointOperator : HTNOperator
 
 public sealed partial class PickFlankPointOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IRobustRandom _random = default!;
     private SharedTransformSystem _transform = default!;
     private XenoBrainSystem _brainSys = default!;
 
@@ -359,8 +359,8 @@ public sealed partial class PickFlankPointOperator : HTNOperator
 
 public sealed partial class XenoHoldOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     [DataField] public List<string> Modes = new();
 
@@ -399,8 +399,8 @@ public sealed partial class XenoHoldOperator : HTNOperator
 
 public sealed partial class PickKitePointOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IRobustRandom _random = default!;
     private SharedTransformSystem _transform = default!;
     private XenoBrainSystem _brainSys = default!;
 
@@ -494,7 +494,7 @@ public sealed partial class PickKitePointOperator : HTNOperator
 
 public sealed partial class XenoModePrecondition : HTNPrecondition
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private IEntityManager _entMan = default!;
 
     [DataField] public List<string> Modes = new();
 
@@ -507,8 +507,8 @@ public sealed partial class XenoModePrecondition : HTNPrecondition
 
 public sealed partial class XenoStrikeOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private SharedTransformSystem _transform = default!;
     private NPCSteeringSystem _steering = default!;
     private PathfindingSystem _pathfind = default!;
@@ -622,7 +622,7 @@ public sealed partial class XenoStrikeOperator : HTNOperator
 
 public sealed partial class XenoTargetDistPrecondition : HTNPrecondition
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private IEntityManager _entMan = default!;
 
     [DataField] public float Min;
     [DataField] public float Max = float.MaxValue;
