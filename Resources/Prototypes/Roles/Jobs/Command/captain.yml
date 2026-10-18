@@ -45,6 +45,7 @@
   equipment:
     shoes: ClothingShoesBootsLaceup
     id: CaptainPDA
+    ears: ClothingHeadsetAltSecurity
     pocket1: FlashlightSeclite
 
 - type: chameleonOutfit

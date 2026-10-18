@@ -3355,7 +3355,7 @@ entities:
             0: 13107
         chunkSize: 4
     - type: SpreaderGrid
-    - type: ImplicitRoof
+    - type: Roof
     - type: ChunkContainer
       chunkEntities:
       - 11315

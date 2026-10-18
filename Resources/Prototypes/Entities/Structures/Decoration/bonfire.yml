@@ -1,3 +1,4 @@
+# Nestation Anarhey CC BY-NC 3.0
 - type: entity
   abstract: true
   parent: [ BaseStructure, StructureHealthFurniture ]
@@ -52,6 +53,24 @@
   - type: Sprite
     layers:
     - state: burning
+  - type: Fixtures
+    fixtures:
+      itemcollide:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        layer:
+        - HighImpassable
+        hard: false
+  - type: ItemPlacer
+    maxEntities: 4
+    whitelist:
+      components:
+      - Temperature
+  - type: PlaceableSurface
+    placeCentered: true
+  - type: FireHeater
+    power: 6000
   - type: Construction
     graph: Bonfire
     node: bonfire

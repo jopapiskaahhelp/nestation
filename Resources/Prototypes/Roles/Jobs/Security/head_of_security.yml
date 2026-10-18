@@ -38,6 +38,7 @@
   id: HoSGear
   equipment:
     id: CaptainPDA
+    ears: ClothingHeadsetAltSecurity
     outerClothing: ClothingOuterArmorBasic
     pocket1: FlashlightSeclite
 

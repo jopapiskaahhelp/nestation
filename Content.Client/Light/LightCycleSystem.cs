@@ -1,3 +1,4 @@
+// Nestation Anarhey CC BY-NC 3.0
 using Content.Shared.GameTicking;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
@@ -6,7 +7,6 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.Light;
 
-/// <inheritdoc/>
 public sealed partial class LightCycleSystem : SharedLightCycleSystem
 {
     [Dependency] private GameTicker _ticker = default!;
@@ -23,11 +23,9 @@ public sealed partial class LightCycleSystem : SharedLightCycleSystem
         var mapQuery = AllEntityQuery<LightCycleComponent, MapLightComponent>();
         while (mapQuery.MoveNext(out var uid,  out var cycle, out var map))
         {
-            if (!cycle.Running)
+            if (!cycle.Enabled)
                 continue;
 
-            // We still iterate paused entities as we still want to override the lighting color and not have
-            // it apply the server state
             var pausedTime = _metadata.GetPauseTime(uid);
 
             var time = (float) _timing.CurTime

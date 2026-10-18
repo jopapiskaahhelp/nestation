@@ -2,7 +2,6 @@
   id: BasicCalmEventsTable
   table: !type:AllSelector # we need to pass a list of rules, since rules have further restrictions to consider via StationEventComp
     children:
-    - id: AnomalySpawn
     - id: BluespaceArtifact
     - id: BluespaceLocker
     - id: BreakerFlip
@@ -104,21 +103,21 @@
       min:  50 # Corvax-MRP # 40
       max:  70 # Corvax-MRP # 60
 
-- type: entity
-  id: AnomalySpawn
-  parent: BaseStationEventShortDelay
-  components:
-  - type: StationEvent
-    startAnnouncementColor: "#18abf5"
-    startAudio:
-      path: /Audio/Corvax/Announcements/flux.ogg # Corvax-Announcements
-      params:
-        volume: -4
-    weight: 8
-    duration: 35
-  - type: AnomalySpawnRule
-  - type: DynamicRuleCost
-    cost: 10
+#- type: entity
+ # id: AnomalySpawn
+ # parent: BaseStationEventShortDelay
+ # components:
+ # - type: StationEvent
+ #   startAnnouncementColor: "#18abf5"
+ #   startAudio:
+  #    path: /Audio/Corvax/Announcements/flux.ogg # Corvax-Announcements
+  #    params:
+  #      volume: -4
+  #  weight: 8
+  #  duration: 35
+ # - type: AnomalySpawnRule
+ # - type: DynamicRuleCost
+ #   cost: 10
 
 - type: entity
   id: BluespaceArtifact
