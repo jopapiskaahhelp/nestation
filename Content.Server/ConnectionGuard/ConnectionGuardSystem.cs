@@ -31,11 +31,11 @@ public sealed class GuardCVars : CVars
         CVarDef.Create("guard.block_seconds", 600, CVar.SERVERONLY);
 }
 
-public sealed class ConnectionGuardSystem : EntitySystem
+public sealed partial class ConnectionGuardSystem : EntitySystem
 {
-    [Dependency] private readonly IServerNetManager _net = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IServerNetManager _net = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private const int MaxTracked = 50_000;
     private static readonly TimeSpan CleanupInterval = TimeSpan.FromSeconds(30);

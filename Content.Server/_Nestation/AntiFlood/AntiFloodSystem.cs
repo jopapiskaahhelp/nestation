@@ -16,7 +16,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.AntiFlood;
 
-public sealed class AntiFloodSystem : EntitySystem
+public sealed partial class AntiFloodSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private IAdminManager _admin = default!;
