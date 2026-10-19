@@ -82,6 +82,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         base.Initialize();
         InitializeChat();
         InitializeStalk();
+        InitializeFeed();
         SubscribeLocalEvent<XenoBrainComponent, DamageChangedEvent>(OnDamage);
         SubscribeLocalEvent<XenoBrainComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
     }
@@ -447,6 +448,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
                 continue;
 
             var d = (p.Pos - x.Pos).Length();
+            if (IsGivenUp(x, b, now, p.Uid, p.Pos, d))
+                continue;
+
             if (d < nearestDist)
             {
                 nearestDist = d;
@@ -506,7 +510,8 @@ public sealed partial class XenoBrainSystem : EntitySystem
         var leaderHasTarget = leader.Uid != x.Uid
                               && leader.Brain.Target is { } lt
                               && TryGetPlayer(lt, x.Map, out lead)
-                              && (lead.Pos - x.Pos).Length() <= b.SightRange * 1.5f;
+                              && (lead.Pos - x.Pos).Length() <= b.SightRange * 1.5f
+                              && !IsGivenUp(x, b, now, lt, lead.Pos, (lead.Pos - x.Pos).Length());
 
         if (leaderHasTarget)
         {
@@ -520,7 +525,8 @@ public sealed partial class XenoBrainSystem : EntitySystem
             targetPos = n.Pos;
             targetIsPlayer = true;
         }
-        else if (TryGetRetaliator(x, now, out var rt, out var rpos))
+        else if (TryGetRetaliator(x, now, out var rt, out var rpos)
+                 && !IsGivenUp(x, b, now, rt, rpos, (rpos - x.Pos).Length()))
         {
             target = rt;
             targetPos = rpos;
@@ -591,6 +597,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
                 case XenoMode.Stalk:
                     ThinkStalk(ctx);
                     break;
+                case XenoMode.Feed:
+                    ThinkFeed(ctx);
+                    break;
                 case XenoMode.Retreat:
                     ThinkRetreat(ctx);
                     break;
@@ -624,7 +633,41 @@ public sealed partial class XenoBrainSystem : EntitySystem
             b.SmashTarget = null;
         }
 
+        if (b.SmashActive && ctx.Target != null && ctx.TargetIsPlayer && ctx.TargetDist <= 5f
+            && !LineBlocked(x, ctx.TargetPos))
+        {
+            b.SmashActive = false;
+        }
+
         TrySmash(x);
+    }
+
+    private bool IsGivenUp(XenoInfo x, XenoBrainComponent b, TimeSpan now, EntityUid uid, Vector2 pos, float dist)
+    {
+        if (b.GiveUpTarget != uid || now >= b.GiveUpUntil)
+            return false;
+
+        if (dist <= b.GiveUpReachDist && !PathBlocked(x.Map, x.Pos, pos, x.Uid))
+        {
+            b.GiveUpTarget = null;
+            b.GiveUpUntil = TimeSpan.Zero;
+            return false;
+        }
+
+        return true;
+    }
+
+    private void GiveUp(XenoInfo x, TimeSpan now)
+    {
+        var b = x.Brain;
+        if (b.Target is not { } target)
+            return;
+
+        b.GiveUpStreak = (now - b.LastGiveUpAt).TotalSeconds < 120 ? Math.Min(b.GiveUpStreak + 1, 3) : 0;
+        var seconds = MathF.Min(b.GiveUpSeconds * (1 << b.GiveUpStreak), b.GiveUpMaxSeconds);
+        b.GiveUpTarget = target;
+        b.GiveUpUntil = now + TimeSpan.FromSeconds(seconds);
+        b.LastGiveUpAt = now;
     }
 
     private void Decide(Ctx c)
@@ -900,6 +943,8 @@ public sealed partial class XenoBrainSystem : EntitySystem
                 return false;
             case XenoMode.Attack:
                 return c.Target != null && (c.TargetDist > 2.5f || LineBlocked(x, c.TargetPos));
+            case XenoMode.Feed:
+                return b.TargetDist > 2.2f;
             case XenoMode.Duel:
                 return b.GoalPos is { } duelGoal && (b.TargetDist > 2.5f || LineBlocked(x, duelGoal));
             case XenoMode.Kite:
@@ -990,6 +1035,12 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (b.Mode == XenoMode.Duel)
             return;
 
+        if (b.Mode == XenoMode.Feed)
+        {
+            EndFeed(x, now);
+            return;
+        }
+
         if ((x.Pos - b.LastDetourStuckPos).Length() < 4f && (now - b.LastDetourTime).TotalSeconds < 40)
             b.DetourCount++;
         else
@@ -1001,7 +1052,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (b.DetourCount > b.MaxDetoursPerSpot)
         {
             b.DetourCount = 0;
-            b.NoHuntUntil = now + TimeSpan.FromSeconds(12);
+            GiveUp(x, now);
             b.NoRallyUntil = now + TimeSpan.FromSeconds(12);
             SetMode(x, XenoMode.Patrol, now);
             return;
@@ -1050,7 +1101,14 @@ public sealed partial class XenoBrainSystem : EntitySystem
         }
 
         if (b.SmashActive && b.SmashTarget == obstacle)
-            return true;
+        {
+            if ((now - b.SmashStart).TotalSeconds <= b.SmashMaxSeconds)
+                return true;
+
+            _unbreakable.Add(obstacle);
+            b.SmashActive = false;
+            return false;
+        }
 
         b.SmashTarget = obstacle;
 
@@ -1063,6 +1121,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (!bypassNearby || detoursFailed || forceSmash)
         {
             b.SmashActive = true;
+            b.SmashStart = now;
             b.SmashFrom = x.Pos;
             b.SmashPos = _transform.GetWorldPosition(obstacle);
             b.SmashDir = forward;

@@ -26,6 +26,13 @@ public sealed partial class AntiFloodSystem : EntitySystem
     [Dependency] private ISharedPlayerManager _players = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
 
+    private static readonly HashSet<char> BaseAllowedChars = new()
+    {
+        '.', ',', '!', '?', '*', '-', '—', '–', '…', ':', ';',
+        '\'', '"', '’', '«', '»', '(', ')', '~',
+        '%', '#', '$', '+', '=',
+    };
+
     private enum FloodChannel
     {
         Ic,
@@ -36,7 +43,7 @@ public sealed partial class AntiFloodSystem : EntitySystem
     {
         public string Last = string.Empty;
         public int Count;
-        public TimeSpan LastTime;
+        public TimeSpan FirstTime;
     }
 
     private readonly Dictionary<(NetUserId, FloodChannel), FloodState> _states = new();
@@ -185,6 +192,9 @@ public sealed partial class AntiFloodSystem : EntitySystem
             if (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))
                 continue;
 
+            if (BaseAllowedChars.Contains(c))
+                continue;
+
             if (extra.Contains(c))
                 continue;
 
@@ -204,17 +214,15 @@ public sealed partial class AntiFloodSystem : EntitySystem
 
         if (_states.TryGetValue(key, out var state)
             && state.Last == normalized
-            && now - state.LastTime <= window)
+            && now - state.FirstTime <= window)
         {
             state.Count++;
         }
         else
         {
-            state = new FloodState { Last = normalized, Count = 1 };
+            state = new FloodState { Last = normalized, Count = 1, FirstTime = now };
             _states[key] = state;
         }
-
-        state.LastTime = now;
 
         if (state.Count < limit)
             return false;

@@ -1,0 +1,66 @@
+# Nestation Anarhey CC BY-NC 3.0
+- type: decal
+  id: NestationBloodStreakA
+  tags: ["bloodspatter"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/blood_spatter.rsi
+    state: streak_a
+
+- type: decal
+  id: NestationBloodStreakB
+  tags: ["bloodspatter"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/blood_spatter.rsi
+    state: streak_b
+
+- type: decal
+  id: NestationBloodStreakC
+  tags: ["bloodspatter"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/blood_spatter.rsi
+    state: streak_c
+
+- type: decal
+  id: NestationBloodDotA
+  tags: ["bloodspatter"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/blood_spatter.rsi
+    state: dot_a
+
+- type: decal
+  id: NestationBloodDotB
+  tags: ["bloodspatter"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/blood_spatter.rsi
+    state: dot_b
+
+- type: decal
+  id: NestationBloodDotC
+  tags: ["bloodspatter"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/blood_spatter.rsi
+    state: dot_c

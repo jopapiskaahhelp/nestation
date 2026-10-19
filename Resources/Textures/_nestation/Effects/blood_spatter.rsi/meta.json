@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-3.0",
+  "copyright": "Nestation Anarhey",
+  "size": {
+    "x": 16,
+    "y": 16
+  },
+  "states": [
+    {
+      "name": "streak_a"
+    },
+    {
+      "name": "streak_b"
+    },
+    {
+      "name": "streak_c"
+    },
+    {
+      "name": "dot_a"
+    },
+    {
+      "name": "dot_b"
+    },
+    {
+      "name": "dot_c"
+    }
+  ]
+}

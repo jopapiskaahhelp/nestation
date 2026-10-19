@@ -15,7 +15,7 @@ public sealed class AntiFloodCVars : CVars
         CVarDef.Create("antiflood.repeat_limit", 3, CVar.SERVERONLY);
 
     public static readonly CVarDef<float> RepeatWindow =
-        CVarDef.Create("antiflood.repeat_window", 30f, CVar.SERVERONLY);
+        CVarDef.Create("antiflood.repeat_window", 4f, CVar.SERVERONLY);
 
     public static readonly CVarDef<float> MimeMuteSeconds =
         CVarDef.Create("antiflood.mime_mute_seconds", 60f, CVar.SERVERONLY);

@@ -15,6 +15,7 @@ public enum XenoMode : byte
     Kite,
     Stalk,
     Duel,
+    Feed,
 }
 
 public enum XenoStalkPhase : byte
@@ -39,7 +40,7 @@ public sealed partial class XenoBrainComponent : Component
 
     [DataField] public List<string> UnbreakableComponents = new() { "Gatherable", "Indestructible" };
 
-    [DataField] public List<string> UnbreakablePrefixes = new() { "WallRock", "FenceMetalStraight" };
+    [DataField] public List<string> UnbreakablePrefixes = new() { "WallRock", "FenceMetalStraight", "BlastDoor", "HighSecDoor", "HighSecCaptainLocked" };
 
     [DataField] public float StuckMinMove = 0.3f;
 
@@ -80,6 +81,16 @@ public sealed partial class XenoBrainComponent : Component
     [DataField] public float StalkPounceDist = 3.5f;
 
     [DataField] public float DuelChaseRange = 30f;
+
+    [DataField] public float SmashMaxSeconds = 20f;
+
+    [DataField] public float GiveUpSeconds = 30f;
+    [DataField] public float GiveUpMaxSeconds = 180f;
+    [DataField] public float GiveUpReachDist = 9f;
+
+    [DataField] public float FeedRange = 25f;
+    [DataField] public float FeedSeconds = 5f;
+    [DataField] public float FeedMaxSeconds = 40f;
 
     [ViewVariables] public XenoMode Mode = XenoMode.Patrol;
     [ViewVariables] public TimeSpan ModeSince;
@@ -171,4 +182,16 @@ public sealed partial class XenoBrainComponent : Component
     public Vector2 WatchPos;
     public int WatchStill;
     public TimeSpan NextOpenAt;
+
+    public TimeSpan SmashStart;
+
+    public EntityUid? GiveUpTarget;
+    public TimeSpan GiveUpUntil;
+    public TimeSpan LastGiveUpAt;
+    public int GiveUpStreak;
+
+    public EntityUid? FeedTarget;
+    public TimeSpan FeedStart;
+    public TimeSpan FeedDeadline;
+    public TimeSpan NoFeedUntil;
 }
