@@ -16,6 +16,9 @@
           task: XenoKiteCompound
     - tasks:
         - !type:HTNCompoundTask
+          task: XenoStalkCompound
+    - tasks:
+        - !type:HTNCompoundTask
           task: XenoRallyCompound
     - tasks:
         - !type:HTNCompoundTask
@@ -253,6 +256,31 @@
             maxSeconds: 0.5
 
 - type: htnCompound
+  id: XenoStalkCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickStalkPointOperator
+            targetKey: StalkCoordinates
+            modes: [ Stalk ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: StalkCoordinates
+            pathfindKey: StalkPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Stalk ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:XenoHoldOperator
+            modes: [ Stalk ]
+            maxSeconds: 0.5
+
+- type: htnCompound
   id: XenoRallyCompound
   branches:
     - tasks:
@@ -287,13 +315,13 @@
           operator: !type:PickBrainTargetOperator
             targetKey: Target
             targetCoordinatesKey: TargetCoordinates
-            modes: [ Attack, Detour ]
+            modes: [ Attack, Detour, Duel ]
         - !type:HTNPrimitiveTask
           operator: !type:XenoStrikeOperator
-            modes: [ Attack, Detour ]
+            modes: [ Attack, Detour, Duel ]
           preconditions:
             - !type:XenoModePrecondition
-              modes: [ Attack, Detour ]
+              modes: [ Attack, Detour, Duel ]
             - !type:XenoTargetDistPrecondition
               max: 11.5
     - tasks:
@@ -301,7 +329,7 @@
           operator: !type:PickBrainTargetOperator
             targetKey: Target
             targetCoordinatesKey: TargetCoordinates
-            modes: [ Attack, Detour ]
+            modes: [ Attack, Detour, Duel ]
         - !type:HTNPrimitiveTask
           operator: !type:MoveToOperator
             shutdownState: TaskFinished
@@ -312,7 +340,7 @@
             rangeKey: MeleeRange
           preconditions:
             - !type:XenoModePrecondition
-              modes: [ Attack, Detour ]
+              modes: [ Attack, Detour, Duel ]
             - !type:XenoTargetDistPrecondition
               min: 9
 

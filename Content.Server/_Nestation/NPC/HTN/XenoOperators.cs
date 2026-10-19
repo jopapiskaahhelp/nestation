@@ -270,6 +270,7 @@ public sealed partial class PickRallyPointOperator : HTNOperator
 {
     [Dependency] private IEntityManager _entMan = default!;
     private SharedTransformSystem _transform = default!;
+    private XenoBrainSystem _brainSys = default!;
 
     [DataField(required: true)] public string TargetKey = string.Empty;
     [DataField(required: true)] public string RangeKey = string.Empty;
@@ -280,6 +281,7 @@ public sealed partial class PickRallyPointOperator : HTNOperator
     {
         base.Initialize(sysManager);
         _transform = sysManager.GetEntitySystem<SharedTransformSystem>();
+        _brainSys = sysManager.GetEntitySystem<XenoBrainSystem>();
     }
 
     public override Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(
@@ -293,14 +295,18 @@ public sealed partial class PickRallyPointOperator : HTNOperator
             return XenoOps.No();
 
         var xform = _entMan.GetComponent<TransformComponent>(owner);
-        var dist = (_transform.GetWorldPosition(ally) - _transform.GetWorldPosition(xform)).Length();
-        if (dist < Range + 1f)
+        var myPos = _transform.GetWorldPosition(xform);
+        var allyPos = _transform.GetWorldPosition(ally);
+        var dist = (allyPos - myPos).Length();
+
+        var blocked = dist > 2.5f && _brainSys.PathBlocked(xform.MapID, myPos, allyPos, owner);
+        if (dist < Range + 1f && !blocked)
             return XenoOps.No();
 
         return XenoOps.Yes(new Dictionary<string, object>
         {
             [TargetKey] = new EntityCoordinates(ally, Vector2.Zero),
-            [RangeKey] = Range,
+            [RangeKey] = blocked ? 1.5f : Range,
         });
     }
 }
@@ -492,6 +498,74 @@ public sealed partial class PickKitePointOperator : HTNOperator
     }
 }
 
+public sealed partial class PickStalkPointOperator : HTNOperator
+{
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    private SharedTransformSystem _transform = default!;
+    private XenoBrainSystem _brainSys = default!;
+
+    [DataField(required: true)] public string TargetKey = string.Empty;
+    [DataField] public List<string> Modes = new();
+
+    public override void Initialize(IEntitySystemManager sysManager)
+    {
+        base.Initialize(sysManager);
+        _transform = sysManager.GetEntitySystem<SharedTransformSystem>();
+        _brainSys = sysManager.GetEntitySystem<XenoBrainSystem>();
+    }
+
+    public override Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(
+        NPCBlackboard blackboard, CancellationToken cancelToken)
+    {
+        var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
+        if (!_entMan.TryGetComponent(owner, out XenoBrainComponent? brain) || !XenoOps.ModeOk(Modes, brain))
+            return XenoOps.No();
+
+        if (brain.StalkTarget is not { } target || !_entMan.EntityExists(target))
+            return XenoOps.No();
+
+        var xform = _entMan.GetComponent<TransformComponent>(owner);
+        var pos = _transform.GetWorldPosition(xform);
+
+        if (brain.StalkPhase == XenoStalkPhase.Wait)
+        {
+            if (brain.StalkWaitSpot is not { } spot || (spot - pos).Length() < 1.6f)
+                return XenoOps.No();
+
+            return XenoOps.Yes(new Dictionary<string, object>
+            {
+                [TargetKey] = xform.Coordinates.Offset(spot - pos),
+            });
+        }
+
+        var tPos = _transform.GetWorldPosition(target);
+        var toMe = pos - tPos;
+        var dist = toMe.Length();
+        var want = brain.StalkDistance;
+
+        if (dist >= want - 1.2f && dist <= want + 1.5f)
+            return XenoOps.No();
+
+        var away = dist < 0.01f ? _random.NextAngle().ToVec() : toMe / dist;
+        for (var i = 0; i < 6; i++)
+        {
+            var dir = i == 0 ? away : XenoOps.Rotate(away, _random.NextFloat(-0.6f, 0.6f));
+            var cand = tPos + dir * want;
+
+            if (_brainSys.IsDangerous(xform.MapID, cand) || XenoOps.NearAvoid(brain, cand, 2.5f))
+                continue;
+
+            return XenoOps.Yes(new Dictionary<string, object>
+            {
+                [TargetKey] = xform.Coordinates.Offset(cand - pos),
+            });
+        }
+
+        return XenoOps.No();
+    }
+}
+
 public sealed partial class XenoModePrecondition : HTNPrecondition
 {
     [Dependency] private IEntityManager _entMan = default!;
@@ -586,7 +660,13 @@ public sealed partial class XenoStrikeOperator : HTNOperator
         var goal = _brainSys.StrikeGoal(brain, me, targetPos, vel, OrbitRadius, LeadSeconds, FanRadius, FanSwitchDist);
         var steerTo = goal;
         if (_brainSys.GetBypass(owner, brain, xform.MapID, me, goal, now) is { } bypass)
+        {
             steerTo = bypass;
+        }
+        else if (!brain.SmashActive && _brainSys.PathBlocked(xform.MapID, me, goal, owner))
+        {
+            steerTo = _brainSys.GetBypass(owner, brain, xform.MapID, me, targetPos, now) ?? targetPos;
+        }
 
         var steer = _steering.Register(owner, xform.Coordinates.Offset(steerTo - me));
         steer.Range = 0.3f;

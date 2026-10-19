@@ -13,6 +13,14 @@ public enum XenoMode : byte
     Retreat,
     Ambush,
     Kite,
+    Stalk,
+    Duel,
+}
+
+public enum XenoStalkPhase : byte
+{
+    Watch,
+    Wait,
 }
 
 [RegisterComponent]
@@ -27,6 +35,7 @@ public sealed partial class XenoBrainComponent : Component
 
     [DataField] public float StuckSeconds = 2f;
     [DataField] public float StuckSecondsAggro = 1f;
+    [DataField] public float StuckSecondsPack = 1.2f;
 
     [DataField] public List<string> UnbreakableComponents = new() { "Gatherable", "Indestructible" };
 
@@ -63,6 +72,14 @@ public sealed partial class XenoBrainComponent : Component
 
     [DataField] public float HearingRange = 15f;
     [DataField] public float LeapSeconds = 3f;
+
+    [DataField] public float StalkChance = 0.35f;
+    [DataField] public float StalkDistance = 8f;
+    [DataField] public float StalkWatchSeconds = 45f;
+    [DataField] public float StalkCooldown = 120f;
+    [DataField] public float StalkPounceDist = 3.5f;
+
+    [DataField] public float DuelChaseRange = 30f;
 
     [ViewVariables] public XenoMode Mode = XenoMode.Patrol;
     [ViewVariables] public TimeSpan ModeSince;
@@ -139,4 +156,19 @@ public sealed partial class XenoBrainComponent : Component
     public float SpeedMult = 1f;
     public int FlankSide = 1;
     public bool DeathRecorded;
+
+    public EntityUid? StalkTarget;
+    public XenoStalkPhase StalkPhase;
+    public Vector2? StalkWaitSpot;
+    public TimeSpan StalkSince;
+    public TimeSpan NoStalkUntil;
+    public TimeSpan StalkRollReset;
+    public bool StalkRolled;
+
+    public EntityUid? DuelOpponent;
+
+    public TimeSpan NextWatch;
+    public Vector2 WatchPos;
+    public int WatchStill;
+    public TimeSpan NextOpenAt;
 }

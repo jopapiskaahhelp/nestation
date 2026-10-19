@@ -1,6 +1,9 @@
+// Nestation Anarhey CC BY-NC 3.0
+
 using System.Globalization;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
+using Content.Server.AntiFlood;
 using Content.Server.Chat.Managers;
 using Content.Server.Station.Systems;
 using Content.Shared.ActionBlocker;
@@ -45,6 +48,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private ExamineSystemShared _examineSystem = default!;
     [Dependency] private EntityQuery<GhostHearingComponent> _ghostHearingQuery = default!;
+    [Dependency] private AntiFloodSystem _antiFlood = default!;
 
     // Corvax-TTS-Start: Moved from Server to Shared
     // public const int VoiceRange = 10; // how far voice goes in world units
@@ -196,6 +200,9 @@ public sealed partial class ChatSystem : SharedChatSystem
             message = message[1..];
         }
 
+        if (desiredType != InGameICChatType.Emote && !ignoreActionBlocker && _antiFlood.CheckIc(source, player, message))
+            return;
+
         bool shouldCapitalize = (desiredType != InGameICChatType.Emote);
         bool shouldPunctuate = _configurationManager.GetCVar(CCVars.ChatPunctuation);
         // Capitalizing the word I only happens in English, so we check language here
@@ -258,6 +265,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         // It doesn't make any sense for a non-player to send in-game OOC messages, whereas non-players may be sending
         // in-game IC messages.
         if (player?.AttachedEntity is not { Valid: true } entity || source != entity)
+            return;
+
+        if (_antiFlood.CheckOoc(player, message))
             return;
 
         message = SanitizeInGameOOCMessage(message);

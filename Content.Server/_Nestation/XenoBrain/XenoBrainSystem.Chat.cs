@@ -106,7 +106,7 @@ public sealed partial class XenoBrainSystem
 
         foreach (var x in _xenos)
         {
-            if (x.Map != map || (x.Pos - pos).Length() > x.Brain.HearingRange)
+            if (x.Map != map || (x.Pos - pos).Length() > x.Brain.HearingRange || x.Brain.DuelOpponent != null)
                 continue;
 
             if (intent == ChatIntent.Offensive)
@@ -261,6 +261,9 @@ public sealed partial class XenoBrainSystem
 
     private void LearnFromDeath(XenoBrainComponent brain, TimeSpan now)
     {
+        if (brain.DuelOpponent != null)
+            return;
+
         if (brain.LastSkirmishAt != TimeSpan.Zero && (now - brain.LastSkirmishAt).TotalSeconds < 10)
             _skirmishBias = MathF.Max(-0.3f, _skirmishBias - 0.05f);
         else

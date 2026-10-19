@@ -8,6 +8,8 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Physics;
+using Content.Shared.Storage.Components;
+using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
@@ -28,6 +30,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
     [Dependency] private MovementSpeedModifierSystem _speed = default!;
     [Dependency] private SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private SharedEntityStorageSystem _entStorage = default!;
 
     public const int BlockMask = (int) CollisionGroup.MobMask;
     public const int OpaqueMask = (int) CollisionGroup.Opaque;
@@ -51,6 +54,17 @@ public sealed partial class XenoBrainSystem : EntitySystem
     private readonly HashSet<EntityUid> _unbreakable = new();
     private readonly List<Passage> _passages = new();
 
+    private sealed class CrateMemory
+    {
+        public int Opens;
+        public TimeSpan LastOpen;
+        public TimeSpan SkipUntil;
+    }
+
+    private readonly Dictionary<EntityUid, CrateMemory> _crates = new();
+    private const int CrateOpenLimit = 3;
+    private const double CrateWindowSeconds = 60.0;
+
     private sealed class Passage
     {
         public MapId Map;
@@ -67,6 +81,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
     {
         base.Initialize();
         InitializeChat();
+        InitializeStalk();
         SubscribeLocalEvent<XenoBrainComponent, DamageChangedEvent>(OnDamage);
         SubscribeLocalEvent<XenoBrainComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
     }
@@ -129,7 +144,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
     }
 
     public bool RayHit(MapId map, Vector2 from, Vector2 dir, float len, int mask, EntityUid? ignore,
-        out float dist, out Vector2 hitPos, out EntityUid hit)
+        out float dist, out Vector2 hitPos, out EntityUid hit, bool ignoreMobs = true)
     {
         dist = len;
         hitPos = from + dir * len;
@@ -142,6 +157,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
         var found = false;
         foreach (var r in _physics.IntersectRay(map, ray, len, ignore, false))
         {
+            if (ignoreMobs && HasComp<MobStateComponent>(r.HitEntity))
+                continue;
+
             if (!found || r.Distance < dist)
             {
                 found = true;
@@ -152,6 +170,16 @@ public sealed partial class XenoBrainSystem : EntitySystem
         }
 
         return found;
+    }
+
+    public bool PathBlocked(MapId map, Vector2 from, Vector2 to, EntityUid? ignore)
+    {
+        var d = to - from;
+        var l = d.Length();
+        if (l < 0.3f)
+            return false;
+
+        return RayHit(map, from, d / l, l, BlockMask, ignore, out _, out _, out _);
     }
 
     public Vector2 ForwardDir(EntityUid uid, XenoBrainComponent b, Vector2 pos)
@@ -272,6 +300,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         ScanForNewXenos(now);
         Snapshot(now);
         DecayMemory(now);
+        RollDuels(now);
 
         foreach (var x in _xenos)
         {
@@ -376,6 +405,18 @@ public sealed partial class XenoBrainSystem : EntitySystem
         _passages.RemoveAll(p => p.Expire < now);
         PruneLearning();
         _unbreakable.RemoveWhere(e => Deleted(e));
+
+        _tmpKeys.Clear();
+        foreach (var k in _crates.Keys)
+        {
+            if (Deleted(k))
+                _tmpKeys.Add(k);
+        }
+
+        foreach (var k in _tmpKeys)
+        {
+            _crates.Remove(k);
+        }
     }
 
     private void AddThreat(EntityUid player, float amount)
@@ -431,7 +472,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
                 continue;
 
             mapXenos++;
-            if ((a.Pos - x.Pos).Length() <= b.PackRadius)
+            if ((a.Pos - x.Pos).Length() <= b.PackRadius && (a.Uid == x.Uid || a.Brain.DuelOpponent == null))
                 _pack.Add(a);
         }
 
@@ -535,7 +576,11 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         b.TargetDist = ctx.TargetDist;
 
-        if (b.Mode is not (XenoMode.Retreat or XenoMode.Ambush) && ShouldRetreat(b, now, ctx.PackSize))
+        if (b.Mode == XenoMode.Duel)
+        {
+            ThinkDuel(ctx);
+        }
+        else if (b.Mode is not (XenoMode.Retreat or XenoMode.Ambush) && ShouldRetreat(b, now, ctx.PackSize))
         {
             StartRetreat(x, now);
         }
@@ -543,6 +588,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
         {
             switch (b.Mode)
             {
+                case XenoMode.Stalk:
+                    ThinkStalk(ctx);
+                    break;
                 case XenoMode.Retreat:
                     ThinkRetreat(ctx);
                     break;
@@ -568,6 +616,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         UpdateSpeed(x, now);
         CheckStuck(ctx);
+        WatchObstacle(ctx);
         if (b.SmashActive && b.SmashTarget is { } smashed && TerminatingOrDeleted(smashed))
         {
             RecordPassage(x.Map, b.SmashFrom, b.SmashPos + b.SmashDir * 2.2f, now);
@@ -600,7 +649,10 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         if (c.Target is not { } target)
         {
-            if (c.Leader.Uid != x.Uid)
+            if (now >= b.StalkRollReset)
+                b.StalkRolled = false;
+
+            if (c.Leader.Uid != x.Uid && now >= b.NoRallyUntil)
             {
                 b.RallyTarget = c.Leader.Uid;
                 want = XenoMode.Rally;
@@ -616,6 +668,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
         }
         else
         {
+            if (TryStartStalk(c, target))
+                return;
+
             var required = RequiredPack(target, c.MapXenos, b.TargetRanged);
             var engaged = false;
             foreach (var a in _pack)
@@ -823,6 +878,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
     private void Leap(XenoInfo x, TimeSpan now)
     {
         var b = x.Brain;
+        if (b.DuelOpponent != null)
+            return;
+
         b.LeapUntil = now + TimeSpan.FromSeconds(b.LeapSeconds);
         b.NoRetreatUntil = now + TimeSpan.FromSeconds(b.NoRetreatSeconds);
         b.NoLurkUntil = now + TimeSpan.FromSeconds(20);
@@ -830,32 +888,43 @@ public sealed partial class XenoBrainSystem : EntitySystem
         UpdateSpeed(x, now);
     }
 
+    private bool WantsToMove(Ctx c)
+    {
+        var x = c.X;
+        var b = x.Brain;
+
+        switch (b.Mode)
+        {
+            case XenoMode.Ambush:
+            case XenoMode.Stalk:
+                return false;
+            case XenoMode.Attack:
+                return c.Target != null && (c.TargetDist > 2.5f || LineBlocked(x, c.TargetPos));
+            case XenoMode.Duel:
+                return b.GoalPos is { } duelGoal && (b.TargetDist > 2.5f || LineBlocked(x, duelGoal));
+            case XenoMode.Kite:
+                return c.Target != null && (c.TargetDist < 8.5f || c.TargetDist > 14f);
+            case XenoMode.Rally:
+            {
+                if (b.RallyTarget is not { } rt || TerminatingOrDeleted(rt))
+                    return false;
+
+                var rallyPos = _transform.GetWorldPosition(rt);
+                var rallyDist = (rallyPos - x.Pos).Length();
+
+                return rallyDist > 5.5f || (rallyDist > 2.5f && LineBlocked(x, rallyPos));
+            }
+            default:
+                return true;
+        }
+    }
+
     private void CheckStuck(Ctx c)
     {
         var x = c.X;
         var b = x.Brain;
 
-        bool wants;
-        switch (b.Mode)
-        {
-            case XenoMode.Ambush:
-                wants = false;
-                break;
-            case XenoMode.Attack:
-                wants = c.Target != null && (c.TargetDist > 2.5f || LineBlocked(x, c.TargetPos));
-                break;
-            case XenoMode.Kite:
-                wants = c.Target != null && (c.TargetDist < 8.5f || c.TargetDist > 14f);
-                break;
-            case XenoMode.Rally:
-                wants = b.RallyTarget is { } rt && !TerminatingOrDeleted(rt)
-                        && (_transform.GetWorldPosition(rt) - x.Pos).Length() > 5.5f;
-                break;
-            default:
-                wants = true;
-                break;
-        }
-
+        var wants = WantsToMove(c);
         var moved = (x.Pos - b.StuckAnchor).Length() >= b.StuckMinMove;
         if (!wants || moved)
         {
@@ -868,12 +937,43 @@ public sealed partial class XenoBrainSystem : EntitySystem
         }
 
         var limit = b.Mode == XenoMode.Attack && c.Target != null ? b.StuckSecondsAggro : b.StuckSeconds;
+        if (c.PackSize > 1)
+            limit = MathF.Min(limit, b.StuckSecondsPack);
+
         if ((c.Now - b.StuckSince).TotalSeconds < limit)
             return;
 
         b.StuckAnchor = x.Pos;
         b.StuckSince = c.Now;
         OnStuck(x, c.Now);
+    }
+
+    private void WatchObstacle(Ctx c)
+    {
+        var x = c.X;
+        var b = x.Brain;
+        var now = c.Now;
+
+        if (now < b.NextWatch)
+            return;
+
+        b.NextWatch = now + TimeSpan.FromSeconds(0.4);
+
+        var moved = (x.Pos - b.WatchPos).Length();
+        b.WatchPos = x.Pos;
+
+        if (moved >= 0.3f || !WantsToMove(c))
+        {
+            b.WatchStill = 0;
+            return;
+        }
+
+        b.WatchStill++;
+        if (b.WatchStill < 2)
+            return;
+
+        b.WatchStill = 0;
+        HandleObstacle(x, now);
     }
 
     private void OnStuck(XenoInfo x, TimeSpan now)
@@ -887,7 +987,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (HandleObstacle(x, now))
             return;
 
-        if (now < b.PersistUntil)
+        if (b.Mode == XenoMode.Duel)
             return;
 
         if ((x.Pos - b.LastDetourStuckPos).Length() < 4f && (now - b.LastDetourTime).TotalSeconds < 40)
@@ -901,16 +1001,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (b.DetourCount > b.MaxDetoursPerSpot)
         {
             b.DetourCount = 0;
-
-            if (b.SmashTarget is { } st && _unbreakable.Contains(st))
-            {
-                b.NoHuntUntil = now + TimeSpan.FromSeconds(15);
-            }
-            else
-            {
-                b.PersistUntil = now + TimeSpan.FromSeconds(15);
-            }
-
+            b.NoHuntUntil = now + TimeSpan.FromSeconds(12);
+            b.NoRallyUntil = now + TimeSpan.FromSeconds(12);
+            SetMode(x, XenoMode.Patrol, now);
             return;
         }
 
@@ -930,6 +1023,15 @@ public sealed partial class XenoBrainSystem : EntitySystem
         {
             b.SmashActive = false;
             return false;
+        }
+
+        var forceSmash = false;
+        if (TryComp<EntityStorageComponent>(obstacle, out var storage) && !storage.Open)
+        {
+            if (CrateSpammed(obstacle, now))
+                forceSmash = true;
+            else if (TryOpenCrate(x, obstacle, now))
+                return true;
         }
 
         if (_unbreakable.Contains(obstacle))
@@ -958,7 +1060,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
                             && (now - b.LastDetourTime).TotalSeconds < 40
                             && b.DetourCount >= b.MaxDetoursPerSpot;
 
-        if (!bypassNearby || detoursFailed)
+        if (!bypassNearby || detoursFailed || forceSmash)
         {
             b.SmashActive = true;
             b.SmashFrom = x.Pos;
@@ -969,6 +1071,54 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         b.SmashActive = false;
         return false;
+    }
+
+    private CrateMemory GetCrate(EntityUid crate)
+    {
+        if (!_crates.TryGetValue(crate, out var m))
+        {
+            m = new CrateMemory();
+            _crates[crate] = m;
+        }
+
+        return m;
+    }
+
+    private bool CrateSpammed(EntityUid crate, TimeSpan now)
+    {
+        return _crates.TryGetValue(crate, out var m)
+               && m.Opens >= CrateOpenLimit
+               && (now - m.LastOpen).TotalSeconds < CrateWindowSeconds;
+    }
+
+    private bool TryOpenCrate(XenoInfo x, EntityUid crate, TimeSpan now)
+    {
+        var b = x.Brain;
+
+        if (_crates.TryGetValue(crate, out var known) && now < known.SkipUntil)
+            return false;
+
+        if ((_transform.GetWorldPosition(crate) - x.Pos).Length() > 2.3f)
+            return false;
+
+        if (now < b.NextOpenAt)
+            return true;
+
+        b.NextOpenAt = now + TimeSpan.FromSeconds(1.0);
+
+        var mem = GetCrate(crate);
+        if (!_entStorage.TryOpenStorage(x.Uid, crate))
+        {
+            mem.SkipUntil = now + TimeSpan.FromSeconds(30);
+            return false;
+        }
+
+        if ((now - mem.LastOpen).TotalSeconds > CrateWindowSeconds)
+            mem.Opens = 0;
+
+        mem.Opens++;
+        mem.LastOpen = now;
+        return true;
     }
 
     private bool CanXenoBreak(EntityUid ob, XenoBrainComponent b)
@@ -1198,6 +1348,10 @@ public sealed partial class XenoBrainSystem : EntitySystem
     private void SetMode(XenoInfo x, XenoMode mode, TimeSpan now)
     {
         var b = x.Brain;
+
+        if (b.DuelOpponent != null && mode != XenoMode.Duel)
+            return;
+
         if (b.Mode == mode)
             return;
 

@@ -1,3 +1,5 @@
+// Nestation Anarhey CC BY-NC 3.0
+
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -5,6 +7,7 @@ using Content.Corvax.Interfaces.Shared;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
+using Content.Server.AntiFlood;
 using Content.Server.Discord.DiscordLink;
 using Content.Server.Players.RateLimiting;
 using Content.Server.Preferences.Managers;
@@ -268,6 +271,9 @@ private ISawmill? _sawmill = default!;
             DispatchServerMessage(player, Loc.GetString("chat-manager-max-message-length-exceeded-message", ("limit", MaxMessageLength)));
             return;
         }
+
+        if (type == OOCChatType.OOC && _entityManager.System<AntiFloodSystem>().CheckOoc(player, message))
+            return;
 
         switch (type)
         {
