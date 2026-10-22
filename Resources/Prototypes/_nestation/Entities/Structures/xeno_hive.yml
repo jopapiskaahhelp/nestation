@@ -1,0 +1,50 @@
+# Nestation Anarhey CC BY-NC 3.0
+- type: entity
+  parent: BaseStructure
+  id: XenoEgg
+  name: xeno egg
+  description: Something is moving inside.
+  components:
+    - type: Sprite
+      sprite: Objects/Misc/eggspider.rsi
+      state: icon
+    - type: XenoEgg
+    - type: Damageable
+      damageContainer: StructuralInorganic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 40
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+
+- type: entity
+  parent: MarkerBase
+  id: XenoClutch
+  name: xeno clutch
+  components:
+    - type: Sprite
+      layers:
+        - state: green
+    - type: XenoClutch
+      mazeRadius: 14
+      opening:
+        - { proto: MobXeno, delay: 120, class: 1, maturation: 120 }
+        - { proto: MobXenoDrone, delay: 120, class: 1, maturation: 120 }
+        - { proto: MobXenoDrone, delay: 120, class: 1, maturation: 120 }
+        - { proto: MobXeno, delay: 120, class: 1, maturation: 120 }
+        - { proto: MobXenoRunner, delay: 180, class: 2, maturation: 240 }
+        - { proto: MobXenoRunner, delay: 180, class: 2, maturation: 240 }
+        - { proto: MobXenoDrone, delay: 120, class: 1, maturation: 120 }
+        - { proto: MobXenoRavager, delay: 240, class: 3, maturation: 240, maturationMax: 360 }
+      cycle:
+        - { proto: MobXenoDrone, delay: 120, class: 1, maturation: 120 }
+        - { proto: MobXenoRunner, delay: 180, class: 2, maturation: 240 }
+        - { proto: MobXenoSpitter, delay: 180, class: 2, maturation: 240 }
+        - { proto: MobXenoPraetorian, delay: 300, class: 3, maturation: 240, maturationMax: 360 }
+        - { proto: MobXeno, delay: 120, class: 1, maturation: 120 }
+        - { proto: MobXenoRunner, delay: 180, class: 2, maturation: 240 }
+        - { proto: MobXenoRunner, delay: 180, class: 2, maturation: 240 }
+        - { proto: MobXenoRavager, delay: 240, class: 3, maturation: 240, maturationMax: 360 }

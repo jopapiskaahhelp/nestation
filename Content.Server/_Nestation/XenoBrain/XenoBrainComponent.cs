@@ -1,5 +1,8 @@
 // Nestation Anarhey CC BY-NC 3.0
 using System.Numerics;
+using Content.Server._Nestation.XenoHive;
+using Content.Shared._Nestation.XenoHive;
+using Robust.Shared.Map;
 
 namespace Content.Server._Nestation.XenoBrain;
 
@@ -16,6 +19,10 @@ public enum XenoMode : byte
     Stalk,
     Duel,
     Feed,
+    Build,
+    Heal,
+    Guard,
+    Advance,
 }
 
 public enum XenoStalkPhase : byte
@@ -91,6 +98,25 @@ public sealed partial class XenoBrainComponent : Component
     [DataField] public float FeedRange = 25f;
     [DataField] public float FeedSeconds = 5f;
     [DataField] public float FeedMaxSeconds = 40f;
+
+
+    [DataField] public float ProvokeRange = 7f;
+    [DataField] public float ProvokeChance = 0.25f;
+    [DataField] public float ProvokeCheckSeconds = 20f;
+    [DataField] public float CallRange = 45f;
+    [DataField] public int CallCount = 3;
+    [DataField] public float BuildReach = 2.6f;
+    [DataField] public float BuildStuckSeconds = 20f;
+    [DataField] public float DroneHiveAvoid = 30f;
+    [DataField] public float AmbushHoldSeconds = 60f;
+    [DataField] public float HealBelow = 0.7f;
+    [DataField] public float HealTo = 0.95f;
+    [DataField] public float HealPerSecond = 0.03f;
+    [DataField] public float HealMaxSeconds = 90f;
+    [DataField] public float HomeRadius = 35f;
+    [DataField] public float GuardAlertRange = 16f;
+    [DataField] public float ScreamTriggerRange = 5f;
+    [DataField] public float ScreamCooldownSeconds = 40f;
 
     [ViewVariables] public XenoMode Mode = XenoMode.Patrol;
     [ViewVariables] public TimeSpan ModeSince;
@@ -194,4 +220,18 @@ public sealed partial class XenoBrainComponent : Component
     public TimeSpan FeedStart;
     public TimeSpan FeedDeadline;
     public TimeSpan NoFeedUntil;
+
+    public XenoCaste Caste = XenoCaste.Runner;
+
+    public XenoPlanEntry? BuildEntry;
+    public EntityCoordinates? BuildStand;
+    public Vector2 BuildStandPos;
+    public TimeSpan BuildSince;
+    public TimeSpan NextBuildAt;
+    public TimeSpan NextPickAt;
+    public TimeSpan IdlePickAt;
+    public TimeSpan NextProvokeAt;
+    public TimeSpan NoHealUntil;
+    public TimeSpan NextHealAt;
+    public TimeSpan NextScreamAt;
 }

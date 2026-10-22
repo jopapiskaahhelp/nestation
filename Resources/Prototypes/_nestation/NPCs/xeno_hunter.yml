@@ -22,6 +22,9 @@
           task: XenoFeedCompound
     - tasks:
         - !type:HTNCompoundTask
+          task: XenoBuildCompound
+    - tasks:
+        - !type:HTNCompoundTask
           task: XenoRallyCompound
     - tasks:
         - !type:HTNCompoundTask
@@ -438,3 +441,35 @@
           preconditions:
             - !type:XenoModePrecondition
               modes: [ Patrol, Detour ]
+
+- type: htnCompound
+  id: XenoBuildCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickBuildPointOperator
+            targetKey: BuildCoordinates
+            modes: [ Build, Heal, Guard, Advance ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: BuildCoordinates
+            pathfindKey: BuildPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Build, Heal, Guard, Advance ]
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:XenoHoldOperator
+            modes: [ Build, Heal, Guard, Advance ]
+            maxSeconds: 0.4
+
+- type: htnCompound
+  id: XenoQueenCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:NoOperator

@@ -5,6 +5,10 @@
   parent: [ SimpleSpaceMobBase, MobNightVision, BaseMobDestructible ]
   description: They mostly come at night. Mostly.
   components:
+  - type: XenoCaste
+    caste: Burrower
+  - type: NoiseProtection
+    examineText: null
   - type: Insulated
   - type: CombatMode
   - type: InputMover
@@ -124,6 +128,14 @@
   parent: MobXeno
   id: MobXenoPraetorian
   components:
+  - type: XenoCaste
+    caste: Praetorian
+  - type: ScreechAction
+    range: 10
+    effects:
+    - !type:ModifyParalysis
+      time: 4
+    - !type:Disarm
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/Xenos/praetorian.rsi
@@ -157,6 +169,8 @@
   parent: MobXeno
   id: MobXenoDrone
   components:
+  - type: XenoCaste
+    caste: Drone
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/Xenos/drone.rsi
@@ -194,6 +208,13 @@
   parent: MobXeno
   id: MobXenoQueen
   components:
+  - type: XenoCaste
+    caste: Queen
+  - type: HTN
+    rootTask:
+      task: XenoQueenCompound
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/Xenos/queen.rsi
@@ -209,6 +230,8 @@
     speedModifierThresholds:
       150: 0.7
   - type: MovementSpeedModifier
+    baseWalkSpeed: 0
+    baseSprintSpeed: 0
   - type: MeleeWeapon
     damage:
       types:
@@ -233,6 +256,14 @@
   parent: MobXeno
   id: MobXenoRavager
   components:
+  - type: XenoCaste
+    caste: Ravager
+  - type: ScreechAction
+    range: 10
+    effects:
+    - !type:ModifyParalysis
+      time: 4
+    - !type:Disarm
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/Xenos/ravager.rsi
@@ -270,6 +301,8 @@
   parent: MobXeno
   id: MobXenoRunner
   components:
+  - type: XenoCaste
+    caste: Runner
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/Xenos/runner.rsi
@@ -314,6 +347,8 @@
   parent: MobXeno
   id: MobXenoSpitter
   components:
+  - type: XenoCaste
+    caste: Spitter
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/Xenos/spitter.rsi

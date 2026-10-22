@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server._Nestation.XenoBrain;
+using Content.Shared._Nestation.XenoHive;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN.PrimitiveTasks;
 using Robust.Shared.Random;
@@ -10,10 +11,6 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Nestation.NPC.HTN;
 
-/// <summary>
-/// Случайная точка для патруля. Обходит места, где ксеносов ранили, и не ведёт в старые "застревания".
-/// В осторожном режиме (после засады) прыжки короче.
-/// </summary>
 public sealed partial class PickRoamPointOperator : HTNOperator
 {
     [Dependency] private IEntityManager _entManager = default!;
@@ -37,7 +34,6 @@ public sealed partial class PickRoamPointOperator : HTNOperator
     [DataField]
     public float CautiousMaxRange = 18f;
 
-    /// <summary>В каких режимах мозга оператор активен. Пусто = всегда.</summary>
     [DataField]
     public List<string> Modes = new();
 
@@ -64,9 +60,22 @@ public sealed partial class PickRoamPointOperator : HTNOperator
         var min = cautious ? CautiousMinRange : MinRange;
         var max = cautious ? CautiousMaxRange : MaxRange;
 
+        var avoidHive = brain != null && brain.Caste == XenoCaste.Drone && _brainSys.HiveStage(xform.MapID) == 1;
+        var hivePos = avoidHive ? _brainSys.HivePosition(xform.MapID) : null;
+
         for (var i = 0; i < 6; i++)
         {
             var offset = _random.NextAngle().ToVec() * _random.NextFloat(min, max);
+            if (hivePos is { } hp && brain != null)
+            {
+                var away = pos - hp;
+                if (away.LengthSquared() > 0.01f && Vector2.Dot(offset, away) < 0f)
+                    offset = -offset;
+
+                if ((pos + offset - hp).Length() < brain.DroneHiveAvoid)
+                    continue;
+            }
+
             var cand = pos + offset;
 
             if (_brainSys.IsDangerous(xform.MapID, cand))

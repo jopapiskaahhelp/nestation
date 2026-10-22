@@ -1,5 +1,6 @@
 // Nestation Anarhey CC BY-NC 3.0
 using System.Numerics;
+using Content.Shared._Nestation.XenoHive;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -77,7 +78,7 @@ public sealed partial class XenoBrainSystem
             foreach (var idx in members)
             {
                 var cand = _xenos[idx];
-                if (cand.Brain.DuelOpponent == null && !IsChasingPlayer(cand.Brain, now))
+                if (cand.Brain.DuelOpponent == null && cand.Brain.Caste != XenoCaste.Burrower && !IsChasingPlayer(cand.Brain, now))
                     free.Add(idx);
             }
 

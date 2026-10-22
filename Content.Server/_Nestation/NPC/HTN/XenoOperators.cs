@@ -363,6 +363,41 @@ public sealed partial class PickFlankPointOperator : HTNOperator
     }
 }
 
+public sealed partial class PickBuildPointOperator : HTNOperator
+{
+    [Dependency] private IEntityManager _entMan = default!;
+    private SharedTransformSystem _transform = default!;
+
+    [DataField(required: true)] public string TargetKey = string.Empty;
+    [DataField] public List<string> Modes = new();
+
+    public override void Initialize(IEntitySystemManager sysManager)
+    {
+        base.Initialize(sysManager);
+        _transform = sysManager.GetEntitySystem<SharedTransformSystem>();
+    }
+
+    public override Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(
+        NPCBlackboard blackboard, CancellationToken cancelToken)
+    {
+        var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
+        if (!_entMan.TryGetComponent(owner, out XenoBrainComponent? brain) || !XenoOps.ModeOk(Modes, brain))
+            return XenoOps.No();
+
+        if (brain.BuildStand is not { } stand)
+            return XenoOps.No();
+
+        var myPos = _transform.GetWorldPosition(owner);
+        if ((brain.BuildStandPos - myPos).Length() < 1f)
+            return XenoOps.No();
+
+        return XenoOps.Yes(new Dictionary<string, object>
+        {
+            [TargetKey] = stand,
+        });
+    }
+}
+
 public sealed partial class XenoHoldOperator : HTNOperator
 {
     [Dependency] private IEntityManager _entMan = default!;

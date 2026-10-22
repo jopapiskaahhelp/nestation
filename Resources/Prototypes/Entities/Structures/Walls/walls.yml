@@ -748,6 +748,7 @@
   id: WallSolidChitin
   name: exodermis wall
   components:
+  - type: XenoHiveStructure
   - type: Damageable
     damageModifierSet: SteelStaticMod
   - type: Destructible
@@ -777,6 +778,7 @@
   id: WallReinforcedChitin
   name: reinforced exodermis
   components:
+  - type: XenoHiveStructure
   - type: Sprite
     sprite: Structures/Walls/exo.rsi
   - type: Icon

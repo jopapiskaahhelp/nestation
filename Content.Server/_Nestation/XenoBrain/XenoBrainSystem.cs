@@ -1,6 +1,7 @@
 // Nestation Anarhey CC BY-NC 3.0
 using System.Numerics;
 using Content.Server.NPC.HTN;
+using Content.Shared._Nestation.XenoHive;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -302,6 +303,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         Snapshot(now);
         DecayMemory(now);
         RollDuels(now);
+        UpdateSquads(now);
 
         foreach (var x in _xenos)
         {
@@ -336,6 +338,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
         foreach (var uid in _newXenos)
         {
             var brain = EnsureComp<XenoBrainComponent>(uid);
+            if (TryComp<XenoCasteComponent>(uid, out var caste))
+                brain.Caste = caste.Caste;
+
             if (TryComp<HTNComponent>(uid, out var htn))
                 htn.PlanCooldown = brain.PlanCooldown;
         }
@@ -582,9 +587,14 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         b.TargetDist = ctx.TargetDist;
 
+        TryScream(ctx);
+
         if (b.Mode == XenoMode.Duel)
         {
             ThinkDuel(ctx);
+        }
+        else if (HandleHeal(ctx))
+        {
         }
         else if (b.Mode is not (XenoMode.Retreat or XenoMode.Ambush) && ShouldRetreat(b, now, ctx.PackSize))
         {
@@ -688,6 +698,17 @@ public sealed partial class XenoBrainSystem : EntitySystem
             return;
         }
 
+        if (b.Caste == XenoCaste.Burrower
+            && _hive.TryGetHive(x.Map, out var hive)
+            && _hive.GetPlan(hive) is { } plan)
+        {
+            DecideBurrower(c, hive, plan);
+            return;
+        }
+
+        if (TrySquadDecide(c))
+            return;
+
         XenoMode want;
 
         if (c.Target is not { } target)
@@ -695,7 +716,19 @@ public sealed partial class XenoBrainSystem : EntitySystem
             if (now >= b.StalkRollReset)
                 b.StalkRolled = false;
 
-            if (c.Leader.Uid != x.Uid && now >= b.NoRallyUntil)
+            var stage = b.Caste == XenoCaste.Drone ? _hive.GetStage(x.Map) : 0;
+
+            if (stage >= 3)
+            {
+                b.AmbushUntil = now + TimeSpan.FromSeconds(b.AmbushHoldSeconds);
+                want = XenoMode.Ambush;
+            }
+            else if (stage == 2 && now >= b.NoRallyUntil && TryPickEscort(x, out var escort))
+            {
+                b.RallyTarget = escort;
+                want = XenoMode.Rally;
+            }
+            else if (c.Leader.Uid != x.Uid && now >= b.NoRallyUntil)
             {
                 b.RallyTarget = c.Leader.Uid;
                 want = XenoMode.Rally;
@@ -911,6 +944,12 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         if (c.Now >= b.AmbushUntil)
         {
+            if (b.Caste == XenoCaste.Drone && _hive.GetStage(x.Map) >= 3)
+            {
+                b.AmbushUntil = c.Now + TimeSpan.FromSeconds(b.AmbushHoldSeconds);
+                return;
+            }
+
             var cautious = c.Now + TimeSpan.FromSeconds(b.CautiousSeconds);
             b.CautiousUntil = cautious;
             b.NoLurkUntil = cautious;
@@ -945,6 +984,11 @@ public sealed partial class XenoBrainSystem : EntitySystem
                 return c.Target != null && (c.TargetDist > 2.5f || LineBlocked(x, c.TargetPos));
             case XenoMode.Feed:
                 return b.TargetDist > 2.2f;
+            case XenoMode.Build:
+            case XenoMode.Heal:
+            case XenoMode.Guard:
+            case XenoMode.Advance:
+                return (b.BuildEntry != null || b.BuildStand != null) && (b.BuildStandPos - x.Pos).Length() > 1f;
             case XenoMode.Duel:
                 return b.GoalPos is { } duelGoal && (b.TargetDist > 2.5f || LineBlocked(x, duelGoal));
             case XenoMode.Kite:
@@ -1031,6 +1075,25 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         if (HandleObstacle(x, now))
             return;
+
+        if (b.Mode == XenoMode.Build)
+        {
+            OnBuildStuck(x, now);
+            return;
+        }
+
+        if (b.Mode is XenoMode.Heal or XenoMode.Guard or XenoMode.Advance)
+        {
+            if (b.Mode == XenoMode.Heal)
+            {
+                b.NoHealUntil = now + TimeSpan.FromSeconds(20);
+                SetMode(x, XenoMode.Patrol, now);
+            }
+
+            b.BuildStand = null;
+            b.IdlePickAt = TimeSpan.Zero;
+            return;
+        }
 
         if (b.Mode == XenoMode.Duel)
             return;
@@ -1425,7 +1488,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         var b = x.Brain;
         var m = b.BaseSpeed;
 
-        if (b.Mode == XenoMode.Retreat)
+        if (b.Mode is XenoMode.Retreat or XenoMode.Heal)
             m = b.RetreatSpeed;
         else if (now < b.LeapUntil)
             m = b.LeapSpeed;
