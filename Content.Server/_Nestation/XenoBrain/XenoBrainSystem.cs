@@ -341,6 +341,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
             if (TryComp<XenoCasteComponent>(uid, out var caste))
                 brain.Caste = caste.Caste;
 
+            brain.Boldness = 0.3f + _random.NextFloat() * 0.7f;
+            brain.Patience = _random.NextFloat();
+
             if (TryComp<HTNComponent>(uid, out var htn))
                 htn.PlanCooldown = brain.PlanCooldown;
         }
@@ -447,6 +450,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         PlayerInfo? nearest = null;
         var nearDist = float.MaxValue;
         var nearestDist = float.MaxValue;
+        var nearScore = float.MaxValue;
         foreach (var p in _players)
         {
             if (p.Map != x.Map)
@@ -462,10 +466,15 @@ public sealed partial class XenoBrainSystem : EntitySystem
                 nearest = p;
             }
 
-            if (d <= b.SightRange && d < nearDist)
+            if (d <= b.SightRange)
             {
-                nearDist = d;
-                near = p;
+                var score = TargetScore(x, p, d, now);
+                if (score < nearScore)
+                {
+                    nearScore = score;
+                    nearDist = d;
+                    near = p;
+                }
             }
         }
 
@@ -586,7 +595,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
             target != null ? (targetPos - x.Pos).Length() : float.MaxValue, mapXenos, nearestDist, closing);
 
         b.TargetDist = ctx.TargetDist;
+        b.TargetVisible = target != null && ctx.TargetDist <= 30f && !PathBlocked(x.Map, x.Pos, targetPos, x.Uid);
 
+        TrackChase(ctx);
         TryScream(ctx);
 
         if (b.Mode == XenoMode.Duel)
@@ -654,6 +665,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
     private bool IsGivenUp(XenoInfo x, XenoBrainComponent b, TimeSpan now, EntityUid uid, Vector2 pos, float dist)
     {
+        if (b.AbortTarget == uid && now < b.AbortUntil)
+            return true;
+
         if (b.GiveUpTarget != uid || now >= b.GiveUpUntil)
             return false;
 
@@ -709,6 +723,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (TrySquadDecide(c))
             return;
 
+        if ((b.Mode is XenoMode.Bait or XenoMode.Weave or XenoMode.Lure) && ThinkTactic(c))
+            return;
+
         XenoMode want;
 
         if (c.Target is not { } target)
@@ -744,6 +761,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
         }
         else
         {
+            if (TryTactic(c, target))
+                return;
+
             if (TryStartStalk(c, target))
                 return;
 
@@ -988,6 +1008,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
             case XenoMode.Heal:
             case XenoMode.Guard:
             case XenoMode.Advance:
+            case XenoMode.Bait:
+            case XenoMode.Weave:
+            case XenoMode.Lure:
                 return (b.BuildEntry != null || b.BuildStand != null) && (b.BuildStandPos - x.Pos).Length() > 1f;
             case XenoMode.Duel:
                 return b.GoalPos is { } duelGoal && (b.TargetDist > 2.5f || LineBlocked(x, duelGoal));
@@ -1014,6 +1037,59 @@ public sealed partial class XenoBrainSystem : EntitySystem
         var b = x.Brain;
 
         var wants = WantsToMove(c);
+
+        if (!wants)
+        {
+            b.WalkAnchor = x.Pos;
+            b.WalkSince = c.Now;
+        }
+        else if ((x.Pos - b.WalkAnchor).Length() >= 1.5f)
+        {
+            b.WalkAnchor = x.Pos;
+            b.WalkSince = c.Now;
+        }
+        else if ((c.Now - b.WalkSince).TotalSeconds >= 4.0)
+        {
+            b.WalkAnchor = x.Pos;
+            b.WalkSince = c.Now;
+            b.StuckAnchor = x.Pos;
+            b.StuckSince = c.Now;
+            OnStuck(x, c.Now);
+            return;
+        }
+
+        if (wants && b.GoalPos is { } goal)
+        {
+            var goalDist = (goal - x.Pos).Length();
+            if ((goal - b.ProgressGoal).Length() > 2.5f)
+            {
+                b.ProgressGoal = goal;
+                b.ProgressBest = goalDist;
+                b.ProgressSince = c.Now;
+            }
+            else if (goalDist < b.ProgressBest - 1.0f)
+            {
+                b.ProgressBest = goalDist;
+                b.ProgressSince = c.Now;
+            }
+            else if (goalDist > 2.5f && (c.Now - b.ProgressSince).TotalSeconds >= 6.0)
+            {
+                b.ProgressGoal = Vector2.Zero;
+                b.ProgressBest = float.MaxValue;
+                b.ProgressSince = c.Now;
+                b.StuckAnchor = x.Pos;
+                b.StuckSince = c.Now;
+                OnStuck(x, c.Now);
+                return;
+            }
+        }
+        else
+        {
+            b.ProgressGoal = Vector2.Zero;
+            b.ProgressBest = float.MaxValue;
+            b.ProgressSince = c.Now;
+        }
+
         var moved = (x.Pos - b.StuckAnchor).Length() >= b.StuckMinMove;
         if (!wants || moved)
         {
@@ -1082,12 +1158,24 @@ public sealed partial class XenoBrainSystem : EntitySystem
             return;
         }
 
-        if (b.Mode is XenoMode.Heal or XenoMode.Guard or XenoMode.Advance)
+        if (b.Mode is XenoMode.Heal or XenoMode.Guard or XenoMode.Advance or XenoMode.Bait or XenoMode.Weave or XenoMode.Lure)
         {
             if (b.Mode == XenoMode.Heal)
             {
                 b.NoHealUntil = now + TimeSpan.FromSeconds(20);
                 SetMode(x, XenoMode.Patrol, now);
+            }
+
+            if (b.Mode is XenoMode.Bait or XenoMode.Weave or XenoMode.Lure)
+            {
+                b.NextTacticAt = now + TimeSpan.FromSeconds(8);
+                SetMode(x, XenoMode.Patrol, now);
+            }
+
+            if (b.Mode == XenoMode.Advance && _squadOf.TryGetValue(x.Uid, out var stuckSquad) && stuckSquad.Tank == x.Uid)
+            {
+                EndRaid(stuckSquad, now);
+                stuckSquad.NextRaid = now + TimeSpan.FromSeconds(60);
             }
 
             b.BuildStand = null;
@@ -1488,7 +1576,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         var b = x.Brain;
         var m = b.BaseSpeed;
 
-        if (b.Mode is XenoMode.Retreat or XenoMode.Heal)
+        if (b.Mode is XenoMode.Retreat or XenoMode.Heal or XenoMode.Lure or XenoMode.Weave)
             m = b.RetreatSpeed;
         else if (now < b.LeapUntil)
             m = b.LeapSpeed;

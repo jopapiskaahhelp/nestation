@@ -1,0 +1,11 @@
+# Nestation Anarhey CC BY-NC 3.0
+- type: entity
+  parent: MarkerBase
+  id: DirectorSpawnMarker
+  name: director spawn marker
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+    - type: DirectorMarker
+      radius: 18

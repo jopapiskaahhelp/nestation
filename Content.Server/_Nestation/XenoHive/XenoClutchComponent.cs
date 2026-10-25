@@ -47,18 +47,6 @@ public sealed partial class XenoClutchComponent : Component
     public List<XenoHiveEntry> Cycle = new();
 
     [DataField]
-    public int MazeRadius = 14;
-
-    [DataField]
-    public float LoopChance = 0.12f;
-
-    [DataField]
-    public float DoorChance = 0.1f;
-
-    [DataField]
-    public int Entrances = 4;
-
-    [DataField]
     public TimeSpan BuildInterval = TimeSpan.FromSeconds(4);
 
     [DataField]

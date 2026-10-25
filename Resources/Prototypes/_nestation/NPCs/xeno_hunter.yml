@@ -356,8 +356,29 @@
           preconditions:
             - !type:XenoModePrecondition
               modes: [ Attack, Detour, Duel ]
+            - !type:XenoTargetVisiblePrecondition
+              visible: true
             - !type:XenoTargetDistPrecondition
               max: 11.5
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickBrainTargetOperator
+            targetKey: Target
+            targetCoordinatesKey: TargetCoordinates
+            modes: [ Attack, Detour, Duel ]
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: TargetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MeleeRange
+          preconditions:
+            - !type:XenoModePrecondition
+              modes: [ Attack, Detour, Duel ]
+            - !type:XenoTargetVisiblePrecondition
+              visible: false
     - tasks:
         - !type:HTNPrimitiveTask
           operator: !type:PickBrainTargetOperator
@@ -389,6 +410,8 @@
           preconditions:
             - !type:XenoModePrecondition
               modes: [ Attack, Detour, Duel ]
+            - !type:XenoTargetVisiblePrecondition
+              visible: true
 
 - type: htnCompound
   id: XenoRoamCompound
@@ -449,7 +472,7 @@
         - !type:HTNPrimitiveTask
           operator: !type:PickBuildPointOperator
             targetKey: BuildCoordinates
-            modes: [ Build, Heal, Guard, Advance ]
+            modes: [ Build, Heal, Guard, Advance, Bait, Weave, Lure ]
         - !type:HTNPrimitiveTask
           operator: !type:MoveToOperator
             shutdownState: TaskFinished
@@ -460,11 +483,11 @@
             rangeKey: MeleeRange
           preconditions:
             - !type:XenoModePrecondition
-              modes: [ Build, Heal, Guard, Advance ]
+              modes: [ Build, Heal, Guard, Advance, Bait, Weave, Lure ]
     - tasks:
         - !type:HTNPrimitiveTask
           operator: !type:XenoHoldOperator
-            modes: [ Build, Heal, Guard, Advance ]
+            modes: [ Build, Heal, Guard, Advance, Bait, Weave, Lure ]
             maxSeconds: 0.4
 
 - type: htnCompound

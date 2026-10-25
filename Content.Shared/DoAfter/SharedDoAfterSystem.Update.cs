@@ -204,6 +204,12 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         if (args.EventTarget is { Valid: true } eventTarget && !Exists(eventTarget))
             return true;
 
+        if (args.Target is { } missing && TerminatingOrDeleted(missing))
+        {
+            Log.Warning($"DoAfter cancelled, target deleted: {args.Event.GetType().Name} user={ToPrettyString(args.User)}");
+            return true;
+        }
+
         // TODO: Re-use existing xform query for these calculations.
         if (args.BreakOnMove && !(!args.BreakOnWeightlessMove && _gravity.IsWeightless(args.User)))
         {

@@ -238,6 +238,45 @@ public sealed partial class XenoHiveSystem : EntitySystem
         QueueDel(uid);
     }
 
+    public bool TrySnapFree(MapId map, Vector2 pos, out EntityCoordinates coords, out Vector2 snapped)
+    {
+        coords = default;
+        snapped = default;
+
+        if (!_maps.TryFindGridAt(map, pos, out var gridUid, out var grid))
+            return false;
+
+        var center = _maps.WorldToTile(gridUid, grid, pos);
+        var bestDist = float.MaxValue;
+        var found = false;
+
+        for (var dx = -3; dx <= 3; dx++)
+        {
+            for (var dy = -3; dy <= 3; dy++)
+            {
+                var tile = new Vector2i(center.X + dx, center.Y + dy);
+                if (!_maps.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
+                    continue;
+
+                if (_turf.IsTileBlocked(tileRef, StructureMask))
+                    continue;
+
+                var local = _maps.GridTileToLocal(gridUid, grid, tile);
+                var world = _transform.ToMapCoordinates(local).Position;
+                var d = (world - pos).LengthSquared();
+                if (d >= bestDist)
+                    continue;
+
+                bestDist = d;
+                coords = local;
+                snapped = world;
+                found = true;
+            }
+        }
+
+        return found;
+    }
+
     public bool TryGetHive(MapId map, out Entity<XenoClutchComponent> hive)
     {
         var query = EntityQueryEnumerator<XenoClutchComponent, TransformComponent>();
@@ -273,10 +312,21 @@ public sealed partial class XenoHiveSystem : EntitySystem
         if (xform.GridUid is not { } grid || !TryComp<MapGridComponent>(grid, out var gridComp))
             return null;
 
-        var plan = XenoMazePlan.Generate(_random, hive.Comp.MazeRadius, hive.Comp.LoopChance,
-            hive.Comp.DoorChance, hive.Comp.Entrances);
+        var origin = _maps.WorldToTile(grid, gridComp, _transform.GetWorldPosition(xform));
+
+        bool Blocked(Vector2i offset)
+        {
+            var tile = new Vector2i(origin.X + offset.X, origin.Y + offset.Y);
+            if (!_maps.TryGetTileRef(grid, gridComp, tile, out var tileRef) || tileRef.Tile.IsEmpty)
+                return true;
+
+            return _turf.IsTileBlocked(tileRef, StructureMask);
+        }
+
+        var plan = XenoMazePlan.Generate(_random, Blocked);
         plan.Grid = grid;
-        plan.Origin = _maps.WorldToTile(grid, gridComp, _transform.GetWorldPosition(xform));
+        plan.Origin = origin;
+        plan.Owner = hive.Comp;
         hive.Comp.Plan = plan;
         return plan;
     }
@@ -384,16 +434,15 @@ public sealed partial class XenoHiveSystem : EntitySystem
         return _turf.IsTileBlocked(tileRef, StructureMask) ? TileClass.Foreign : TileClass.Clear;
     }
 
-    private void FixEnclosed(XenoClutchComponent clutch)
+    private bool BuildLabels(XenoMazePlan plan, XenoClutchComponent clutch, MapGridComponent gridComp,
+        out TileClass[,] cls, out EntityUid[,] walls, out int[,] label, out HashSet<int> good)
     {
-        if (clutch.Plan is not { } plan || !TryComp<MapGridComponent>(plan.Grid, out var gridComp))
-            return;
-
         var r = plan.Radius;
         var size = 2 * r + 1;
-        var cls = new TileClass[size, size];
-        var walls = new EntityUid[size, size];
-        var label = new int[size, size];
+        cls = new TileClass[size, size];
+        walls = new EntityUid[size, size];
+        label = new int[size, size];
+        good = new HashSet<int>();
 
         for (var x = 0; x < size; x++)
         {
@@ -436,7 +485,6 @@ public sealed partial class XenoHiveSystem : EntitySystem
             }
         }
 
-        var good = new HashSet<int>();
         for (var i = 0; i < size; i++)
         {
             foreach (var l in new[] { label[0, i], label[size - 1, i], label[i, 0], label[i, size - 1] })
@@ -449,8 +497,71 @@ public sealed partial class XenoHiveSystem : EntitySystem
         if (good.Count == 0 && label[r, r] > 0)
             good.Add(label[r, r]);
 
-        if (good.Count == 0)
+        return good.Count > 0;
+    }
+
+    private void EnsureLabels(XenoMazePlan plan)
+    {
+        var now = _timing.CurTime;
+        if (plan.Labels != null && (now - plan.LabelsAt).TotalSeconds < 1.5)
             return;
+
+        if (plan.Owner == null || !TryComp<MapGridComponent>(plan.Grid, out var gridComp))
+            return;
+
+        BuildLabels(plan, plan.Owner, gridComp, out _, out _, out var label, out var good);
+        plan.Labels = label;
+        plan.LabelsAt = now;
+        plan.Good.Clear();
+        foreach (var g in good)
+        {
+            plan.Good.Add(g);
+        }
+    }
+
+    private int LabelAtOffset(XenoMazePlan plan, Vector2i offset)
+    {
+        var r = plan.Radius;
+        var lx = offset.X + r;
+        var ly = offset.Y + r;
+        if (plan.Labels is not { } labels || lx < 0 || ly < 0 || lx >= labels.GetLength(0) || ly >= labels.GetLength(1))
+            return -2;
+
+        return labels[lx, ly];
+    }
+
+    public bool CanReach(XenoMazePlan plan, Vector2 from, Vector2i target)
+    {
+        EnsureLabels(plan);
+        if (plan.Labels == null || !TryComp<MapGridComponent>(plan.Grid, out var gridComp))
+            return true;
+
+        var targetLabel = LabelAtOffset(plan, target);
+        if (targetLabel <= 0)
+            return false;
+
+        var tile = _maps.WorldToTile(plan.Grid, gridComp, from);
+        var fromLabel = LabelAtOffset(plan, new Vector2i(tile.X - plan.Origin.X, tile.Y - plan.Origin.Y));
+
+        if (fromLabel == -2)
+            return plan.Good.Contains(targetLabel);
+
+        if (fromLabel <= 0)
+            return true;
+
+        return fromLabel == targetLabel || (plan.Good.Contains(fromLabel) && plan.Good.Contains(targetLabel));
+    }
+
+    private void FixEnclosed(XenoClutchComponent clutch)
+    {
+        if (clutch.Plan is not { } plan || !TryComp<MapGridComponent>(plan.Grid, out var gridComp))
+            return;
+
+        if (!BuildLabels(plan, clutch, gridComp, out var cls, out var walls, out var label, out var good))
+            return;
+
+        var r = plan.Radius;
+        var size = 2 * r + 1;
 
         var enclosed = new HashSet<int>();
         foreach (var open in plan.Open)
@@ -463,12 +574,13 @@ public sealed partial class XenoHiveSystem : EntitySystem
         if (enclosed.Count == 0)
             return;
 
-        var best = new Dictionary<int, (XenoPlanEntry Entry, bool ToGood)>();
+        var best = new Dictionary<int, (XenoPlanEntry Entry, bool ToGood, bool Strong)>();
         foreach (var entry in plan.Entries)
         {
-            if (entry.State != XenoEntryState.Built || entry.Kind != XenoPlanKind.Wall)
+            if (entry.State != XenoEntryState.Built || entry.Kind == XenoPlanKind.Door)
                 continue;
 
+            var strong = entry.Kind == XenoPlanKind.Wall;
             var ex = entry.Offset.X + r;
             var ey = entry.Offset.Y + r;
             if (ex < 1 || ey < 1 || ex >= size - 1 || ey >= size - 1 || cls[ex, ey] != TileClass.Wall)
@@ -487,8 +599,12 @@ public sealed partial class XenoHiveSystem : EntitySystem
                     continue;
 
                 var toGood = good.Contains(other);
-                if (!best.TryGetValue(inner, out var current) || (!current.ToGood && toGood))
-                    best[inner] = (entry, toGood);
+                if (!best.TryGetValue(inner, out var current)
+                    || (!current.Strong && strong)
+                    || (current.Strong == strong && !current.ToGood && toGood))
+                {
+                    best[inner] = (entry, toGood, strong);
+                }
             }
         }
 
@@ -504,6 +620,8 @@ public sealed partial class XenoHiveSystem : EntitySystem
             plan.Open.Add(entry.Offset);
             plan.OpenList.Add(entry.Offset);
         }
+
+        plan.Labels = null;
     }
 
     public XenoPlanEntry? PickEntry(Entity<XenoClutchComponent> hive, XenoMazePlan plan, Vector2 from,
@@ -546,6 +664,9 @@ public sealed partial class XenoHiveSystem : EntitySystem
                     continue;
             }
 
+            if (!TryPickStand(plan, entry, from, out _))
+                continue;
+
             minPriority = Math.Min(minPriority, entry.Priority);
             var dist = (EntryWorld(plan, entry.Offset) - from).LengthSquared();
             if (dist < bestDist)
@@ -575,7 +696,7 @@ public sealed partial class XenoHiveSystem : EntitySystem
                     continue;
 
                 var cand = new Vector2i(entry.Offset.X + dx, entry.Offset.Y + dy);
-                if (!plan.Open.Contains(cand))
+                if (!plan.Open.Contains(cand) || !CanReach(plan, from, cand))
                     continue;
 
                 var dist = (EntryWorld(plan, cand) - from).LengthSquared();
@@ -591,14 +712,32 @@ public sealed partial class XenoHiveSystem : EntitySystem
         return found;
     }
 
-    public bool TryRandomOpen(XenoMazePlan plan, out Vector2i tile)
+    public bool TryRandomOpen(XenoMazePlan plan, Vector2 from, out Vector2i tile)
     {
         tile = default;
-        if (plan.OpenList.Count == 0)
-            return false;
+        var count = 0;
+        foreach (var t in plan.OpenList)
+        {
+            if (!CanReach(plan, from, t))
+                continue;
 
-        tile = plan.OpenList[_random.Next(plan.OpenList.Count)];
-        return true;
+            count++;
+            if (_random.Next(count) == 0)
+                tile = t;
+        }
+
+        return count > 0;
+    }
+
+    public bool AnyPending(XenoMazePlan plan)
+    {
+        foreach (var entry in plan.Entries)
+        {
+            if (entry.State == XenoEntryState.Pending)
+                return true;
+        }
+
+        return false;
     }
 
     public void Release(XenoMazePlan plan, XenoPlanEntry entry)
@@ -638,7 +777,7 @@ public sealed partial class XenoHiveSystem : EntitySystem
         return true;
     }
 
-    public bool TryPickSpot(XenoMazePlan plan, int minRing, int maxRing, out Vector2i tile)
+    public bool TryPickSpot(XenoMazePlan plan, int minRing, int maxRing, out Vector2i tile, Vector2? from = null)
     {
         tile = default;
         var count = 0;
@@ -646,6 +785,9 @@ public sealed partial class XenoHiveSystem : EntitySystem
         {
             var ring = Math.Max(Math.Abs(t.X), Math.Abs(t.Y));
             if (ring < minRing || ring > maxRing)
+                continue;
+
+            if (from is { } origin && !CanReach(plan, origin, t))
                 continue;
 
             count++;

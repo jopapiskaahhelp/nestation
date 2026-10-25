@@ -21,6 +21,15 @@ public sealed partial class XenoBrainSystem
         Guard,
         Advance,
         Engage,
+        Lure,
+    }
+
+    private enum SquadPlay : byte
+    {
+        Push,
+        Pincer,
+        Bait,
+        Rotate,
     }
 
     private sealed class Squad
@@ -36,6 +45,9 @@ public sealed partial class XenoBrainSystem
         public Vector2 Goal;
         public float TankFrac;
         public bool Pounced;
+        public SquadPlay Play;
+        public int LastCount;
+        public Vector2 LurePost;
     }
 
     private const int SquadMax = 4;
@@ -131,8 +143,14 @@ public sealed partial class XenoBrainSystem
 
     private void SetStandWorld(XenoBrainComponent b, MapId map, Vector2 pos)
     {
-        b.BuildStand = _transform.ToCoordinates(new MapCoordinates(pos, map));
-        b.BuildStandPos = pos;
+        if (!_hive.TrySnapFree(map, pos, out var coords, out var snapped))
+        {
+            b.BuildStand = null;
+            return;
+        }
+
+        b.BuildStand = coords;
+        b.BuildStandPos = snapped;
     }
 
     private bool HandleHeal(Ctx c)
@@ -203,7 +221,7 @@ public sealed partial class XenoBrainSystem
         if (TryFindVisiblePlayer(x, b.SightRange, out _))
             return false;
 
-        if (!_hive.TryPickSpot(plan, 3, 7, out var tile))
+        if (!_hive.TryPickSpot(plan, 3, 7, out var tile, x.Pos))
             return false;
 
         SetStand(b, plan, tile);
@@ -255,10 +273,23 @@ public sealed partial class XenoBrainSystem
 
         var isTank = squad.Tank == x.Uid;
 
+        var baitMember = !isTank && squad.Play == SquadPlay.Bait;
+
         switch (squad.State)
         {
             case SquadState.Guard:
                 ThinkGuard(c, plan);
+                return true;
+            case SquadState.Advance or SquadState.Engage or SquadState.Lure when baitMember:
+                ThinkGuard(c, plan);
+                return true;
+            case SquadState.Lure when isTank:
+                if (b.BuildStand == null || (b.BuildStandPos - squad.LurePost).Length() > 2f)
+                    SetStandWorld(b, x.Map, squad.LurePost);
+
+                b.TacticUntil = now + TimeSpan.FromSeconds(5);
+                SetMode(x, XenoMode.Lure, now);
+                b.GoalPos = squad.LurePost;
                 return true;
             case SquadState.Advance when isTank:
                 if (b.BuildStand == null || (b.BuildStandPos - squad.Goal).Length() > 2f)
@@ -267,10 +298,39 @@ public sealed partial class XenoBrainSystem
                 SetMode(x, XenoMode.Advance, now);
                 b.GoalPos = squad.Goal;
                 return true;
+            case SquadState.Advance when squad.Play == SquadPlay.Pincer:
+                var idx = squad.Members.IndexOf(x.Uid);
+                var side = idx % 2 == 0 ? 1f : -1f;
+                var ang = (65f + 12f * (idx / 2)) * MathF.PI / 180f * side;
+                var away = squad.TankPos - squad.Goal;
+                var alen = away.Length();
+                var baseDir = alen > 0.1f ? away / alen : new Vector2(1f, 0f);
+                var cos = MathF.Cos(ang);
+                var sin = MathF.Sin(ang);
+                var rot = new Vector2(baseDir.X * cos - baseDir.Y * sin, baseDir.X * sin + baseDir.Y * cos);
+                var spot = squad.Goal + rot * 12f;
+                if (b.BuildStand == null || (b.BuildStandPos - spot).Length() > 3f)
+                    SetStandWorld(b, x.Map, spot);
+
+                SetMode(x, XenoMode.Advance, now);
+                b.GoalPos = b.BuildStandPos;
+                return true;
             case SquadState.Engage when isTank:
                 return false;
             case SquadState.Engage when squad.Pounced:
-                return false;
+                if (!b.PouncePending)
+                    return false;
+
+                if (now >= b.PounceAt && squad.Target is { } pounceTarget)
+                {
+                    b.PouncePending = false;
+                    ApplyPounce(x, pounceTarget, now);
+                    return true;
+                }
+
+                b.RallyTarget = squad.Tank;
+                SetMode(x, XenoMode.Rally, now);
+                return true;
             default:
                 b.RallyTarget = squad.Tank;
                 SetMode(x, XenoMode.Rally, now);
@@ -295,7 +355,7 @@ public sealed partial class XenoBrainSystem
             return;
         }
 
-        if ((b.BuildStand == null || now >= b.IdlePickAt) && _hive.TryPickSpot(plan, 5, plan.Radius - 1, out var tile))
+        if ((b.BuildStand == null || now >= b.IdlePickAt) && _hive.TryPickSpot(plan, 5, plan.Radius - 1, out var tile, x.Pos))
         {
             SetStand(b, plan, tile);
             b.IdlePickAt = now + TimeSpan.FromSeconds(60 + _random.NextFloat() * 60f);
@@ -414,6 +474,16 @@ public sealed partial class XenoBrainSystem
                 readyMembers++;
         }
 
+        if (squad.LastCount > squad.Members.Count && squad.State != SquadState.Guard)
+        {
+            EndRaid(squad, now);
+            squad.NextRaid = now + TimeSpan.FromSeconds(RaidIntervalSeconds + 60f);
+            squad.LastCount = squad.Members.Count;
+            return;
+        }
+
+        squad.LastCount = squad.Members.Count;
+
         switch (squad.State)
         {
             case SquadState.Guard:
@@ -435,6 +505,7 @@ public sealed partial class XenoBrainSystem
                 if (TryNearestPlayer(tank.Map, tank.Pos, RaidRange, out var target))
                 {
                     squad.State = SquadState.Advance;
+                    squad.Play = ChoosePlay(readyMembers);
                     squad.StateSince = now;
                     squad.Target = target.Uid;
                     squad.Goal = target.Pos;
@@ -472,11 +543,32 @@ public sealed partial class XenoBrainSystem
                     break;
                 }
 
+                if (squad.State == SquadState.Lure)
+                {
+                    tb.ForcedTarget = null;
+                    tb.NoRetreatUntil = now + TimeSpan.FromSeconds(3);
+                    if ((now - squad.StateSince).TotalSeconds > 40.0
+                        || (squad.LurePost - tank.Pos).Length() <= 3f)
+                    {
+                        EndRaid(squad, now);
+                    }
+
+                    break;
+                }
+
                 tb.ForcedTarget = engaged;
                 tb.ForcedUntil = now + TimeSpan.FromSeconds(3);
                 tb.NoRetreatUntil = now + TimeSpan.FromSeconds(3);
 
+                if (squad.Play == SquadPlay.Bait
+                    && ((now - squad.StateSince).TotalSeconds > 4.0 || squad.TankFrac - tankFrac >= 0.1f))
+                {
+                    StartLure(squad, tank, now);
+                    break;
+                }
+
                 if (!squad.Pounced
+                    && squad.Play != SquadPlay.Bait
                     && ((victim.Pos - tank.Pos).Length() <= PounceDist
                         || squad.TankFrac - tankFrac >= 0.15f
                         || (now - squad.StateSince).TotalSeconds > 8.0))
@@ -486,6 +578,42 @@ public sealed partial class XenoBrainSystem
 
                 break;
         }
+    }
+
+    private SquadPlay ChoosePlay(int ready)
+    {
+        var wPush = 35f;
+        var wPincer = ready >= 2 ? 25f : 0f;
+        var wBait = 25f;
+        var wRotate = ready >= 3 ? 15f : 0f;
+        var roll = _random.NextFloat() * (wPush + wPincer + wBait + wRotate);
+
+        if ((roll -= wPush) < 0f)
+            return SquadPlay.Push;
+
+        if ((roll -= wPincer) < 0f)
+            return SquadPlay.Pincer;
+
+        if ((roll -= wBait) < 0f)
+            return SquadPlay.Bait;
+
+        return SquadPlay.Rotate;
+    }
+
+    private void StartLure(Squad squad, XenoInfo tank, TimeSpan now)
+    {
+        if (!_hive.TryGetHive(squad.Map, out var hive) || _hive.GetPlan(hive) is not { } plan
+            || !_hive.TryPickSpot(plan, 5, plan.Radius - 1, out var tile, tank.Pos))
+        {
+            EndRaid(squad, now);
+            return;
+        }
+
+        squad.LurePost = _hive.EntryWorld(plan, tile);
+        squad.State = SquadState.Lure;
+        squad.StateSince = now;
+        tank.Brain.ForcedTarget = null;
+        tank.Brain.BuildStand = null;
     }
 
     private void StartEngage(Squad squad, XenoInfo tank, EntityUid target, float tankFrac, TimeSpan now)
@@ -506,20 +634,35 @@ public sealed partial class XenoBrainSystem
     private void Pounce(Squad squad, EntityUid target, TimeSpan now)
     {
         squad.Pounced = true;
+        var i = 0;
 
         foreach (var m in squad.Members)
         {
             if (!FindXeno(m, out var mi) || mi.Brain.Mode == XenoMode.Heal)
                 continue;
 
-            var mb = mi.Brain;
-            mb.ForcedTarget = target;
-            mb.ForcedUntil = now + TimeSpan.FromSeconds(12);
-            mb.NoRetreatUntil = now + TimeSpan.FromSeconds(10);
-            mb.NoLurkUntil = now + TimeSpan.FromSeconds(15);
-            mb.RecentHits.Clear();
-            Leap(mi, now);
+            if (squad.Play == SquadPlay.Rotate && i > 0)
+            {
+                mi.Brain.PouncePending = true;
+                mi.Brain.PounceAt = now + TimeSpan.FromSeconds(i * 1.2 + _random.NextFloat() * 0.6f);
+                i++;
+                continue;
+            }
+
+            i++;
+            ApplyPounce(mi, target, now);
         }
+    }
+
+    private void ApplyPounce(XenoInfo mi, EntityUid target, TimeSpan now)
+    {
+        var mb = mi.Brain;
+        mb.ForcedTarget = target;
+        mb.ForcedUntil = now + TimeSpan.FromSeconds(12);
+        mb.NoRetreatUntil = now + TimeSpan.FromSeconds(10);
+        mb.NoLurkUntil = now + TimeSpan.FromSeconds(15);
+        mb.RecentHits.Clear();
+        Leap(mi, now);
     }
 
     private void EndRaid(Squad squad, TimeSpan now)
@@ -543,6 +686,7 @@ public sealed partial class XenoBrainSystem
 
             mi.Brain.BuildStand = null;
             mi.Brain.IdlePickAt = TimeSpan.Zero;
+            mi.Brain.PouncePending = false;
         }
     }
 }

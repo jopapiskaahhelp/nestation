@@ -60,12 +60,21 @@ public sealed partial class PickRoamPointOperator : HTNOperator
         var min = cautious ? CautiousMinRange : MinRange;
         var max = cautious ? CautiousMaxRange : MaxRange;
 
-        var avoidHive = brain != null && brain.Caste == XenoCaste.Drone && _brainSys.HiveStage(xform.MapID) == 1;
+        var stage = brain != null ? _brainSys.HiveStage(xform.MapID) : 0;
+        var avoidHive = brain != null && brain.Caste == XenoCaste.Drone && stage == 1;
         var hivePos = avoidHive ? _brainSys.HivePosition(xform.MapID) : null;
+        var homePos = brain != null && !avoidHive && brain.Caste != XenoCaste.Burrower && stage > 0
+            ? _brainSys.HivePosition(xform.MapID)
+            : null;
 
         for (var i = 0; i < 6; i++)
         {
-            var offset = _random.NextAngle().ToVec() * _random.NextFloat(min, max);
+            Vector2 offset;
+            if (homePos is { } home && brain != null)
+                offset = home + _random.NextAngle().ToVec() * _random.NextFloat(4f, brain.HomeRadius) - pos;
+            else
+                offset = _random.NextAngle().ToVec() * _random.NextFloat(min, max);
+
             if (hivePos is { } hp && brain != null)
             {
                 var away = pos - hp;

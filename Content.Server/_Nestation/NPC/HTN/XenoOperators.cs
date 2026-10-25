@@ -735,6 +735,22 @@ public sealed partial class XenoStrikeOperator : HTNOperator
     }
 }
 
+public sealed partial class XenoTargetVisiblePrecondition : HTNPrecondition
+{
+    [Dependency] private IEntityManager _entMan = default!;
+
+    [DataField] public bool Visible = true;
+
+    public override bool IsMet(NPCBlackboard blackboard)
+    {
+        var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
+        if (!_entMan.TryGetComponent(owner, out XenoBrainComponent? brain))
+            return false;
+
+        return brain.TargetVisible == Visible;
+    }
+}
+
 public sealed partial class XenoTargetDistPrecondition : HTNPrecondition
 {
     [Dependency] private IEntityManager _entMan = default!;

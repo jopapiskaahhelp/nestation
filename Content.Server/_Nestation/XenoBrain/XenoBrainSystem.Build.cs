@@ -147,6 +147,8 @@ public sealed partial class XenoBrainSystem
             {
                 if (entry != null)
                     _hive.Skip(plan, entry, now, 90f);
+                else if (_hive.AnyPending(plan))
+                    hive.Comp.NextFix = TimeSpan.Zero;
 
                 b.NextPickAt = now + TimeSpan.FromSeconds(2);
             }
@@ -154,7 +156,7 @@ public sealed partial class XenoBrainSystem
 
         if (b.BuildEntry == null)
         {
-            if ((b.BuildStand == null || now >= b.IdlePickAt) && _hive.TryRandomOpen(plan, out var idle))
+            if ((b.BuildStand == null || now >= b.IdlePickAt) && _hive.TryRandomOpen(plan, x.Pos, out var idle))
             {
                 SetStand(b, plan, idle);
                 b.IdlePickAt = now + TimeSpan.FromSeconds(12);

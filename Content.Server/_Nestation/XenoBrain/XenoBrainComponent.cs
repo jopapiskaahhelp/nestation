@@ -23,6 +23,9 @@ public enum XenoMode : byte
     Heal,
     Guard,
     Advance,
+    Bait,
+    Weave,
+    Lure,
 }
 
 public enum XenoStalkPhase : byte
@@ -116,6 +119,9 @@ public sealed partial class XenoBrainComponent : Component
     [DataField] public float HomeRadius = 35f;
     [DataField] public float GuardAlertRange = 16f;
     [DataField] public float ScreamTriggerRange = 5f;
+    [DataField] public float BaitDistance = 14f;
+    [DataField] public float ChaseAbortMin = 5f;
+    [DataField] public float ChaseAbortMax = 10f;
     [DataField] public float ScreamCooldownSeconds = 40f;
 
     [ViewVariables] public XenoMode Mode = XenoMode.Patrol;
@@ -234,4 +240,28 @@ public sealed partial class XenoBrainComponent : Component
     public TimeSpan NoHealUntil;
     public TimeSpan NextHealAt;
     public TimeSpan NextScreamAt;
+    public bool TargetVisible;
+    public Vector2 WalkAnchor;
+    public TimeSpan WalkSince;
+    public Vector2 ProgressGoal;
+    public float ProgressBest = float.MaxValue;
+    public TimeSpan ProgressSince;
+    public float Boldness = 0.7f;
+    public float Patience = 0.5f;
+    public TimeSpan NextTacticAt;
+    public TimeSpan TacticSince;
+    public TimeSpan TacticUntil;
+    public int TacticPhase;
+    public int WeaveSide = 1;
+    public TimeSpan NextWeaveAt;
+    public EntityUid? ChaseTarget;
+    public TimeSpan ChaseSince;
+    public TimeSpan ChaseNextCheck;
+    public float ChaseStartDist;
+    public float ChaseAbortAfter;
+    public Vector2 ChasePrevPos;
+    public EntityUid? AbortTarget;
+    public TimeSpan AbortUntil;
+    public bool PouncePending;
+    public TimeSpan PounceAt;
 }

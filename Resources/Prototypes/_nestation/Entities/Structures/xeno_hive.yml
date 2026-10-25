@@ -29,7 +29,6 @@
       layers:
         - state: green
     - type: XenoClutch
-      mazeRadius: 14
       opening:
         - { proto: MobXeno, delay: 120, class: 1, maturation: 120 }
         - { proto: MobXenoDrone, delay: 120, class: 1, maturation: 120 }

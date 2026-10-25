@@ -110,7 +110,8 @@ public sealed partial class XenoBrainSystem
 
     private bool IsChasingPlayer(XenoBrainComponent b, TimeSpan now)
     {
-        if (b.Mode is XenoMode.Retreat or XenoMode.Ambush or XenoMode.Stalk or XenoMode.Kite or XenoMode.Flank or XenoMode.Feed)
+        if (b.Mode is XenoMode.Retreat or XenoMode.Ambush or XenoMode.Stalk or XenoMode.Kite or XenoMode.Flank or XenoMode.Feed
+            or XenoMode.Heal or XenoMode.Guard or XenoMode.Advance or XenoMode.Bait or XenoMode.Weave or XenoMode.Lure)
             return true;
 
         if (now < b.LeapUntil || (b.ForcedTarget != null && now < b.ForcedUntil))
