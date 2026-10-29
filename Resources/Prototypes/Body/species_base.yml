@@ -1,3 +1,4 @@
+# Nestation New City CC BY-NC 3.0
 - type: entity
   abstract: true
   parent:
@@ -163,6 +164,7 @@
   - BaseSpeciesMob
   - BaseMobDestructible
   - BaseHungerThirstSlowdown
+  - BaseHungerThirstDeath
   id: BaseSpeciesMobOrganic
   save: false
   components:

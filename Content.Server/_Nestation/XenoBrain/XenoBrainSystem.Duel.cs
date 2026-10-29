@@ -1,4 +1,4 @@
-// Nestation Anarhey CC BY-NC 3.0
+// Nestation new city CC BY-NC 3.0
 using System.Numerics;
 using Content.Shared._Nestation.XenoHive;
 using Robust.Shared.Map;
@@ -111,7 +111,7 @@ public sealed partial class XenoBrainSystem
     private bool IsChasingPlayer(XenoBrainComponent b, TimeSpan now)
     {
         if (b.Mode is XenoMode.Retreat or XenoMode.Ambush or XenoMode.Stalk or XenoMode.Kite or XenoMode.Flank or XenoMode.Feed
-            or XenoMode.Heal or XenoMode.Guard or XenoMode.Advance or XenoMode.Bait or XenoMode.Weave or XenoMode.Lure)
+            or XenoMode.Heal or XenoMode.Guard or XenoMode.Advance or XenoMode.Bait or XenoMode.Weave or XenoMode.Lure or XenoMode.Unstick)
             return true;
 
         if (now < b.LeapUntil || (b.ForcedTarget != null && now < b.ForcedUntil))

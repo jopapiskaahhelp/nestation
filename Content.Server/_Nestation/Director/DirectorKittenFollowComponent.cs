@@ -1,4 +1,4 @@
-// Nestation Anarhey CC BY-NC 3.0
+// Nestation new city CC BY-NC 3.0
 using Content.Server.NPC.HTN;
 using Robust.Shared.Prototypes;
 

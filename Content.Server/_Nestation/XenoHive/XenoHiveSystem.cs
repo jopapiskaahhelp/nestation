@@ -1,4 +1,4 @@
-// Nestation Anarhey CC BY-NC 3.0
+// Nestation new city CC BY-NC 3.0
 using System.Numerics;
 using Content.Shared._Nestation.XenoHive;
 using Content.Shared.Damage;
@@ -712,6 +712,27 @@ public sealed partial class XenoHiveSystem : EntitySystem
         return found;
     }
 
+    public bool TryPickExit(XenoMazePlan plan, Vector2 from, out Vector2 world)
+    {
+        world = default;
+        var r = plan.Radius;
+        var gates = new[] { new Vector2i(r, 0), new Vector2i(-r, 0), new Vector2i(0, r), new Vector2i(0, -r) };
+        var start = _random.Next(gates.Length);
+
+        for (var i = 0; i < gates.Length; i++)
+        {
+            var gate = gates[(start + i) % gates.Length];
+            if (!CanReach(plan, from, gate))
+                continue;
+
+            var outward = new Vector2(Math.Sign(gate.X), Math.Sign(gate.Y));
+            world = EntryWorld(plan, gate) + outward * (8f + _random.NextFloat() * 6f);
+            return true;
+        }
+
+        return false;
+    }
+
     public bool TryRandomOpen(XenoMazePlan plan, Vector2 from, out Vector2i tile)
     {
         tile = default;
@@ -777,7 +798,7 @@ public sealed partial class XenoHiveSystem : EntitySystem
         return true;
     }
 
-    public bool TryPickSpot(XenoMazePlan plan, int minRing, int maxRing, out Vector2i tile, Vector2? from = null)
+    public bool TryPickSpot(XenoMazePlan plan, int minRing, int maxRing, out Vector2i tile, Vector2? from = null, float minFrom = 0f)
     {
         tile = default;
         var count = 0;
@@ -787,7 +808,7 @@ public sealed partial class XenoHiveSystem : EntitySystem
             if (ring < minRing || ring > maxRing)
                 continue;
 
-            if (from is { } origin && !CanReach(plan, origin, t))
+            if (from is { } origin && (!CanReach(plan, origin, t) || (minFrom > 0f && (EntryWorld(plan, t) - origin).Length() < minFrom)))
                 continue;
 
             count++;

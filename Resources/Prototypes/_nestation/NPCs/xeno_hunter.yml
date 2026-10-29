@@ -1,4 +1,4 @@
-# Nestation Anarhey CC BY-NC 3.0
+# Nestation new city CC BY-NC 3.0
 - type: htnCompound
   id: XenoCompound
   branches:
@@ -472,7 +472,7 @@
         - !type:HTNPrimitiveTask
           operator: !type:PickBuildPointOperator
             targetKey: BuildCoordinates
-            modes: [ Build, Heal, Guard, Advance, Bait, Weave, Lure ]
+            modes: [ Build, Heal, Guard, Advance, Bait, Weave, Lure, Unstick ]
         - !type:HTNPrimitiveTask
           operator: !type:MoveToOperator
             shutdownState: TaskFinished
@@ -483,11 +483,11 @@
             rangeKey: MeleeRange
           preconditions:
             - !type:XenoModePrecondition
-              modes: [ Build, Heal, Guard, Advance, Bait, Weave, Lure ]
+              modes: [ Build, Heal, Guard, Advance, Bait, Weave, Lure, Unstick ]
     - tasks:
         - !type:HTNPrimitiveTask
           operator: !type:XenoHoldOperator
-            modes: [ Build, Heal, Guard, Advance, Bait, Weave, Lure ]
+            modes: [ Build, Heal, Guard, Advance, Bait, Weave, Lure, Unstick ]
             maxSeconds: 0.4
 
 - type: htnCompound

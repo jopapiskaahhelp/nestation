@@ -24,7 +24,7 @@
       NavPry: !type:Bool
         true
       NavSmash: !type:Bool
-        true
+        false
   - type: Prying
     pryPowered: true
     force: true
@@ -520,7 +520,7 @@
       NavPry: !type:Bool
         true
       NavSmash: !type:Bool
-        true
+        false
   - type: Reactive
     groups:
       Flammable: [Touch]

@@ -1,3 +1,4 @@
+using Content.Client._Nestation.Tutorial;
 using Content.Client.FeedbackPopup;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Controls;
@@ -24,6 +25,7 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private ChangelogUIController _changelog = default!;
     [Dependency] private InfoUIController _info = default!;
+    [Dependency] private TutorialUIController _tutorial = default!;
     [Dependency] private OptionsUIController _options = default!;
     [Dependency] private GuidebookUIController _guidebook = default!;
     [Dependency] private FeedbackPopupUIController _feedback = null!;
@@ -82,6 +84,12 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
         {
             CloseEscapeWindow();
             _info.OpenWindow();
+        };
+
+        _escapeWindow.TutorialButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _tutorial.Open(false);
         };
 
         _escapeWindow.DisconnectButton.OnPressed += _ =>

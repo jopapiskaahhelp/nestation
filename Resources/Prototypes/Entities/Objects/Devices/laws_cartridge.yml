@@ -1,0 +1,22 @@
+# Nestation new city CC BY-NC 3.0
+- type: entity
+  parent: BaseItem
+  id: LawsCartridge
+  name: картридж законов
+  description: Картридж со сводом законов станции.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/cartridges.rsi
+    state: cart-log
+  - type: Icon
+    sprite: Objects/Misc/cartridges.rsi
+    state: cart-log
+  - type: Cartridge
+    programName: laws-program-name
+    icon:
+      sprite: Objects/Misc/cartridges.rsi
+      state: cart-log
+  - type: LawsCartridge
+    writeAccess: Captain
+  - type: UIFragment
+    ui: !type:LawsUi

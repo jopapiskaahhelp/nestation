@@ -1,8 +1,7 @@
-# Nestation Anarhey CC BY-NC 3.0
 job-name-atmostech = атмосферный техник
 job-name-bartender = бармен
 job-name-borg = киборг
-job-name-botanist = ботаник
+job-name-botanist = фермер
 job-name-brigmedic = бригмедик
 job-name-cadet = кадет СБ
 job-name-captain = мэр

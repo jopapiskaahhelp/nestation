@@ -1,0 +1,47 @@
+# Nestation New City CC BY-NC 3.0
+- type: damageType
+  id: Starvation
+  name: damage-type-starvation
+  armorCoefficientPrice: 1
+  armorFlatPrice: 1
+
+- type: damageType
+  id: Dehydration
+  name: damage-type-dehydration
+  armorCoefficientPrice: 1
+  armorFlatPrice: 1
+
+- type: entity
+  abstract: true
+  id: BaseHungerThirstDeath
+  components:
+  - type: SatiationDamage
+    satiations:
+      Hunger:
+        thresholds:
+          Overfed:
+            types:
+              Starvation: -2
+          Okay:
+            types:
+              Starvation: -2
+          Peckish:
+            types:
+              Starvation: -2
+          Starving:
+            types:
+              Starvation: 1
+      Thirst:
+        thresholds:
+          Overhydrated:
+            types:
+              Dehydration: -2
+          Okay:
+            types:
+              Dehydration: -2
+          Thirsty:
+            types:
+              Dehydration: -2
+          Parched:
+            types:
+              Dehydration: 1

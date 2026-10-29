@@ -1,0 +1,84 @@
+# Nestation New City CC BY-NC 3.0
+- type: startingGear
+  id: UnbalancedGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    shoes: ClothingShoesBootsMercFilled
+    gloves: ClothingHandsGlovesMercFingerless
+    head: ClothingHeadHelmetHardsuitCybersun
+    outerClothing: ClothingOuterHardsuitJuggernaut
+    back: ClothingBackpackMerc
+    belt: ClothingBeltMercWebbing
+    eyes: ClothingEyesGlassesMercenary
+    mask: ClothingMaskBandMerc
+
+- type: entity
+  parent: ShellShotgun
+  id: ShellShotgunUnbalanced
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    proto: PelletShotgunSpread
+    deleteOnSpawn: true
+
+- type: entity
+  parent: BaseItem
+  id: WeaponShotgunKammererUnbalanced
+  name: Kammerer
+  description: An old yet faithful design, and a favorite among irregular forces of many worlds. Uses .50 shotgun shells.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Shotguns/pump.rsi
+    layers:
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Large
+    shape:
+    - 0,0,4,0
+    sprite: Objects/Weapons/Guns/Shotguns/pump_inhands_64x.rsi
+  - type: Gun
+    fireRate: 1
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Corvax/Weapons/Guns/Gunshots/shotgun_alt.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: GunSpreadModifier
+    spread: 0.6
+  - type: BasicEntityAmmoProvider
+    proto: ShellShotgunUnbalanced
+  - type: Unremoveable
+    deleteOnDrop: false
+  - type: Tag
+    tags:
+    - WeaponShotgunKammerer
+
+- type: entity
+  parent: MobHuman
+  id: MobUnbalanced
+  name: Unbalanced
+  description: A former soldier who has lost his mind.
+  components:
+  - type: Loadout
+    prototypes:
+    - UnbalancedGear
+  - type: InputMover
+  - type: MobMover
+  - type: Unbalanced
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobUnbalanced
+  name: unbalanced spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: ai
+  - type: ConditionalSpawner
+    prototypes:
+    - MobUnbalanced

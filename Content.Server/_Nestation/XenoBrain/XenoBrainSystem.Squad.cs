@@ -1,4 +1,4 @@
-// Nestation Anarhey CC BY-NC 3.0
+// Nestation new city CC BY-NC 3.0
 using System.Numerics;
 using Content.Server._Nestation.XenoHive;
 using Content.Shared._Nestation.XenoHive;
@@ -7,6 +7,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Maths;
 using Robust.Shared.Random;
 
 namespace Content.Server._Nestation.XenoBrain;
@@ -22,6 +23,7 @@ public sealed partial class XenoBrainSystem
         Advance,
         Engage,
         Lure,
+        Patrol,
     }
 
     private enum SquadPlay : byte
@@ -48,6 +50,7 @@ public sealed partial class XenoBrainSystem
         public SquadPlay Play;
         public int LastCount;
         public Vector2 LurePost;
+        public TimeSpan NextPatrol;
     }
 
     private const int SquadMax = 4;
@@ -291,7 +294,7 @@ public sealed partial class XenoBrainSystem
                 SetMode(x, XenoMode.Lure, now);
                 b.GoalPos = squad.LurePost;
                 return true;
-            case SquadState.Advance when isTank:
+            case SquadState.Advance or SquadState.Patrol when isTank:
                 if (b.BuildStand == null || (b.BuildStandPos - squad.Goal).Length() > 2f)
                     SetStandWorld(b, x.Map, squad.Goal);
 
@@ -385,6 +388,7 @@ public sealed partial class XenoBrainSystem
                     Tank = x.Uid,
                     StateSince = now,
                     NextRaid = now + TimeSpan.FromSeconds(RaidIntervalSeconds),
+                    NextPatrol = now + TimeSpan.FromSeconds(45),
                 };
                 _squads[x.Uid] = created;
             }
@@ -493,6 +497,9 @@ public sealed partial class XenoBrainSystem
                     break;
                 }
 
+                if (now >= squad.NextPatrol && ready && StartPatrol(squad, tank, now))
+                    break;
+
                 if (now < squad.NextRaid)
                     break;
 
@@ -514,6 +521,22 @@ public sealed partial class XenoBrainSystem
                 else
                 {
                     squad.NextRaid = now + TimeSpan.FromSeconds(RaidIntervalSeconds / 2f);
+                }
+
+                break;
+
+            case SquadState.Patrol:
+                if (!ready || (now - squad.StateSince).TotalSeconds > 80.0 || (tank.Pos - squad.Goal).Length() < 4f)
+                {
+                    EndRaid(squad, now);
+                    squad.NextPatrol = now + TimeSpan.FromSeconds(90 + _random.NextFloat() * 90f);
+                    break;
+                }
+
+                if (TryFindVisiblePlayer(tank, 18f, out var patrolSeen))
+                {
+                    squad.Play = SquadPlay.Push;
+                    StartEngage(squad, tank, patrolSeen.Uid, tankFrac, now);
                 }
 
                 break;
@@ -578,6 +601,34 @@ public sealed partial class XenoBrainSystem
 
                 break;
         }
+    }
+
+    private bool StartPatrol(Squad squad, XenoInfo tank, TimeSpan now)
+    {
+        var baseAngle = _random.NextAngle();
+        var bestClear = 0f;
+        var bestDir = Vector2.Zero;
+
+        for (var k = 0; k < 12; k++)
+        {
+            var dir = (baseAngle + Angle.FromDegrees(30.0 * k)).ToVec();
+            var clear = ClearDistance(tank.Map, tank.Pos, dir, 45f, tank.Uid);
+            if (clear > bestClear + _random.NextFloat() * 8f)
+            {
+                bestClear = clear;
+                bestDir = dir;
+            }
+        }
+
+        squad.NextPatrol = now + TimeSpan.FromSeconds(90 + _random.NextFloat() * 90f);
+        if (bestClear < 12f)
+            return false;
+
+        squad.State = SquadState.Patrol;
+        squad.StateSince = now;
+        squad.Goal = tank.Pos + bestDir * MathF.Min(bestClear - 1f, 22f + _random.NextFloat() * 18f);
+        tank.Brain.BuildStand = null;
+        return true;
     }
 
     private SquadPlay ChoosePlay(int ready)

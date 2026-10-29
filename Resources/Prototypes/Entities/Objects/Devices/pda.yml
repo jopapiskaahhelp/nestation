@@ -96,6 +96,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
   - type: ActivatableUI
     key: enum.PdaUiKey.Key
     singleUser: true
@@ -161,6 +162,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
         - id: WantedListCartridge
 
 - type: entity
@@ -176,6 +178,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
         - id: MedTekCartridge
 
 - type: entity
@@ -479,6 +482,7 @@
         children:
         - id: CrewManifestCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
   - type: PermanentStatusEffects # for random sentience event
     statusEffects:
     - TraitStatusEffectMuted
@@ -538,6 +542,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
         - id: AstroNavCartridge
 
 - type: entity
@@ -584,6 +589,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
         - id: AstroNavCartridge
 
 - type: entity
@@ -947,6 +953,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
         - id: WantedListCartridge
         - id: LogProbeCartridge
 
@@ -1024,6 +1031,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
         - id: MedTekCartridge
         - id: WantedListCartridge
         - id: LogProbeCartridge
@@ -1052,6 +1060,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
         - id: LogProbeCartridge
         - id: WantedListCartridge
         - id: MedTekCartridge
@@ -1286,6 +1295,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
         - id: MedTekCartridge
         - id: WantedListCartridge
         - id: LogProbeCartridge
@@ -1526,6 +1536,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
         - id: WantedListCartridge
         - id: LogProbeCartridge
 
@@ -1556,6 +1567,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: LawsCartridge
         - id: WantedListCartridge
         - id: MedTekCartridge
 

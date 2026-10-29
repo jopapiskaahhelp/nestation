@@ -24,7 +24,7 @@
   equipment:
     shoes: ClothingShoesColorBrown
     id: BotanistPDA
-    ears: ClothingHeadsetService
+    ears: ClothingHeadsetGrey
     belt: ClothingBeltPlantFilled
   #storage:
     #back:

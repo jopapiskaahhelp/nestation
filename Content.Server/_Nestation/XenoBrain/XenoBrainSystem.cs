@@ -1,4 +1,4 @@
-// Nestation Anarhey CC BY-NC 3.0
+// Nestation new city CC BY-NC 3.0
 using System.Numerics;
 using Content.Server.NPC.HTN;
 using Content.Shared._Nestation.XenoHive;
@@ -172,6 +172,78 @@ public sealed partial class XenoBrainSystem : EntitySystem
         }
 
         return found;
+    }
+
+    public float ClearDistance(MapId map, Vector2 from, Vector2 dir, float max, EntityUid ignore)
+    {
+        RayHit(map, from, dir, max, BlockMask, ignore, out var dist, out _, out _);
+        return dist;
+    }
+
+    public void ForceUnstick(EntityUid uid)
+    {
+        foreach (var x in _xenos)
+        {
+            if (x.Uid != uid)
+                continue;
+
+            if (x.Brain.Mode is XenoMode.Patrol or XenoMode.Detour && !_squadOf.ContainsKey(uid)
+                && x.Brain.Caste != XenoCaste.Burrower)
+            {
+                StartUnstick(x, _timing.CurTime);
+            }
+
+            return;
+        }
+    }
+
+    public void RememberRoam(EntityUid uid, Vector2 pos)
+    {
+        if (!TryComp<XenoBrainComponent>(uid, out var b))
+            return;
+
+        var now = _timing.CurTime;
+        b.RecentRoam.RemoveAll(r => r.Expire < now);
+        b.RecentRoam.Add((pos, now + TimeSpan.FromSeconds(90)));
+        if (b.RecentRoam.Count > 8)
+            b.RecentRoam.RemoveAt(0);
+    }
+
+    public bool IsRecentRoam(EntityUid uid, Vector2 pos, float radius)
+    {
+        if (!TryComp<XenoBrainComponent>(uid, out var b))
+            return false;
+
+        var now = _timing.CurTime;
+        foreach (var (p, expire) in b.RecentRoam)
+        {
+            if (expire >= now && (p - pos).Length() < radius)
+                return true;
+        }
+
+        return false;
+    }
+
+    public bool TryBaseRoam(EntityUid uid, MapId map, Vector2 pos, out EntityCoordinates coords)
+    {
+        coords = default;
+        if (!_hive.TryGetHive(map, out var hive) || _hive.GetPlan(hive) is not { } plan)
+            return false;
+
+        if (_hive.HivePos(map) is not { } center || (pos - center).Length() > plan.Radius + 3)
+            return false;
+
+        if (_random.Prob(0.6f) && _hive.TryPickExit(plan, pos, out var exitWorld)
+            && _hive.TrySnapFree(map, exitWorld, out coords, out _))
+        {
+            return true;
+        }
+
+        if (!_hive.TryPickSpot(plan, 0, plan.Radius - 1, out var tile, pos, 6f))
+            return false;
+
+        coords = _hive.EntryCoords(plan, tile);
+        return true;
     }
 
     public bool PathBlocked(MapId map, Vector2 from, Vector2 to, EntityUid? ignore)
@@ -598,6 +670,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         b.TargetVisible = target != null && ctx.TargetDist <= 30f && !PathBlocked(x.Map, x.Pos, targetPos, x.Uid);
 
         TrackChase(ctx);
+        TrackIdle(ctx);
         TryScream(ctx);
 
         if (b.Mode == XenoMode.Duel)
@@ -723,7 +796,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (TrySquadDecide(c))
             return;
 
-        if ((b.Mode is XenoMode.Bait or XenoMode.Weave or XenoMode.Lure) && ThinkTactic(c))
+        if ((b.Mode is XenoMode.Bait or XenoMode.Weave or XenoMode.Lure or XenoMode.Unstick) && ThinkTactic(c))
             return;
 
         XenoMode want;
@@ -1011,6 +1084,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
             case XenoMode.Bait:
             case XenoMode.Weave:
             case XenoMode.Lure:
+            case XenoMode.Unstick:
                 return (b.BuildEntry != null || b.BuildStand != null) && (b.BuildStandPos - x.Pos).Length() > 1f;
             case XenoMode.Duel:
                 return b.GoalPos is { } duelGoal && (b.TargetDist > 2.5f || LineBlocked(x, duelGoal));
@@ -1054,7 +1128,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
             b.WalkSince = c.Now;
             b.StuckAnchor = x.Pos;
             b.StuckSince = c.Now;
-            OnStuck(x, c.Now);
+            HandleStall(x, c.Now);
             return;
         }
 
@@ -1079,7 +1153,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
                 b.ProgressSince = c.Now;
                 b.StuckAnchor = x.Pos;
                 b.StuckSince = c.Now;
-                OnStuck(x, c.Now);
+                HandleStall(x, c.Now);
                 return;
             }
         }
@@ -1158,7 +1232,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
             return;
         }
 
-        if (b.Mode is XenoMode.Heal or XenoMode.Guard or XenoMode.Advance or XenoMode.Bait or XenoMode.Weave or XenoMode.Lure)
+        if (b.Mode is XenoMode.Heal or XenoMode.Guard or XenoMode.Advance or XenoMode.Bait or XenoMode.Weave or XenoMode.Lure or XenoMode.Unstick)
         {
             if (b.Mode == XenoMode.Heal)
             {
@@ -1166,7 +1240,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
                 SetMode(x, XenoMode.Patrol, now);
             }
 
-            if (b.Mode is XenoMode.Bait or XenoMode.Weave or XenoMode.Lure)
+            if (b.Mode is XenoMode.Bait or XenoMode.Weave or XenoMode.Lure or XenoMode.Unstick)
             {
                 b.NextTacticAt = now + TimeSpan.FromSeconds(8);
                 SetMode(x, XenoMode.Patrol, now);
@@ -1565,10 +1639,22 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (b.Mode == mode)
             return;
 
+        if (IsStandMode(b.Mode) && !IsStandMode(mode))
+        {
+            b.BuildStand = null;
+            b.BuildEntry = null;
+        }
+
         b.Mode = mode;
         b.ModeSince = now;
         b.StuckAnchor = x.Pos;
         b.StuckSince = now;
+    }
+
+    private static bool IsStandMode(XenoMode mode)
+    {
+        return mode is XenoMode.Build or XenoMode.Heal or XenoMode.Guard or XenoMode.Advance or XenoMode.Bait
+            or XenoMode.Weave or XenoMode.Lure or XenoMode.Unstick;
     }
 
     private void UpdateSpeed(XenoInfo x, TimeSpan now)

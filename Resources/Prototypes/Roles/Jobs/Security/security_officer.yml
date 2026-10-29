@@ -25,7 +25,7 @@
 - type: startingGear
   id: SecurityOfficerGear
   equipment:
-    id: CaptainPDA
+    id: HoSPDA
     ears: ClothingHeadsetAltSecurity
     outerClothing: ClothingOuterArmorBasic
     pocket1: FlashlightSeclite

@@ -1,4 +1,5 @@
 using Content.Server.Acz;
+using Content.Server._Nestation.LinkedAccounts;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -81,6 +82,7 @@ namespace Content.Server.Entry
         [Dependency] private ServerInfoManager _serverInfo = default!;
         [Dependency] private ServerUpdateManager _updateManager = default!;
         [Dependency] private ServerFeedbackManager _feedbackManager = null!;
+        [Dependency] private LinkedAccountsManager _linkedAccounts = default!;
 
         public override void PreInit()
         {
@@ -170,6 +172,7 @@ namespace Content.Server.Entry
             _multiServerKick.Initialize();
             _cvarCtrl.Initialize();
             _feedbackManager.Initialize();
+            _linkedAccounts.Initialize();
         }
 
         public override void Update(ModUpdateLevel level, FrameEventArgs frameEventArgs)

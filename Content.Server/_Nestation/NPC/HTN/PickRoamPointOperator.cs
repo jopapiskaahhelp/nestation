@@ -1,4 +1,4 @@
-// Nestation Anarhey CC BY-NC 3.0
+// Nestation new city CC BY-NC 3.0
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +6,7 @@ using Content.Server._Nestation.XenoBrain;
 using Content.Shared._Nestation.XenoHive;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN.PrimitiveTasks;
+using Robust.Shared.Maths;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -63,42 +64,101 @@ public sealed partial class PickRoamPointOperator : HTNOperator
         var stage = brain != null ? _brainSys.HiveStage(xform.MapID) : 0;
         var avoidHive = brain != null && brain.Caste == XenoCaste.Drone && stage == 1;
         var hivePos = avoidHive ? _brainSys.HivePosition(xform.MapID) : null;
-        var homePos = brain != null && !avoidHive && brain.Caste != XenoCaste.Burrower && stage > 0
-            ? _brainSys.HivePosition(xform.MapID)
-            : null;
+        var map = xform.MapID;
 
-        for (var i = 0; i < 6; i++)
+        Vector2? Choose(float minClear, bool filters)
         {
-            Vector2 offset;
-            if (homePos is { } home && brain != null)
-                offset = home + _random.NextAngle().ToVec() * _random.NextFloat(4f, brain.HomeRadius) - pos;
-            else
-                offset = _random.NextAngle().ToVec() * _random.NextFloat(min, max);
+            var baseAngle = _random.NextAngle();
+            var total = 0f;
+            var fan = new List<(Vector2 Offset, float Weight)>();
 
-            if (hivePos is { } hp && brain != null)
+            for (var k = 0; k < 16; k++)
             {
-                var away = pos - hp;
-                if (away.LengthSquared() > 0.01f && Vector2.Dot(offset, away) < 0f)
-                    offset = -offset;
-
-                if ((pos + offset - hp).Length() < brain.DroneHiveAvoid)
+                var dir = (baseAngle + Angle.FromDegrees(22.5 * k)).ToVec();
+                var clear = _brainSys.ClearDistance(map, pos, dir, max, owner);
+                if (clear < minClear)
                     continue;
+
+                var travel = MathF.Min(clear - 0.8f, _random.NextFloat(min, max));
+                if (travel < minClear - 0.8f)
+                    continue;
+
+                var offset = dir * travel;
+                var cand = pos + offset;
+                var weight = clear;
+
+                if (brain != null)
+                {
+                    if (filters && (_brainSys.IsDangerous(map, cand) || XenoOps.NearAvoid(brain, cand, 4f)))
+                        continue;
+
+                    if (_brainSys.IsRecentRoam(owner, cand, 4f))
+                        continue;
+
+                    if (brain.LastRoamDir != Vector2.Zero)
+                    {
+                        var dot = Vector2.Dot(dir, brain.LastRoamDir);
+                        weight *= dot < -0.5f ? 0.02f : 0.4f + 0.6f * MathF.Max(0f, dot);
+                    }
+
+                    if (hivePos is { } hiveAt)
+                    {
+                        if ((cand - hiveAt).Length() < brain.DroneHiveAvoid)
+                            continue;
+
+                        var away = pos - hiveAt;
+                        if (away.LengthSquared() > 0.01f)
+                            weight *= 0.5f + 1.5f * MathF.Max(0f, Vector2.Dot(dir, Vector2.Normalize(away)));
+                    }
+                }
+
+                fan.Add((offset, weight));
+                total += weight;
             }
 
-            var cand = pos + offset;
+            if (fan.Count == 0)
+                return null;
 
-            if (_brainSys.IsDangerous(xform.MapID, cand))
-                continue;
+            var roll = _random.NextFloat() * total;
+            foreach (var (offset, weight) in fan)
+            {
+                roll -= weight;
+                if (roll <= 0f)
+                    return offset;
+            }
 
-            if (brain != null && XenoOps.NearAvoid(brain, cand, 4f))
-                continue;
+            return fan[^1].Offset;
+        }
 
+        Vector2? picked = Choose(6f, true);
+
+        if (picked == null && brain != null && _brainSys.TryBaseRoam(owner, map, pos, out var baseCoords))
+        {
+            brain.LastRoamDir = Vector2.Zero;
+            _brainSys.RememberRoam(owner, pos);
             return XenoOps.Yes(new Dictionary<string, object>
             {
-                [TargetKey] = xform.Coordinates.Offset(offset),
+                [TargetKey] = baseCoords,
             });
         }
 
-        return XenoOps.No();
+        picked ??= Choose(3f, true);
+        picked ??= Choose(2.5f, false);
+
+        if (picked is not { } chosen)
+        {
+            _brainSys.ForceUnstick(owner);
+            return XenoOps.No();
+        }
+
+        if (brain != null)
+            brain.LastRoamDir = Vector2.Normalize(chosen);
+
+        _brainSys.RememberRoam(owner, pos + chosen);
+
+        return XenoOps.Yes(new Dictionary<string, object>
+        {
+            [TargetKey] = xform.Coordinates.Offset(chosen),
+        });
     }
 }

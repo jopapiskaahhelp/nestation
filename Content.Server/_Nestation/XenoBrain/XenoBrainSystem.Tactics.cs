@@ -1,4 +1,4 @@
-// Nestation Anarhey CC BY-NC 3.0
+// Nestation new city CC BY-NC 3.0
 using System.Numerics;
 using Content.Server._Nestation.XenoHive;
 using Content.Shared._Nestation.XenoHive;
@@ -49,6 +49,60 @@ public sealed partial class XenoBrainSystem
             score += 6f * (1.2f - b.Boldness);
 
         return score;
+    }
+
+    private void TrackIdle(Ctx c)
+    {
+        var x = c.X;
+        var b = x.Brain;
+        var now = c.Now;
+
+        if (b.Mode is not (XenoMode.Patrol or XenoMode.Detour) || b.Caste == XenoCaste.Burrower
+            || _squadOf.ContainsKey(x.Uid))
+        {
+            b.IdleAnchor = x.Pos;
+            b.IdleSince = now;
+            b.OscAnchor = x.Pos;
+            b.OscLast = x.Pos;
+            b.OscSince = now;
+            b.OscPath = 0f;
+            return;
+        }
+
+        b.OscPath += (x.Pos - b.OscLast).Length();
+        b.OscLast = x.Pos;
+
+        if ((now - b.OscSince).TotalSeconds >= 20.0)
+        {
+            var wander = b.OscPath > 10f && (x.Pos - b.OscAnchor).Length() < 4.5f;
+            b.OscAnchor = x.Pos;
+            b.OscSince = now;
+            b.OscPath = 0f;
+
+            if (wander)
+            {
+                RememberRoam(x.Uid, x.Pos);
+                b.AvoidPoints.Add((x.Pos, now + TimeSpan.FromSeconds(60)));
+                StartUnstick(x, now);
+                return;
+            }
+        }
+
+        if ((x.Pos - b.IdleAnchor).Length() >= 2f)
+        {
+            b.IdleAnchor = x.Pos;
+            b.IdleSince = now;
+            return;
+        }
+
+        if ((now - b.IdleSince).TotalSeconds < 8.0)
+            return;
+
+        b.IdleAnchor = x.Pos;
+        b.IdleSince = now;
+        b.LastRoamDir = Vector2.Zero;
+        b.CautiousUntil = TimeSpan.Zero;
+        StartUnstick(x, now);
     }
 
     private void TrackChase(Ctx c)
@@ -145,7 +199,8 @@ public sealed partial class XenoBrainSystem
         var b = x.Brain;
         var now = c.Now;
 
-        if (b.Caste == XenoCaste.Burrower || b.DuelOpponent != null || now < b.NextTacticAt)
+        if (b.Caste == XenoCaste.Burrower || b.DuelOpponent != null || now < b.NextTacticAt
+            || _squadOf.ContainsKey(x.Uid))
             return false;
 
         if (now < b.LeapUntil || b.ForcedTarget != null)
@@ -225,8 +280,99 @@ public sealed partial class XenoBrainSystem
             XenoMode.Bait => ThinkBait(c),
             XenoMode.Weave => ThinkWeave(c),
             XenoMode.Lure => ThinkLure(c),
+            XenoMode.Unstick => ThinkUnstick(c),
             _ => false,
         };
+    }
+
+    private void StartUnstick(XenoInfo x, TimeSpan now)
+    {
+        var b = x.Brain;
+        b.StallStrikes = 0;
+        b.TacticUntil = now + TimeSpan.FromSeconds(8);
+        b.BuildStand = null;
+        b.BuildEntry = null;
+        b.AvoidPoints.Add((x.Pos, now + TimeSpan.FromSeconds(45)));
+        if (b.AvoidPoints.Count > 8)
+            b.AvoidPoints.RemoveAt(0);
+
+        SetMode(x, XenoMode.Unstick, now);
+    }
+
+    private void HandleStall(XenoInfo x, TimeSpan now)
+    {
+        var b = x.Brain;
+        if ((now - b.LastStallAt).TotalSeconds > 30.0)
+            b.StallStrikes = 0;
+
+        b.LastStallAt = now;
+        b.StallStrikes++;
+
+        var free = b.Mode is XenoMode.Patrol or XenoMode.Detour or XenoMode.Rally
+                   && b.Caste != XenoCaste.Burrower && !_squadOf.ContainsKey(x.Uid);
+
+        if (free && b.StallStrikes >= 2)
+        {
+            StartUnstick(x, now);
+            return;
+        }
+
+        OnStuck(x, now);
+    }
+
+    private bool ThinkUnstick(Ctx c)
+    {
+        var x = c.X;
+        var b = x.Brain;
+        var now = c.Now;
+
+        if (now > b.TacticUntil || (c.Target != null && c.TargetIsPlayer && c.TargetDist < 14f))
+        {
+            b.WalkAnchor = x.Pos;
+            b.WalkSince = now;
+            b.IdleAnchor = x.Pos;
+            b.IdleSince = now;
+            return EndTactic(x, now);
+        }
+
+        if (b.BuildStand != null && (b.BuildStandPos - x.Pos).Length() >= 1.2f)
+        {
+            b.GoalPos = b.BuildStandPos;
+            return true;
+        }
+
+        var baseAngle = _random.NextAngle();
+        var bestScore = 0f;
+        var bestClear = 0f;
+        var bestDir = Vector2.Zero;
+        for (var k = 0; k < 16; k++)
+        {
+            var dir = (baseAngle + Angle.FromDegrees(22.5 * k)).ToVec();
+            var clear = ClearDistance(x.Map, x.Pos, dir, 10f, x.Uid);
+            var score = clear;
+
+            if (b.LastRoamDir != Vector2.Zero && Vector2.Dot(dir, b.LastRoamDir) < -0.4f)
+                score *= 0.3f;
+
+            if (IsRecentRoam(x.Uid, x.Pos + dir * MathF.Min(clear, 6f), 3f))
+                score *= 0.2f;
+
+            if (score > bestScore)
+            {
+                bestScore = score;
+                bestClear = clear;
+                bestDir = dir;
+            }
+        }
+
+        if (bestClear < 1.5f)
+            return EndTactic(x, now);
+
+        b.LastRoamDir = bestDir;
+        RememberRoam(x.Uid, x.Pos);
+        SetStandWorld(b, x.Map, x.Pos + bestDir * MathF.Min(bestClear - 0.8f, 7f));
+        b.GoalPos = b.BuildStand != null ? b.BuildStandPos : (Vector2?) null;
+        return true;
     }
 
     private bool EndTactic(XenoInfo x, TimeSpan now)

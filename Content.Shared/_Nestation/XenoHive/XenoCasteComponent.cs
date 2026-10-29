@@ -1,4 +1,4 @@
-// Nestation Anarhey CC BY-NC 3.0
+// Nestation new city CC BY-NC 3.0
 namespace Content.Shared._Nestation.XenoHive;
 
 public enum XenoCaste : byte

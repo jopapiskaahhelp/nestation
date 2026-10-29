@@ -1,4 +1,4 @@
-// Nestation Anarhey CC BY-NC 3.0
+// Nestation new city CC BY-NC 3.0
 using System.Numerics;
 using Content.Server._Nestation.XenoHive;
 using Content.Shared._Nestation.XenoHive;
@@ -26,6 +26,7 @@ public enum XenoMode : byte
     Bait,
     Weave,
     Lure,
+    Unstick,
 }
 
 public enum XenoStalkPhase : byte
@@ -243,6 +244,16 @@ public sealed partial class XenoBrainComponent : Component
     public bool TargetVisible;
     public Vector2 WalkAnchor;
     public TimeSpan WalkSince;
+    public int StallStrikes;
+    public readonly List<(Vector2 Pos, TimeSpan Expire)> RecentRoam = new();
+    public Vector2 OscAnchor;
+    public Vector2 OscLast;
+    public TimeSpan OscSince;
+    public float OscPath;
+    public TimeSpan LastStallAt;
+    public Vector2 LastRoamDir;
+    public Vector2 IdleAnchor;
+    public TimeSpan IdleSince;
     public Vector2 ProgressGoal;
     public float ProgressBest = float.MaxValue;
     public TimeSpan ProgressSince;
