@@ -9,10 +9,10 @@ using Content.Shared.PDA;
 
 namespace Content.Server.CartridgeLoader.Cartridges;
 
-public sealed class LawsCartridgeSystem : EntitySystem
+public sealed partial class LawsCartridgeSystem : EntitySystem
 {
-    [Dependency] private readonly CartridgeLoaderSystem _cartridgeLoader = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private CartridgeLoaderSystem _cartridgeLoader = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
 
     private readonly List<string> _laws = new();
 

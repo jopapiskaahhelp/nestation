@@ -29,7 +29,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Nestation.Unbalanced;
 
-public sealed class UnbalancedSystem : EntitySystem
+public sealed partial class UnbalancedSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
