@@ -26,7 +26,7 @@ public sealed partial class XenoHiveEntry
 public sealed partial class XenoClutchComponent : Component
 {
     [DataField]
-    public EntProtoId QueenProto = "MobXenoQueen";
+    public EntProtoId QueenProto = "MobXenoHiveQueen";
 
     [DataField]
     public EntProtoId EggProto = "XenoEgg";

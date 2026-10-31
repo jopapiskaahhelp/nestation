@@ -214,7 +214,7 @@ public sealed partial class XenoBrainSystem
         var others = CountOthers(target, x.Map, c.TargetPos, 10f);
 
         XenoMazePlan? plan = null;
-        if (_hive.TryGetHive(x.Map, out var hive))
+        if (b.HiveOwned && _hive.TryGetHive(x.Map, out var hive))
             plan = _hive.GetPlan(hive);
 
         var wHide = dist >= 6f && dist <= 22f ? (b.TargetRanged ? 28f : 14f) * (1.3f - b.Boldness) : 0f;

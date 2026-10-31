@@ -61,7 +61,7 @@ public sealed partial class PickRoamPointOperator : HTNOperator
         var min = cautious ? CautiousMinRange : MinRange;
         var max = cautious ? CautiousMaxRange : MaxRange;
 
-        var stage = brain != null ? _brainSys.HiveStage(xform.MapID) : 0;
+        var stage = brain != null && brain.HiveOwned ? _brainSys.HiveStage(xform.MapID) : 0;
         var avoidHive = brain != null && brain.Caste == XenoCaste.Drone && stage == 1;
         var hivePos = avoidHive ? _brainSys.HivePosition(xform.MapID) : null;
         var map = xform.MapID;

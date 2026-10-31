@@ -1,4 +1,4 @@
-// Nestation Anarhey CC BY-NC 3.0
+// Nestation new city CC BY-NC 3.0
 using Content.Shared._Nestation.CCVars;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;

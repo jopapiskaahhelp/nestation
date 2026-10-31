@@ -87,7 +87,7 @@ public sealed partial class XenoBrainSystem
             var bestDist = float.MaxValue;
             foreach (var a in _xenos)
             {
-                if (a.Uid == caller.Uid || a.Map != caller.Map || a.Brain.Caste == XenoCaste.Burrower
+                if (a.Uid == caller.Uid || a.Map != caller.Map || !a.Brain.HiveOwned || a.Brain.Caste == XenoCaste.Burrower
                     || a.Brain.DuelOpponent != null || a.Brain.Mode == XenoMode.Retreat || picked.Contains(a))
                 {
                     continue;

@@ -210,11 +210,6 @@
   components:
   - type: XenoCaste
     caste: Queen
-  - type: HTN
-    rootTask:
-      task: XenoQueenCompound
-  - type: Physics
-    bodyType: Static
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/Xenos/queen.rsi
@@ -230,8 +225,6 @@
     speedModifierThresholds:
       150: 0.7
   - type: MovementSpeedModifier
-    baseWalkSpeed: 0
-    baseSprintSpeed: 0
   - type: MeleeWeapon
     damage:
       types:
@@ -250,6 +243,21 @@
   - type: Tag
     tags:
     - CannotSuicide
+
+
+- type: entity
+  name: queen
+  parent: MobXenoQueen
+  id: MobXenoHiveQueen
+  components:
+  - type: HTN
+    rootTask:
+      task: XenoQueenCompound
+  - type: Physics
+    bodyType: Static
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 0
+    baseSprintSpeed: 0
 
 - type: entity
   name: ravager

@@ -1,6 +1,7 @@
 // Nestation new city CC BY-NC 3.0
 using System.Numerics;
 using Content.Server.NPC.HTN;
+using Content.Server._Nestation.XenoHive;
 using Content.Shared._Nestation.XenoHive;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -227,6 +228,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
     public bool TryBaseRoam(EntityUid uid, MapId map, Vector2 pos, out EntityCoordinates coords)
     {
         coords = default;
+        if (!TryComp<XenoBrainComponent>(uid, out var roamBrain) || !roamBrain.HiveOwned)
+            return false;
+
         if (!_hive.TryGetHive(map, out var hive) || _hive.GetPlan(hive) is not { } plan)
             return false;
 
@@ -413,6 +417,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
             if (TryComp<XenoCasteComponent>(uid, out var caste))
                 brain.Caste = caste.Caste;
 
+            brain.HiveOwned = HasComp<XenoHiveMemberComponent>(uid);
             brain.Boldness = 0.3f + _random.NextFloat() * 0.7f;
             brain.Patience = _random.NextFloat();
 
@@ -785,7 +790,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
             return;
         }
 
-        if (b.Caste == XenoCaste.Burrower
+        if (b.Caste == XenoCaste.Burrower && b.HiveOwned
             && _hive.TryGetHive(x.Map, out var hive)
             && _hive.GetPlan(hive) is { } plan)
         {
@@ -806,7 +811,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
             if (now >= b.StalkRollReset)
                 b.StalkRolled = false;
 
-            var stage = b.Caste == XenoCaste.Drone ? _hive.GetStage(x.Map) : 0;
+            var stage = b.Caste == XenoCaste.Drone && b.HiveOwned ? _hive.GetStage(x.Map) : 0;
 
             if (stage >= 3 && now >= b.NextAmbushAt)
             {
@@ -1037,7 +1042,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
         if (c.Now >= b.AmbushUntil)
         {
-            if (b.Caste == XenoCaste.Drone && _hive.GetStage(x.Map) >= 3)
+            if (b.Caste == XenoCaste.Drone && b.HiveOwned && _hive.GetStage(x.Map) >= 3)
                 b.NextAmbushAt = c.Now + TimeSpan.FromSeconds(25 + _random.NextFloat() * 25f);
 
             var cautious = c.Now + TimeSpan.FromSeconds(b.CautiousSeconds);

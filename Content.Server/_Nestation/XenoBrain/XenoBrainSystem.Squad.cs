@@ -164,7 +164,7 @@ public sealed partial class XenoBrainSystem
         var b = x.Brain;
         var now = c.Now;
 
-        if (b.Caste == XenoCaste.Burrower)
+        if (b.Caste == XenoCaste.Burrower || !b.HiveOwned)
             return false;
 
         if (b.Mode != XenoMode.Heal)
@@ -385,7 +385,7 @@ public sealed partial class XenoBrainSystem
         _squadAlive.Clear();
         foreach (var x in _xenos)
         {
-            if (!IsTank(x.Brain) || x.Brain.DuelOpponent != null || !_hive.TryGetHive(x.Map, out _))
+            if (!IsTank(x.Brain) || !x.Brain.HiveOwned || x.Brain.DuelOpponent != null || !_hive.TryGetHive(x.Map, out _))
                 continue;
 
             _squadAlive.Add(x.Uid);
@@ -431,7 +431,7 @@ public sealed partial class XenoBrainSystem
         foreach (var x in _xenos)
         {
             var b = x.Brain;
-            if (IsTank(b) || b.Caste == XenoCaste.Burrower || b.DuelOpponent != null)
+            if (IsTank(b) || !b.HiveOwned || b.Caste == XenoCaste.Burrower || b.DuelOpponent != null)
                 continue;
 
             Squad? chosen = null;

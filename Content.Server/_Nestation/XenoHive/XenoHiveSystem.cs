@@ -230,7 +230,8 @@ public sealed partial class XenoHiveSystem : EntitySystem
 
     private void Hatch(EntityUid uid, XenoEggComponent egg, TransformComponent xform)
     {
-        Spawn(egg.Hatch, xform.Coordinates);
+        var mob = Spawn(egg.Hatch, xform.Coordinates);
+        EnsureComp<XenoHiveMemberComponent>(mob);
 
         if (egg.Clutch is { } clutchUid && TryComp<XenoClutchComponent>(clutchUid, out var clutch))
             clutch.Stage = Math.Max(clutch.Stage, egg.Class);
