@@ -8,17 +8,23 @@ using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Nutrition.Components;
 using Content.Shared.Physics;
 using Content.Shared.SSDIndicator;
 using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Wieldable;
+using Content.Shared.Wieldable.Components;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
@@ -29,7 +35,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Nestation.Unbalanced;
 
-public sealed partial class UnbalancedSystem : EntitySystem
+public sealed class UnbalancedSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -37,13 +43,16 @@ public sealed partial class UnbalancedSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedWieldableSystem _wieldable = default!;
     [Dependency] private SharedCombatModeSystem _combat = default!;
     [Dependency] private SharedDoorSystem _door = default!;
     [Dependency] private SharedEntityStorageSystem _storage = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedMoverController _mover = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     [Dependency] private EntityQuery<FixturesComponent> _fixturesQuery = default!;
     [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
@@ -52,6 +61,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
     private const int SightMask = (int) (CollisionGroup.Impassable | CollisionGroup.InteractImpassable);
 
     private const float ThinkInterval = 0.1f;
+    private const float HealthCheckInterval = 0.5f;
     private const float WallStop = 1.05f;
     private const float OpenReach = 1.2f;
     private const float SideOffset = 0.28f;
@@ -76,6 +86,10 @@ public sealed partial class UnbalancedSystem : EntitySystem
     private void OnMapInit(Entity<UnbalancedComponent> ent, ref MapInitEvent args)
     {
         RemComp<SSDIndicatorComponent>(ent);
+        RemComp<SatiationComponent>(ent);
+        RemComp<SatiationDamageComponent>(ent);
+        RemComp<SatiationSpeedModifierComponent>(ent);
+        RemComp<SatiationCounterAlertComponent>(ent);
 
         var now = _timing.CurTime;
         ent.Comp.NextThink = now;
@@ -112,6 +126,8 @@ public sealed partial class UnbalancedSystem : EntitySystem
                 comp.NextRegen = now + TimeSpan.FromSeconds(comp.RegenInterval);
                 Regenerate(uid);
             }
+
+            HandleScream(uid, comp, now);
 
             if (!_mobState.IsAlive(uid))
             {
@@ -171,23 +187,60 @@ public sealed partial class UnbalancedSystem : EntitySystem
         _damageable.TryChangeDamage(uid, heal, true, false, ignoreGlobalModifiers: true);
     }
 
+    private void HandleScream(EntityUid uid, UnbalancedComponent comp, TimeSpan now)
+    {
+        if (now >= comp.NextHealthCheck)
+        {
+            comp.NextHealthCheck = now + TimeSpan.FromSeconds(HealthCheckInterval);
+
+            if (TryComp<DamageableComponent>(uid, out var damageable)
+                && _thresholds.TryGetThresholdForState(uid, MobState.Critical, out var critical)
+                && critical.Value > FixedPoint2.Zero)
+            {
+                var total = _damageable.GetPositiveDamage((uid, damageable)).GetTotal();
+                var health = 1f - total.Float() / critical.Value.Float();
+
+                if (!comp.Screaming && health < comp.ScreamBelow)
+                {
+                    comp.Screaming = true;
+                    comp.NextScream = now;
+                }
+                else if (comp.Screaming && health >= comp.ScreamUntil)
+                {
+                    comp.Screaming = false;
+                }
+            }
+        }
+
+        if (!comp.Screaming || now < comp.NextScream)
+            return;
+
+        comp.NextScream = now + TimeSpan.FromSeconds(comp.ScreamInterval);
+        _audio.PlayPvs(new SoundCollectionSpecifier("MaleScreams"), uid);
+    }
+
     private Entity<GunComponent>? EnsureGun(EntityUid uid, UnbalancedComponent comp)
     {
-        if (_gun.TryGetGun(uid, out var held))
+        if (!_gun.TryGetGun(uid, out var held))
         {
-            comp.Gun = held.Owner;
-            return held;
+            if (comp.Gun is not { } gunUid || !Exists(gunUid))
+            {
+                gunUid = Spawn(comp.GunProto, Transform(uid).Coordinates);
+                comp.Gun = gunUid;
+            }
+
+            _hands.TryForcePickupAnyHand(uid, gunUid, checkActionBlocker: false);
+
+            if (!_gun.TryGetGun(uid, out held))
+                return null;
         }
 
-        if (comp.Gun is not { } gunUid || !Exists(gunUid))
-        {
-            gunUid = Spawn(comp.GunProto, Transform(uid).Coordinates);
-            comp.Gun = gunUid;
-        }
+        comp.Gun = held.Owner;
 
-        _hands.TryForcePickupAnyHand(uid, gunUid, checkActionBlocker: false);
+        if (TryComp<WieldableComponent>(held, out var wieldable) && !wieldable.Wielded)
+            _wieldable.TryWield((held.Owner, wieldable), uid);
 
-        return _gun.TryGetGun(uid, out held) ? held : null;
+        return held;
     }
 
     private void Think(EntityUid uid, UnbalancedComponent comp, TransformComponent xform, TimeSpan now)
@@ -207,7 +260,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
         var pos = _transform.GetWorldPosition(xform);
         FixInWall(uid, comp, xform, ref pos);
 
-        if (TryShootLiving(uid, comp, gun, xform, pos))
+        if (TryShootLiving(uid, comp, gun, xform, pos, now))
         {
             comp.MoveDir = Vector2.Zero;
             return;
@@ -216,12 +269,14 @@ public sealed partial class UnbalancedSystem : EntitySystem
         Patrol(uid, comp, gun, xform, pos, now);
     }
 
-    private bool TryShootLiving(EntityUid uid, UnbalancedComponent comp, Entity<GunComponent> gun, TransformComponent xform, Vector2 pos)
+    private bool TryShootLiving(EntityUid uid, UnbalancedComponent comp, Entity<GunComponent> gun, TransformComponent xform, Vector2 pos, TimeSpan now)
     {
         var map = xform.MapID;
         EntityUid? best = null;
         var bestPos = Vector2.Zero;
         var bestDist = float.MaxValue;
+        var keepCurrent = false;
+        var currentPos = Vector2.Zero;
 
         var flags = LookupFlags.Dynamic | LookupFlags.Uncontained;
         foreach (var (target, _) in _lookup.GetEntitiesInRange<MobStateComponent>(new MapCoordinates(pos, map), comp.ShootRange, flags))
@@ -231,8 +286,6 @@ public sealed partial class UnbalancedSystem : EntitySystem
 
             var targetPos = _transform.GetWorldPosition(target);
             var dist = (targetPos - pos).Length();
-            if (dist >= bestDist)
-                continue;
 
             if (dist > 0.2f)
             {
@@ -241,13 +294,46 @@ public sealed partial class UnbalancedSystem : EntitySystem
                     continue;
             }
 
+            if (target == comp.AimTarget)
+            {
+                keepCurrent = true;
+                currentPos = targetPos;
+            }
+
+            if (dist >= bestDist)
+                continue;
+
             best = target;
             bestPos = targetPos;
             bestDist = dist;
         }
 
+        if (keepCurrent && comp.AimTarget is { } current)
+        {
+            best = current;
+            bestPos = currentPos;
+        }
+
         if (best == null)
+        {
+            comp.AimTarget = null;
             return false;
+        }
+
+        if (comp.AimTarget != best)
+        {
+            comp.AimTarget = best;
+            comp.AimReadyAt = now + TimeSpan.FromSeconds(comp.AimDelay);
+        }
+
+        if (now < comp.AimReadyAt)
+        {
+            var delta = bestPos - pos;
+            if (delta.LengthSquared() > 0.0001f)
+                _transform.SetWorldRotation(uid, delta.ToWorldAngle());
+
+            return true;
+        }
 
         Shoot(uid, gun, xform, pos, bestPos, best);
         return true;
@@ -273,6 +359,43 @@ public sealed partial class UnbalancedSystem : EntitySystem
         return _gun.AttemptShoot(uid, gun, coords, target);
     }
 
+    private UnbalancedGridMemory GetMemory(UnbalancedComponent comp, EntityUid gridUid)
+    {
+        if (!comp.Memory.TryGetValue(gridUid, out var memory))
+        {
+            memory = new UnbalancedGridMemory();
+            comp.Memory[gridUid] = memory;
+        }
+
+        return memory;
+    }
+
+    private bool IsProtoBlacklisted(UnbalancedComponent comp, EntityUid entity)
+    {
+        return MetaData(entity).EntityPrototype?.ID is { } id && comp.UnbreakableProtos.Contains(id);
+    }
+
+    private bool IsBlacklisted(UnbalancedComponent comp, UnbalancedGridMemory memory, EntityUid entity, Vector2i tile)
+    {
+        return comp.UnbreakableEnts.Contains(entity)
+               || memory.Unbreakable.Contains(tile)
+               || IsProtoBlacklisted(comp, entity);
+    }
+
+    private void BlacklistEntity(UnbalancedComponent comp, EntityUid entity)
+    {
+        comp.UnbreakableEnts.Add(entity);
+
+        if (MetaData(entity).EntityPrototype?.ID is { } id)
+            comp.UnbreakableProtos.Add(id);
+    }
+
+    private void Blacklist(UnbalancedComponent comp, UnbalancedGridMemory memory, EntityUid entity, Vector2i tile)
+    {
+        BlacklistEntity(comp, entity);
+        memory.Unbreakable.Add(tile);
+    }
+
     private void Patrol(EntityUid uid, UnbalancedComponent comp, Entity<GunComponent> gun, TransformComponent xform, Vector2 pos, TimeSpan now)
     {
         var map = xform.MapID;
@@ -285,17 +408,18 @@ public sealed partial class UnbalancedSystem : EntitySystem
 
         if (comp.Grid != gridUid)
         {
-            ResetMemory(comp);
+            ResetPath(comp);
             comp.Grid = gridUid;
         }
 
+        var memory = GetMemory(comp, gridUid);
         var tile = _maps.WorldToTile(gridUid, grid, pos);
-        MarkVisited(comp, tile);
-        CheckStuck(comp, pos, now);
+        MarkVisited(memory, tile);
+        CheckStuck(comp, memory, pos, now);
 
         if (comp.Obstacle != null)
         {
-            WorkObstacle(uid, comp, gun, xform, pos, now);
+            WorkObstacle(uid, comp, memory, gun, xform, pos, now);
             return;
         }
 
@@ -308,9 +432,9 @@ public sealed partial class UnbalancedSystem : EntitySystem
         while (comp.Path.Count > 0 && (TileCenter(gridUid, grid, comp.Path[0]) - pos).LengthSquared() < WaypointRadiusSq)
             comp.Path.RemoveAt(0);
 
-        if (comp.Path.Count == 0 && !Plan(comp, gridUid, grid, tile))
+        if (comp.Path.Count == 0 && !Plan(comp, memory, gridUid, grid, tile))
         {
-            comp.Visited.Clear();
+            memory.Visited.Clear();
             comp.MoveDir = Vector2.Zero;
             comp.NextAction = now + TimeSpan.FromSeconds(2);
             return;
@@ -336,8 +460,24 @@ public sealed partial class UnbalancedSystem : EntitySystem
         _transform.SetWorldRotation(uid, moveDir.ToWorldAngle());
 
         var probeLen = MathF.Min(distToTarget + 0.6f, 2.2f);
-        if (!Probe(comp, map, pos, moveDir, probeLen, uid, out var hitDist, out var hit))
+        if (!Probe(map, pos, moveDir, probeLen, uid, out var hitDist, out var hit))
             return;
+
+        var hitTile = _maps.WorldToTile(gridUid, grid, _transform.GetWorldPosition(hit));
+
+        if (IsBlacklisted(comp, memory, hit, hitTile))
+        {
+            var onPath = comp.Path[0] == hitTile || (comp.Path.Count > 1 && comp.Path[1] == hitTile);
+            if (onPath && hitDist <= WallStop + 0.3f)
+            {
+                Blacklist(comp, memory, hit, hitTile);
+                comp.Path.Clear();
+                comp.Goal = null;
+                comp.MoveDir = Vector2.Zero;
+            }
+
+            return;
+        }
 
         var isDoor = TryComp<DoorComponent>(hit, out var door);
         var isStorage = TryComp<EntityStorageComponent>(hit, out var storage);
@@ -400,7 +540,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
         comp.ObstacleInfinite = false;
     }
 
-    private void WorkObstacle(EntityUid uid, UnbalancedComponent comp, Entity<GunComponent> gun, TransformComponent xform, Vector2 pos, TimeSpan now)
+    private void WorkObstacle(EntityUid uid, UnbalancedComponent comp, UnbalancedGridMemory memory, Entity<GunComponent> gun, TransformComponent xform, Vector2 pos, TimeSpan now)
     {
         comp.MoveDir = Vector2.Zero;
 
@@ -409,6 +549,14 @@ public sealed partial class UnbalancedSystem : EntitySystem
         {
             ClearObstacle(comp);
             comp.Path.Clear();
+            return;
+        }
+
+        if (!comp.ObstacleInfinite && IsProtoBlacklisted(comp, obstacle))
+        {
+            ClearObstacle(comp);
+            comp.Path.Clear();
+            comp.Goal = null;
             return;
         }
 
@@ -447,13 +595,20 @@ public sealed partial class UnbalancedSystem : EntitySystem
             if (now - comp.LastShot < TimeSpan.FromSeconds(0.8))
                 return;
 
-            comp.UnbreakableEnts.Add(obstacle);
-            if (_maps.TryFindGridAt(xform.MapID, obstaclePos, out var gridUid, out var grid))
-                comp.Unbreakable.Add(_maps.WorldToTile(gridUid, grid, obstaclePos));
+            if (comp.Grid is { } gridUid && TryComp<MapGridComponent>(gridUid, out var grid))
+            {
+                var obstacleTile = _maps.WorldToTile(gridUid, grid, obstaclePos);
+                Blacklist(comp, memory, obstacle, obstacleTile);
+            }
+            else
+            {
+                BlacklistEntity(comp, obstacle);
+            }
 
             ClearObstacle(comp);
             comp.Path.Clear();
             comp.Goal = null;
+            comp.NextAction = now + TimeSpan.FromSeconds(0.3);
             return;
         }
 
@@ -464,7 +619,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
         }
     }
 
-    private void CheckStuck(UnbalancedComponent comp, Vector2 pos, TimeSpan now)
+    private void CheckStuck(UnbalancedComponent comp, UnbalancedGridMemory memory, Vector2 pos, TimeSpan now)
     {
         if (now < comp.NextStuckCheck)
             return;
@@ -477,7 +632,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
             if (comp.StuckCount >= 2)
             {
                 if (comp.Goal is { } goal)
-                    comp.Visited.Add(goal);
+                    memory.Visited.Add(goal);
 
                 comp.Path.Clear();
                 comp.Goal = null;
@@ -492,11 +647,8 @@ public sealed partial class UnbalancedSystem : EntitySystem
         comp.LastPos = pos;
     }
 
-    private void ResetMemory(UnbalancedComponent comp)
+    private void ResetPath(UnbalancedComponent comp)
     {
-        comp.Visited.Clear();
-        comp.Unbreakable.Clear();
-        comp.UnbreakableEnts.Clear();
         comp.Path.Clear();
         comp.Goal = null;
         comp.Obstacle = null;
@@ -504,13 +656,13 @@ public sealed partial class UnbalancedSystem : EntitySystem
         comp.ObstacleInfinite = false;
     }
 
-    private void MarkVisited(UnbalancedComponent comp, Vector2i tile)
+    private void MarkVisited(UnbalancedGridMemory memory, Vector2i tile)
     {
         for (var dx = -1; dx <= 1; dx++)
         {
             for (var dy = -1; dy <= 1; dy++)
             {
-                comp.Visited.Add(new Vector2i(tile.X + dx, tile.Y + dy));
+                memory.Visited.Add(new Vector2i(tile.X + dx, tile.Y + dy));
             }
         }
     }
@@ -548,9 +700,9 @@ public sealed partial class UnbalancedSystem : EntitySystem
         return false;
     }
 
-    private float TileCost(UnbalancedComponent comp, EntityUid gridUid, MapGridComponent grid, Vector2i tile)
+    private float TileCost(UnbalancedComponent comp, UnbalancedGridMemory memory, EntityUid gridUid, MapGridComponent grid, Vector2i tile)
     {
-        if (comp.Unbreakable.Contains(tile))
+        if (memory.Unbreakable.Contains(tile))
             return -1f;
 
         if (!_maps.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
@@ -562,7 +714,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
             if (!IsBlocking(anchored))
                 continue;
 
-            if (comp.UnbreakableEnts.Contains(anchored))
+            if (comp.UnbreakableEnts.Contains(anchored) || IsProtoBlacklisted(comp, anchored))
                 return -1f;
 
             if (HasComp<DoorComponent>(anchored) || HasComp<EntityStorageComponent>(anchored))
@@ -610,7 +762,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
         }
     }
 
-    private bool Plan(UnbalancedComponent comp, EntityUid gridUid, MapGridComponent grid, Vector2i start)
+    private bool Plan(UnbalancedComponent comp, UnbalancedGridMemory memory, EntityUid gridUid, MapGridComponent grid, Vector2i start)
     {
         comp.Path.Clear();
         comp.Goal = null;
@@ -630,7 +782,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
             if (!closed.Add(current))
                 continue;
 
-            if (current != start && !comp.Visited.Contains(current) && GetCost(current) <= 1f)
+            if (current != start && !memory.Visited.Contains(current) && GetCost(current) <= 1f)
             {
                 goal = current;
                 break;
@@ -675,13 +827,13 @@ public sealed partial class UnbalancedSystem : EntitySystem
             if (costs.TryGetValue(tile, out var cached))
                 return cached;
 
-            var value = TileCost(comp, gridUid, grid, tile);
+            var value = TileCost(comp, memory, gridUid, grid, tile);
             costs[tile] = value;
             return value;
         }
     }
 
-    private bool Probe(UnbalancedComponent comp, MapId map, Vector2 pos, Vector2 dir, float len, EntityUid self, out float dist, out EntityUid hit)
+    private bool Probe(MapId map, Vector2 pos, Vector2 dir, float len, EntityUid self, out float dist, out EntityUid hit)
     {
         dist = float.MaxValue;
         hit = default;
@@ -691,7 +843,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
         for (var i = -1; i <= 1; i++)
         {
             var origin = pos + side * i;
-            if (Cast(comp.UnbreakableEnts, map, origin, dir, len, BlockMask, self, out var d, out var h) && d < dist)
+            if (Cast(null, map, origin, dir, len, BlockMask, self, out var d, out var h) && d < dist)
             {
                 dist = d;
                 hit = h;

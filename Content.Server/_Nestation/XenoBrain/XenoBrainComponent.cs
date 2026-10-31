@@ -245,6 +245,7 @@ public sealed partial class XenoBrainComponent : Component
     public Vector2 WalkAnchor;
     public TimeSpan WalkSince;
     public int StallStrikes;
+    public TimeSpan NextAmbushAt;
     public readonly List<(Vector2 Pos, TimeSpan Expire)> RecentRoam = new();
     public Vector2 OscAnchor;
     public Vector2 OscLast;

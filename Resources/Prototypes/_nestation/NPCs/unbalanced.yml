@@ -51,6 +51,9 @@
     spread: 0.6
   - type: BasicEntityAmmoProvider
     proto: ShellShotgunUnbalanced
+  - type: Wieldable
+    unwieldOnUse: false
+    useDelayOnWield: false
   - type: Unremoveable
     deleteOnDrop: false
   - type: Tag

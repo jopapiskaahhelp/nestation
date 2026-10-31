@@ -808,9 +808,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
             var stage = b.Caste == XenoCaste.Drone ? _hive.GetStage(x.Map) : 0;
 
-            if (stage >= 3)
+            if (stage >= 3 && now >= b.NextAmbushAt)
             {
-                b.AmbushUntil = now + TimeSpan.FromSeconds(b.AmbushHoldSeconds);
+                b.AmbushUntil = now + TimeSpan.FromSeconds(40 + _random.NextFloat() * 30f);
                 want = XenoMode.Ambush;
             }
             else if (stage == 2 && now >= b.NoRallyUntil && TryPickEscort(x, out var escort))
@@ -1038,10 +1038,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (c.Now >= b.AmbushUntil)
         {
             if (b.Caste == XenoCaste.Drone && _hive.GetStage(x.Map) >= 3)
-            {
-                b.AmbushUntil = c.Now + TimeSpan.FromSeconds(b.AmbushHoldSeconds);
-                return;
-            }
+                b.NextAmbushAt = c.Now + TimeSpan.FromSeconds(25 + _random.NextFloat() * 25f);
 
             var cautious = c.Now + TimeSpan.FromSeconds(b.CautiousSeconds);
             b.CautiousUntil = cautious;
@@ -1248,8 +1245,15 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
             if (b.Mode == XenoMode.Advance && _squadOf.TryGetValue(x.Uid, out var stuckSquad) && stuckSquad.Tank == x.Uid)
             {
-                EndRaid(stuckSquad, now);
-                stuckSquad.NextRaid = now + TimeSpan.FromSeconds(60);
+                if (stuckSquad.State == SquadState.Patrol)
+                {
+                    stuckSquad.Goal = x.Pos;
+                }
+                else
+                {
+                    EndRaid(stuckSquad, now);
+                    stuckSquad.NextRaid = now + TimeSpan.FromSeconds(60);
+                }
             }
 
             b.BuildStand = null;
