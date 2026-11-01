@@ -98,8 +98,7 @@
 
 - type: marking
   id: HumanHairCotton
-  bodyPart: Hair
-  sponsorOnly: true # Corvax-Sponsors
+  bodyPart: Hair # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/human_hair.rsi
       state: cotton
@@ -134,8 +133,7 @@
 
 - type: marking
   id: HumanHairFingerwave
-  bodyPart: Hair
-  sponsorOnly: true # Corvax-Sponsors
+  bodyPart: Hair # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/human_hair.rsi
       state: fingerwave
@@ -149,16 +147,14 @@
 
 - type: marking
   id: HumanHairFortuneteller
-  bodyPart: Hair
-  sponsorOnly: true # Corvax-Sponsors
+  bodyPart: Hair # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/human_hair.rsi
       state: fortuneteller
 
 - type: marking
   id: HumanHairFortunetellerAlt
-  bodyPart: Hair
-  sponsorOnly: true # Corvax-Sponsors
+  bodyPart: Hair # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/human_hair.rsi
       state: fortuneteller_alt
@@ -284,8 +280,7 @@
 
 - type: marking
   id: HumanHairLongdtails
-  bodyPart: Hair
-  sponsorOnly: true # Corvax-Sponsors
+  bodyPart: Hair # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/human_hair.rsi
       state: longdtails
@@ -313,8 +308,7 @@
 
 - type: marking
   id: HumanHairLooseSlicked
-  bodyPart: Hair
-  sponsorOnly: true # Corvax-Sponsors
+  bodyPart: Hair # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/human_hair.rsi
       state: loose_slicked
@@ -356,8 +350,7 @@
 
 - type: marking
   id: HumanHairQuadcurls
-  bodyPart: Hair
-  sponsorOnly: true # Corvax-Sponsors
+  bodyPart: Hair # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/human_hair.rsi
       state: quadcurls
@@ -385,8 +378,7 @@
 
 - type: marking
   id: HumanHairShy
-  bodyPart: Hair
-  sponsorOnly: true # Corvax-Sponsors
+  bodyPart: Hair # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/human_hair.rsi
       state: shy
@@ -449,8 +441,7 @@
 
 - type: marking
   id: HumanHairSpicy
-  bodyPart: Hair
-  sponsorOnly: true # Corvax-Sponsors
+  bodyPart: Hair # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/human_hair.rsi
       state: spicy
@@ -485,8 +476,7 @@
 
 - type: marking
   id: HumanHairWife
-  bodyPart: Hair
-  sponsorOnly: true # Corvax-Sponsors
+  bodyPart: Hair # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/human_hair.rsi
       state: wife

@@ -1,8 +1,7 @@
 - type: marking
   id: IpcShellguardShellguardMonitorHead2
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_monitor.rsi
       state: head-2
@@ -10,8 +9,7 @@
 - type: marking
   id: IpcShellguardShellguardMonitorHead1
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_monitor.rsi
       state: head-1
@@ -19,8 +17,7 @@
 - type: marking
   id: IpcShellguardShellguardMainLLeg1
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: l_leg-1
@@ -28,8 +25,7 @@
 - type: marking
   id: IpcShellguardShellguardMainRHand2
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: r_hand-2
@@ -37,8 +33,7 @@
 - type: marking
   id: IpcShellguardShellguardMainLFoot1
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: l_foot-1
@@ -46,8 +41,7 @@
 - type: marking
   id: IpcShellguardShellguardMainLHand1
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: l_hand-1
@@ -55,8 +49,7 @@
 - type: marking
   id: IpcShellguardShellguardMainRArm2
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: r_arm-2
@@ -64,8 +57,7 @@
 - type: marking
   id: IpcShellguardShellguardMainTorso2
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: torso-2
@@ -73,8 +65,7 @@
 - type: marking
   id: IpcShellguardShellguardMainTorso1
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: torso-1
@@ -82,8 +73,7 @@
 - type: marking
   id: IpcShellguardShellguardMainLArm2
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: l_arm-2
@@ -91,8 +81,7 @@
 - type: marking
   id: IpcShellguardShellguardMainRHand1
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: r_hand-1
@@ -100,8 +89,7 @@
 - type: marking
   id: IpcShellguardShellguardMainRLeg2
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: r_leg-2
@@ -109,8 +97,7 @@
 - type: marking
   id: IpcShellguardShellguardMainRLeg1
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: r_leg-1
@@ -118,8 +105,7 @@
 - type: marking
   id: IpcShellguardShellguardMainLArm1
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: l_arm-1
@@ -127,8 +113,7 @@
 - type: marking
   id: IpcShellguardShellguardMainLHand2
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: l_hand-2
@@ -136,8 +121,7 @@
 - type: marking
   id: IpcShellguardShellguardMainRArm1
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: r_arm-1
@@ -145,8 +129,7 @@
 - type: marking
   id: IpcShellguardShellguardMainRFoot2
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: r_foot-2
@@ -154,8 +137,7 @@
 - type: marking
   id: IpcShellguardShellguardMainRFoot1
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: r_foot-1
@@ -163,8 +145,7 @@
 - type: marking
   id: IpcShellguardShellguardMainLFoot2
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: l_foot-2
@@ -172,8 +153,7 @@
 - type: marking
   id: IpcShellguardShellguardMainLLeg2
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_main.rsi
       state: l_leg-2
@@ -181,8 +161,7 @@
 - type: marking
   id: IpcShellguardShellguardAlt1Head2
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_alt1.rsi
       state: head-2
@@ -190,8 +169,7 @@
 - type: marking
   id: IpcShellguardShellguardAlt1Head1
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/shellguard/shellguard_alt1.rsi
       state: head-1
@@ -199,8 +177,7 @@
 - type: marking
   id: IpcZenghuZenghuMainLLeg1
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: l_leg-1
@@ -208,8 +185,7 @@
 - type: marking
   id: IpcZenghuZenghuMainRHand2
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: r_hand-2
@@ -217,8 +193,7 @@
 - type: marking
   id: IpcZenghuZenghuMainLFoot1
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: l_foot-1
@@ -226,8 +201,7 @@
 - type: marking
   id: IpcZenghuZenghuMainLHand1
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: l_hand-1
@@ -235,8 +209,7 @@
 - type: marking
   id: IpcZenghuZenghuMainRArm2
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: r_arm-2
@@ -244,8 +217,7 @@
 - type: marking
   id: IpcZenghuZenghuMainTorso2
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: torso-2
@@ -253,8 +225,7 @@
 - type: marking
   id: IpcZenghuZenghuMainTorso1
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: torso-1
@@ -262,8 +233,7 @@
 - type: marking
   id: IpcZenghuZenghuMainLArm2
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: l_arm-2
@@ -271,8 +241,7 @@
 - type: marking
   id: IpcZenghuZenghuMainRHand1
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: r_hand-1
@@ -280,8 +249,7 @@
 - type: marking
   id: IpcZenghuZenghuMainRLeg2
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: r_leg-2
@@ -289,8 +257,7 @@
 - type: marking
   id: IpcZenghuZenghuMainGroin
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: groin
@@ -298,8 +265,7 @@
 - type: marking
   id: IpcZenghuZenghuMainRLeg1
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: r_leg-1
@@ -307,8 +273,7 @@
 - type: marking
   id: IpcZenghuZenghuMainHead2
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: head-2
@@ -316,8 +281,7 @@
 - type: marking
   id: IpcZenghuZenghuMainLArm1
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: l_arm-1
@@ -325,8 +289,7 @@
 - type: marking
   id: IpcZenghuZenghuMainLHand2
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: l_hand-2
@@ -334,8 +297,7 @@
 - type: marking
   id: IpcZenghuZenghuMainRArm1
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: r_arm-1
@@ -343,8 +305,7 @@
 - type: marking
   id: IpcZenghuZenghuMainRFoot2
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: r_foot-2
@@ -352,8 +313,7 @@
 - type: marking
   id: IpcZenghuZenghuMainRFoot1
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: r_foot-1
@@ -361,8 +321,7 @@
 - type: marking
   id: IpcZenghuZenghuMainLFoot2
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: l_foot-2
@@ -370,8 +329,7 @@
 - type: marking
   id: IpcZenghuZenghuMainHead1
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: head-1
@@ -379,8 +337,7 @@
 - type: marking
   id: IpcZenghuZenghuMainLLeg2
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/zenghu/zenghu_main.rsi
       state: l_leg-2
@@ -388,8 +345,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainLLeg1
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: l_leg-1
@@ -397,8 +353,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainRHand2
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: r_hand-2
@@ -406,8 +361,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainLFoot1
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: l_foot-1
@@ -415,8 +369,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainLHand1
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: l_hand-1
@@ -424,8 +377,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainRArm2
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: r_arm-2
@@ -433,8 +385,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainTorso2
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: torso-2
@@ -442,8 +393,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainTorso1
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: torso-1
@@ -451,8 +401,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainLArm2
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: l_arm-2
@@ -460,8 +409,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainRHand1
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: r_hand-1
@@ -469,8 +417,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainRLeg2
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: r_leg-2
@@ -478,8 +425,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainRLeg1
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: r_leg-1
@@ -487,8 +433,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainLArm1
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: l_arm-1
@@ -496,8 +441,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainLHand2
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: l_hand-2
@@ -505,8 +449,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainRArm1
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: r_arm-1
@@ -514,8 +457,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainRFoot2
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: r_foot-2
@@ -523,8 +465,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainRFoot1
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: r_foot-1
@@ -532,8 +473,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainLFoot2
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: l_foot-2
@@ -541,8 +481,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMainLLeg2
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_main.rsi
       state: l_leg-2
@@ -550,8 +489,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMonitorHead2
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_monitor.rsi
       state: head-2
@@ -559,8 +497,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosMonitorHead1
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_monitor.rsi
       state: head-1
@@ -568,8 +505,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosAlt1Head2
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_alt1.rsi
       state: head-2
@@ -577,8 +513,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosAlt1Head3
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_alt1.rsi
       state: head-3
@@ -586,8 +521,7 @@
 - type: marking
   id: IpcHesphiastosHesphiastosAlt1Head1
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/hesphiastos/hesphiastos_alt1.rsi
       state: head-1
@@ -595,8 +529,7 @@
 - type: marking
   id: IpcBishopBishopMonitorHead2
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_monitor.rsi
       state: head-2
@@ -604,8 +537,7 @@
 - type: marking
   id: IpcBishopBishopMonitorHead
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_monitor.rsi
       state: head
@@ -613,8 +545,7 @@
 - type: marking
   id: IpcBishopBishopAlt1Head
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_alt1.rsi
       state: head
@@ -622,8 +553,7 @@
 - type: marking
   id: IpcBishopBishopMainLArmCombined
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: l_arm-combined
@@ -631,8 +561,7 @@
 - type: marking
   id: IpcBishopBishopMainTorsoPrimary
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: torso-primary
@@ -640,8 +569,7 @@
 - type: marking
   id: IpcBishopBishopMainLLegSecondary
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: l_leg-secondary
@@ -649,8 +577,7 @@
 - type: marking
   id: IpcBishopBishopMainRArmPrimary
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: r_arm-primary
@@ -658,8 +585,7 @@
 - type: marking
   id: IpcBishopBishopMainLArmTertiary
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: l_arm-tertiary
@@ -667,8 +593,7 @@
 - type: marking
   id: IpcBishopBishopMainRHand
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: r_hand
@@ -676,8 +601,7 @@
 - type: marking
   id: IpcBishopBishopMainLArmPrimary
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: l_arm-primary
@@ -685,8 +609,7 @@
 - type: marking
   id: IpcBishopBishopMainRLegPrimary
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: r_leg-primary
@@ -694,8 +617,7 @@
 - type: marking
   id: IpcBishopBishopMainTorsoSecondary
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: torso-secondary
@@ -703,8 +625,7 @@
 - type: marking
   id: IpcBishopBishopMainRLegCombined
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: r_leg-combined
@@ -712,8 +633,7 @@
 - type: marking
   id: IpcBishopBishopMainRArmSecondary
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: r_arm-secondary
@@ -721,8 +641,7 @@
 - type: marking
   id: IpcBishopBishopMainHead
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: head
@@ -730,8 +649,7 @@
 - type: marking
   id: IpcBishopBishopMainLFoot
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: l_foot
@@ -739,8 +657,7 @@
 - type: marking
   id: IpcBishopBishopMainLArmSecondary
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: l_arm-secondary
@@ -748,8 +665,7 @@
 - type: marking
   id: IpcBishopBishopMainLLegPrimary
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: l_leg-primary
@@ -757,8 +673,7 @@
 - type: marking
   id: IpcBishopBishopMainRArmTertiary
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: r_arm-tertiary
@@ -766,8 +681,7 @@
 - type: marking
   id: IpcBishopBishopMainLHand
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: l_hand
@@ -775,8 +689,7 @@
 - type: marking
   id: IpcBishopBishopMainLLegCombined
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: l_leg-combined
@@ -784,8 +697,7 @@
 - type: marking
   id: IpcBishopBishopMainRFoot
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: r_foot
@@ -793,8 +705,7 @@
 - type: marking
   id: IpcBishopBishopMainRLegSecondary
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: r_leg-secondary
@@ -802,8 +713,7 @@
 - type: marking
   id: IpcBishopBishopMainRArmCombined
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/bishop/bishop_main.rsi
       state: r_arm-combined
@@ -811,8 +721,7 @@
 - type: marking
   id: IpcMorpheusMorpheusAlt1Head
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_alt1.rsi
       state: head
@@ -820,8 +729,7 @@
 - type: marking
   id: IpcMorpheusMorpheusMainRHand
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_main.rsi
       state: r_hand
@@ -829,8 +737,7 @@
 - type: marking
   id: IpcMorpheusMorpheusMainLArm
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_main.rsi
       state: l_arm
@@ -838,8 +745,7 @@
 - type: marking
   id: IpcMorpheusMorpheusMainTorso
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_main.rsi
       state: torso
@@ -847,8 +753,7 @@
 - type: marking
   id: IpcMorpheusMorpheusMainHead
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_main.rsi
       state: head
@@ -856,8 +761,7 @@
 - type: marking
   id: IpcMorpheusMorpheusMainRLeg
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_main.rsi
       state: r_leg
@@ -865,8 +769,7 @@
 - type: marking
   id: IpcMorpheusMorpheusMainLFoot
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_main.rsi
       state: l_foot
@@ -874,8 +777,7 @@
 - type: marking
   id: IpcMorpheusMorpheusMainLHand
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_main.rsi
       state: l_hand
@@ -883,8 +785,7 @@
 - type: marking
   id: IpcMorpheusMorpheusMainRArm
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_main.rsi
       state: r_arm
@@ -892,8 +793,7 @@
 - type: marking
   id: IpcMorpheusMorpheusMainRFoot
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_main.rsi
       state: r_foot
@@ -901,8 +801,7 @@
 - type: marking
   id: IpcMorpheusMorpheusMainLLeg
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/morpheus/morpheus_main.rsi
       state: l_leg
@@ -910,8 +809,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMainRHand
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_main.rsi
       state: r_hand
@@ -919,8 +817,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMainLArm
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_main.rsi
       state: l_arm
@@ -928,8 +825,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMainTorso
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_main.rsi
       state: torso
@@ -937,8 +833,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMainHead
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_main.rsi
       state: head
@@ -946,8 +841,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMainRLeg
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_main.rsi
       state: r_leg
@@ -955,8 +849,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMainLFoot
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_main.rsi
       state: l_foot
@@ -964,8 +857,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMainLHand
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_main.rsi
       state: l_hand
@@ -973,8 +865,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMainRArm
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_main.rsi
       state: r_arm
@@ -982,8 +873,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMainRFoot
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_main.rsi
       state: r_foot
@@ -991,8 +881,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMainLLeg
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_main.rsi
       state: l_leg
@@ -1000,8 +889,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiMonitorHead
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_monitor.rsi
       state: head
@@ -1009,8 +897,7 @@
 - type: marking
   id: IpcWardtakahashiWardtakahashiAlt1Head
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/wardtakahashi/wardtakahashi_alt1.rsi
       state: head
@@ -1018,8 +905,7 @@
 - type: marking
   id: IpcXionXionMonitorHead2
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_monitor.rsi
       state: head-2
@@ -1027,8 +913,7 @@
 - type: marking
   id: IpcXionXionMonitorHead1
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_monitor.rsi
       state: head-1
@@ -1036,8 +921,7 @@
 - type: marking
   id: IpcXionXionMainLLeg1
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: l_leg-1
@@ -1045,8 +929,7 @@
 - type: marking
   id: IpcXionXionMainRHand2
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: r_hand-2
@@ -1054,8 +937,7 @@
 - type: marking
   id: IpcXionXionMainLFoot1
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: l_foot-1
@@ -1063,8 +945,7 @@
 - type: marking
   id: IpcXionXionMainLHand1
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: l_hand-1
@@ -1072,8 +953,7 @@
 - type: marking
   id: IpcXionXionMainRArm2
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: r_arm-2
@@ -1081,8 +961,7 @@
 - type: marking
   id: IpcXionXionMainTorso2
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: torso-2
@@ -1090,8 +969,7 @@
 - type: marking
   id: IpcXionXionMainTorso1
   bodyPart: Chest
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: torso-1
@@ -1099,8 +977,7 @@
 - type: marking
   id: IpcXionXionMainLArm2
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: l_arm-2
@@ -1108,8 +985,7 @@
 - type: marking
   id: IpcXionXionMainRHand1
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: r_hand-1
@@ -1117,8 +993,7 @@
 - type: marking
   id: IpcXionXionMainRLeg2
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: r_leg-2
@@ -1126,8 +1001,7 @@
 - type: marking
   id: IpcXionXionMainRLeg1
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: r_leg-1
@@ -1135,8 +1009,7 @@
 - type: marking
   id: IpcXionXionMainLArm1
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: l_arm-1
@@ -1144,8 +1017,7 @@
 - type: marking
   id: IpcXionXionMainLHand2
   bodyPart: LArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: l_hand-2
@@ -1153,8 +1025,7 @@
 - type: marking
   id: IpcXionXionMainRArm1
   bodyPart: RArm
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: r_arm-1
@@ -1162,8 +1033,7 @@
 - type: marking
   id: IpcXionXionMainRFoot2
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: r_foot-2
@@ -1171,8 +1041,7 @@
 - type: marking
   id: IpcXionXionMainRFoot1
   bodyPart: RLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: r_foot-1
@@ -1180,8 +1049,7 @@
 - type: marking
   id: IpcXionXionMainLFoot2
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: l_foot-2
@@ -1189,8 +1057,7 @@
 - type: marking
   id: IpcXionXionMainLLeg2
   bodyPart: LLeg
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_main.rsi
       state: l_leg-2
@@ -1198,8 +1065,7 @@
 - type: marking
   id: IpcXionXionAlt1Head2
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_alt1.rsi
       state: head-2
@@ -1207,8 +1073,7 @@
 - type: marking
   id: IpcXionXionAlt1Head1
   bodyPart: Head
-  groupWhitelist: [Ipc]
-  sponsorOnly: true # Corvax-Sponsors
+  groupWhitelist: [Ipc] # Corvax-Sponsors
   sprites:
     - sprite: Corvax/Mobs/Customization/Ipc/xion/xion_alt1.rsi
       state: head-1

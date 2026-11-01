@@ -1,9 +1,8 @@
-﻿# Bishop
+# Bishop
 - type: marking
   id: CyberlimbRArmBishop
   bodyPart: RArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -17,7 +16,6 @@
   id: CyberlimbLArmBishop
   bodyPart: LArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -31,7 +29,6 @@
   id: CyberlimbRHandBishop
   bodyPart: RHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -45,7 +42,6 @@
   id: CyberlimbLHandBishop
   bodyPart: LHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -59,7 +55,6 @@
   id: CyberlimbRLegBishop
   bodyPart: RLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -73,7 +68,6 @@
   id: CyberlimbLLegBishop
   bodyPart: LLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -87,7 +81,6 @@
   id: CyberlimbLFootBishop
   bodyPart: LFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -101,7 +94,6 @@
   id: CyberlimbRFootBishop
   bodyPart: RFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -115,7 +107,6 @@
   id: CyberlimbTorsoBishop
   bodyPart: Chest
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -130,7 +121,6 @@
   id: CyberlimbRArmHephaestus
   bodyPart: RArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -144,7 +134,6 @@
   id: CyberlimbLArmHephaestus
   bodyPart: LArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -158,7 +147,6 @@
   id: CyberlimbRHandHephaestus
   bodyPart: RHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -172,7 +160,6 @@
   id: CyberlimbLHandHephaestus
   bodyPart: LHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -186,7 +173,6 @@
   id: CyberlimbRLegHephaestus
   bodyPart: RLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -200,7 +186,6 @@
   id: CyberlimbLLegHephaestus
   bodyPart: LLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -214,7 +199,6 @@
   id: CyberlimbLFootHephaestus
   bodyPart: LFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -228,7 +212,6 @@
   id: CyberlimbRFootHephaestus
   bodyPart: RFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -242,7 +225,6 @@
   id: CyberlimbTorsoHephaestus
   bodyPart: Chest
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -257,7 +239,6 @@
   id: CyberlimbRArmHephaestusTitan
   bodyPart: RArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -271,7 +252,6 @@
   id: CyberlimbLArmHephaestusTitan
   bodyPart: LArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -285,7 +265,6 @@
   id: CyberlimbRHandHephaestusTitan
   bodyPart: RHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -299,7 +278,6 @@
   id: CyberlimbLHandHephaestusTitan
   bodyPart: LHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -313,7 +291,6 @@
   id: CyberlimbRLegHephaestusTitan
   bodyPart: RLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -327,7 +304,6 @@
   id: CyberlimbLLegHephaestusTitan
   bodyPart: LLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -341,7 +317,6 @@
   id: CyberlimbLFootHephaestusTitan
   bodyPart: LFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -355,7 +330,6 @@
   id: CyberlimbRFootHephaestusTitan
   bodyPart: RFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -369,7 +343,6 @@
   id: CyberlimbTorsoHephaestusTitan
   bodyPart: Chest
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -384,7 +357,6 @@
   id: CyberlimbRArmMorpheus
   bodyPart: RArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -398,7 +370,6 @@
   id: CyberlimbLArmMorpheus
   bodyPart: LArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -412,7 +383,6 @@
   id: CyberlimbRHandMorpheus
   bodyPart: RHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -426,7 +396,6 @@
   id: CyberlimbLHandMorpheus
   bodyPart: LHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -440,7 +409,6 @@
   id: CyberlimbRLegMorpheus
   bodyPart: RLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -454,7 +422,6 @@
   id: CyberlimbLLegMorpheus
   bodyPart: LLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -468,7 +435,6 @@
   id: CyberlimbLFootMorpheus
   bodyPart: LFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -482,7 +448,6 @@
   id: CyberlimbRFootMorpheus
   bodyPart: RFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -496,7 +461,6 @@
   id: CyberlimbTorsoMorpheus
   bodyPart: Chest
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -512,7 +476,6 @@
   id: CyberlimbRArmWardtakahashi
   bodyPart: RArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -526,7 +489,6 @@
   id: CyberlimbLArmWardtakahashi
   bodyPart: LArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -540,7 +502,6 @@
   id: CyberlimbRHandWardtakahashi
   bodyPart: RHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -554,7 +515,6 @@
   id: CyberlimbLHandWardtakahashi
   bodyPart: LHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -568,7 +528,6 @@
   id: CyberlimbRLegWardtakahashi
   bodyPart: RLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -582,7 +541,6 @@
   id: CyberlimbLLegWardtakahashi
   bodyPart: LLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -596,7 +554,6 @@
   id: CyberlimbLFootWardtakahashi
   bodyPart: LFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -610,7 +567,6 @@
   id: CyberlimbRFootWardtakahashi
   bodyPart: RFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -625,7 +581,6 @@
   bodyPart: Chest
   groupWhitelist: [ Human, Arachnid ]
   sexRestriction: Male
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -640,7 +595,6 @@
   bodyPart: Chest
   groupWhitelist: [ Human, Arachnid ]
   sexRestriction: Female
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -655,7 +609,6 @@
   id: CyberlimbRArmZenghu
   bodyPart: RArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -669,7 +622,6 @@
   id: CyberlimbLArmZenghu
   bodyPart: LArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -683,7 +635,6 @@
   id: CyberlimbRHandZenghu
   bodyPart: RHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -697,7 +648,6 @@
   id: CyberlimbLHandZenghu
   bodyPart: LHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -711,7 +661,6 @@
   id: CyberlimbRLegZenghu
   bodyPart: RLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -725,7 +674,6 @@
   id: CyberlimbLLegZenghu
   bodyPart: LLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -739,7 +687,6 @@
   id: CyberlimbLFootZenghu
   bodyPart: LFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -753,7 +700,6 @@
   id: CyberlimbRFootZenghu
   bodyPart: RFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -767,7 +713,6 @@
   id: CyberlimbTorsoZenghu
   bodyPart: Chest
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -782,7 +727,6 @@
   id: CyberlimbRArmNanotrasen
   bodyPart: RArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -796,7 +740,6 @@
   id: CyberlimbLArmNanotrasen
   bodyPart: LArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -810,7 +753,6 @@
   id: CyberlimbRHandNanotrasen
   bodyPart: RHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -824,7 +766,6 @@
   id: CyberlimbLHandNanotrasen
   bodyPart: LHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -838,7 +779,6 @@
   id: CyberlimbRLegNanotrasen
   bodyPart: RLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -852,7 +792,6 @@
   id: CyberlimbLLegNanotrasen
   bodyPart: LLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -866,7 +805,6 @@
   id: CyberlimbLFootNanotrasen
   bodyPart: LFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -880,7 +818,6 @@
   id: CyberlimbRFootNanotrasen
   bodyPart: RFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -894,7 +831,6 @@
   id: CyberlimbTorsoNanotrasen
   bodyPart: Chest
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -909,7 +845,6 @@
   id: CyberlimbRArmXion
   bodyPart: RArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -923,7 +858,6 @@
   id: CyberlimbLArmXion
   bodyPart: LArm
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -937,7 +871,6 @@
   id: CyberlimbRHandXion
   bodyPart: RHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -951,7 +884,6 @@
   id: CyberlimbLHandXion
   bodyPart: LHand
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -965,7 +897,6 @@
   id: CyberlimbRLegXion
   bodyPart: RLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -979,7 +910,6 @@
   id: CyberlimbLLegXion
   bodyPart: LLeg
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -993,7 +923,6 @@
   id: CyberlimbLFootXion
   bodyPart: LFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -1007,7 +936,6 @@
   id: CyberlimbRFootXion
   bodyPart: RFoot
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:
@@ -1021,7 +949,6 @@
   id: CyberlimbTorsoXion
   bodyPart: Chest
   groupWhitelist: [ Human, Arachnid ]
-  sponsorOnly: true
   coloring:
     default:
       type:

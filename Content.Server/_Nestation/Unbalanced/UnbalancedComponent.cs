@@ -24,6 +24,12 @@ public sealed partial class UnbalancedComponent : Component
     public int ObstacleShotLimit = 8;
 
     [DataField]
+    public int MagazineSize = 7;
+
+    [DataField]
+    public float ReloadTime = 3.3f;
+
+    [DataField]
     public float ScreamBelow = 0.5f;
 
     [DataField]
@@ -43,6 +49,24 @@ public sealed partial class UnbalancedComponent : Component
     public TimeSpan NextScream;
     public TimeSpan LastShot;
     public TimeSpan AimReadyAt;
+
+    public TimeSpan SpeechBusyUntil;
+    public TimeSpan NextIdleLine;
+    public TimeSpan NextCloseLine;
+    public TimeSpan NextHitLine;
+    public TimeSpan NextMissLine;
+    public TimeSpan LastDamaged;
+    public TimeSpan ReloadUntil;
+    public TimeSpan ReloadSayAt;
+    public TimeSpan MissShotAt;
+    public TimeSpan MissCheckAt;
+    public TimeSpan GlowUntil;
+    public TimeSpan ReloadStartedAt;
+    public int ReloadSoundStep;
+
+    public EntityUid? Voice;
+    public int ShotsInMagazine;
+    public int EngagedShots;
 
     public bool Screaming;
     public EntityUid? AimTarget;

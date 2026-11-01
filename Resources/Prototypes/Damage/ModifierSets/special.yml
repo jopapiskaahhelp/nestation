@@ -1,3 +1,4 @@
+# Nestation New City CC BY-NC 3.0
 # These modifiers don't appear as a natural set used by any entity, but for some other novel purpose.
 
 # Represents which damage types should be modified in relation to how they cause bleed rate.
@@ -19,3 +20,5 @@
     Shock: 0.0
     Slash: 0.25
     Structural: 0.0
+    Starvation: 0.0
+    Dehydration: 0.0

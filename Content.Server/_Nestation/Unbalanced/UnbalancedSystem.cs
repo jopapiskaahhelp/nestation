@@ -8,6 +8,7 @@ using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Item;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -23,6 +24,7 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
+using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -31,11 +33,12 @@ using Robust.Shared.Maths;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server._Nestation.Unbalanced;
 
-public sealed partial class UnbalancedSystem : EntitySystem
+public sealed class UnbalancedSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -53,12 +56,19 @@ public sealed partial class UnbalancedSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedMoverController _mover = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
 
     [Dependency] private EntityQuery<FixturesComponent> _fixturesQuery = default!;
     [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
 
     private const int BlockMask = (int) CollisionGroup.MobMask;
     private const int SightMask = (int) (CollisionGroup.Impassable | CollisionGroup.InteractImpassable);
+
+    private const string GlowColor = "#39a1ff";
+    private const float GlowRadius = 6f;
+    private const float GlowEnergy = 7.5f;
+    private const float GlowTime = 3f;
 
     private const float ThinkInterval = 0.1f;
     private const float HealthCheckInterval = 0.5f;
@@ -69,6 +79,53 @@ public sealed partial class UnbalancedSystem : EntitySystem
     private const float WallCost = 12f;
     private const float OpenableCost = 3f;
     private const int PlanBudget = 20000;
+
+    private const string VoicePath = "/Audio/_Nestation/Unbalanced/";
+
+    private readonly record struct VoiceLine(string Name, float Length);
+
+    private static readonly VoiceLine[] IdleLines =
+    {
+        new("idle_blood", 5.43f), new("idle_footsteps", 3.72f), new("idle_radio", 1.74f), new("idle_anybody", 3.89f),
+    };
+
+    private static readonly VoiceLine[] SpotLines =
+    {
+        new("spot_contact", 3.19f), new("spot_arms_up", 5.83f),
+    };
+
+    private static readonly VoiceLine[] CloseLines =
+    {
+        new("close_stay_away_1", 5.11f), new("close_stay_away_2", 7.16f), new("close_skull", 2.2f),
+    };
+
+    private static readonly VoiceLine[] KillLines =
+    {
+        new("kill_walk_into_shot", 3.19f), new("kill_no_next_time", 4.7f), new("kill_one_down", 2.42f),
+    };
+
+    private static readonly VoiceLine[] FleeLines =
+    {
+        new("flee_cowards", 4.24f), new("flee_keep_running", 4.97f),
+    };
+
+    private static readonly VoiceLine ScreamLine = new("scream_phase2", 3.29f);
+    private static readonly VoiceLine RecoveredLine = new("hit_still_fighting", 4.82f);
+    private static readonly VoiceLine AmbushedLine = new("hit_noo", 1.46f);
+    private static readonly VoiceLine MissLine = new("miss_aiming", 2.82f);
+    private static readonly VoiceLine OutOfShellsLine = new("out_of_shells", 1.57f);
+    private static readonly VoiceLine ReloadLine = new("reload", 1.6f);
+
+    private static readonly (float At, string Path)[] ReloadSounds =
+    {
+        (0.1f, "/Audio/Weapons/Guns/Cock/shotgun_open.ogg"),
+        (0.6f, "/Audio/Weapons/Guns/MagIn/shotgun_insert.ogg"),
+        (1.05f, "/Audio/Weapons/Guns/MagIn/shotgun_insert.ogg"),
+        (1.5f, "/Audio/Weapons/Guns/MagIn/shotgun_insert.ogg"),
+        (1.95f, "/Audio/Weapons/Guns/MagIn/shotgun_insert.ogg"),
+        (2.4f, "/Audio/Weapons/Guns/MagIn/shotgun_insert.ogg"),
+        (2.95f, "/Audio/Weapons/Guns/Cock/shotgun_close.ogg"),
+    };
 
     private static readonly Vector2i[] Dirs =
     {
@@ -81,6 +138,8 @@ public sealed partial class UnbalancedSystem : EntitySystem
 
         UpdatesBefore.Add(typeof(SharedPhysicsSystem));
         SubscribeLocalEvent<UnbalancedComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<UnbalancedComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<ItemComponent, GunShotEvent>(OnAnyGunShot);
     }
 
     private void OnMapInit(Entity<UnbalancedComponent> ent, ref MapInitEvent args)
@@ -94,6 +153,8 @@ public sealed partial class UnbalancedSystem : EntitySystem
         var now = _timing.CurTime;
         ent.Comp.NextThink = now;
         ent.Comp.NextRegen = now + TimeSpan.FromSeconds(ent.Comp.RegenInterval);
+        ent.Comp.NextIdleLine = now + TimeSpan.FromSeconds(_random.NextFloat(8f, 20f));
+        ent.Comp.ReloadSoundStep = ReloadSounds.Length;
 
         if (TryComp<CombatModeComponent>(ent, out var combat))
             _combat.SetInCombatMode(ent, true, combat);
@@ -114,6 +175,8 @@ public sealed partial class UnbalancedSystem : EntitySystem
 
         while (query.MoveNext(out var uid, out var comp, out var xform, out var mover))
         {
+            HandleGlow(uid, comp, now);
+
             if (_mobState.IsDead(uid))
             {
                 comp.MoveDir = Vector2.Zero;
@@ -135,6 +198,8 @@ public sealed partial class UnbalancedSystem : EntitySystem
                 ApplyMovement(uid, comp, mover);
                 continue;
             }
+
+            HandleVoiceTimers(uid, comp, now);
 
             if (now >= comp.NextThink)
             {
@@ -187,27 +252,42 @@ public sealed partial class UnbalancedSystem : EntitySystem
         _damageable.TryChangeDamage(uid, heal, true, false, ignoreGlobalModifiers: true);
     }
 
+    private bool TryGetHealth(EntityUid uid, out float health)
+    {
+        health = 1f;
+
+        if (!TryComp<DamageableComponent>(uid, out var damageable)
+            || !_thresholds.TryGetThresholdForState(uid, MobState.Critical, out var critical)
+            || critical.Value <= FixedPoint2.Zero)
+        {
+            return false;
+        }
+
+        var total = _damageable.GetPositiveDamage((uid, damageable)).GetTotal();
+        health = 1f - total.Float() / critical.Value.Float();
+        return true;
+    }
+
     private void HandleScream(EntityUid uid, UnbalancedComponent comp, TimeSpan now)
     {
         if (now >= comp.NextHealthCheck)
         {
             comp.NextHealthCheck = now + TimeSpan.FromSeconds(HealthCheckInterval);
 
-            if (TryComp<DamageableComponent>(uid, out var damageable)
-                && _thresholds.TryGetThresholdForState(uid, MobState.Critical, out var critical)
-                && critical.Value > FixedPoint2.Zero)
+            if (TryGetHealth(uid, out var health))
             {
-                var total = _damageable.GetPositiveDamage((uid, damageable)).GetTotal();
-                var health = 1f - total.Float() / critical.Value.Float();
-
                 if (!comp.Screaming && health < comp.ScreamBelow)
                 {
                     comp.Screaming = true;
                     comp.NextScream = now;
+                    StartGlow(uid, comp, now);
                 }
                 else if (comp.Screaming && health >= comp.ScreamUntil)
                 {
                     comp.Screaming = false;
+
+                    if (!_mobState.IsDead(uid))
+                        Say(uid, comp, now, RecoveredLine, true);
                 }
             }
         }
@@ -216,7 +296,146 @@ public sealed partial class UnbalancedSystem : EntitySystem
             return;
 
         comp.NextScream = now + TimeSpan.FromSeconds(comp.ScreamInterval);
-        _audio.PlayPvs(new SoundCollectionSpecifier("MaleScreams"), uid);
+        Say(uid, comp, now, ScreamLine, true);
+    }
+
+    private void StartGlow(EntityUid uid, UnbalancedComponent comp, TimeSpan now)
+    {
+        var light = EnsureComp<PointLightComponent>(uid);
+        _lights.SetColor(uid, Color.FromHex(GlowColor), light);
+        _lights.SetRadius(uid, GlowRadius, light);
+        _lights.SetEnergy(uid, GlowEnergy, light);
+        _lights.SetEnabled(uid, true, light);
+        comp.GlowUntil = now + TimeSpan.FromSeconds(GlowTime);
+    }
+
+    private void HandleGlow(EntityUid uid, UnbalancedComponent comp, TimeSpan now)
+    {
+        if (comp.GlowUntil == TimeSpan.Zero || now < comp.GlowUntil)
+            return;
+
+        comp.GlowUntil = TimeSpan.Zero;
+        RemComp<PointLightComponent>(uid);
+    }
+
+    private bool Say(EntityUid uid, UnbalancedComponent comp, TimeSpan now, VoiceLine line, bool force)
+    {
+        if (!force && now < comp.SpeechBusyUntil)
+            return false;
+
+        if (force)
+            comp.Voice = _audio.Stop(comp.Voice);
+
+        comp.Voice = _audio.PlayPvs(new SoundPathSpecifier(VoicePath + line.Name + ".ogg"), uid)?.Entity;
+        comp.SpeechBusyUntil = now + TimeSpan.FromSeconds(line.Length + 0.3f);
+        return true;
+    }
+
+    private bool SayAny(EntityUid uid, UnbalancedComponent comp, TimeSpan now, VoiceLine[] lines, bool force)
+    {
+        return Say(uid, comp, now, _random.Pick(lines), force);
+    }
+
+    private void HandleVoiceTimers(EntityUid uid, UnbalancedComponent comp, TimeSpan now)
+    {
+        while (comp.ReloadSoundStep < ReloadSounds.Length
+               && now >= comp.ReloadStartedAt + TimeSpan.FromSeconds(ReloadSounds[comp.ReloadSoundStep].At))
+        {
+            _audio.PlayPvs(new SoundPathSpecifier(ReloadSounds[comp.ReloadSoundStep].Path), uid);
+            comp.ReloadSoundStep++;
+        }
+
+        if (comp.ReloadSayAt != TimeSpan.Zero && now >= comp.ReloadSayAt)
+        {
+            comp.ReloadSayAt = TimeSpan.Zero;
+            Say(uid, comp, now, ReloadLine, true);
+        }
+
+        if (comp.MissCheckAt != TimeSpan.Zero && now >= comp.MissCheckAt)
+        {
+            comp.MissCheckAt = TimeSpan.Zero;
+
+            if (comp.LastDamaged < comp.MissShotAt && now >= comp.NextMissLine)
+            {
+                comp.NextMissLine = now + TimeSpan.FromSeconds(_random.NextFloat(6f, 12f));
+                Say(uid, comp, now, MissLine, false);
+            }
+        }
+    }
+
+    private void OnDamageChanged(EntityUid uid, UnbalancedComponent comp, DamageChangedEvent args)
+    {
+        if (!args.DamageIncreased || args.Origin is not { } origin || origin == uid || _mobState.IsDead(uid))
+            return;
+
+        var now = _timing.CurTime;
+        comp.LastDamaged = now;
+
+        if (comp.AimTarget != null || comp.Screaming || now < comp.NextHitLine)
+            return;
+
+        comp.NextHitLine = now + TimeSpan.FromSeconds(_random.NextFloat(5f, 10f));
+        Say(uid, comp, now, AmbushedLine, false);
+    }
+
+    private void OnAnyGunShot(Entity<ItemComponent> ent, ref GunShotEvent args)
+    {
+        var shooter = args.User;
+        if (HasComp<UnbalancedComponent>(shooter))
+            return;
+
+        var shooterXform = Transform(shooter);
+        var shooterPos = _transform.GetWorldPosition(shooterXform);
+        var facing = _transform.GetWorldRotation(shooterXform).ToWorldVec();
+        var now = _timing.CurTime;
+
+        var query = EntityQueryEnumerator<UnbalancedComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var comp, out var xform))
+        {
+            if (xform.MapID != shooterXform.MapID || comp.MissCheckAt != TimeSpan.Zero || _mobState.IsDead(uid))
+                continue;
+
+            var delta = _transform.GetWorldPosition(xform) - shooterPos;
+            var dist = delta.Length();
+            if (dist < 1f || dist > 25f)
+                continue;
+
+            if (Vector2.Dot(facing, delta / dist) < 0.9f)
+                continue;
+
+            comp.MissShotAt = now;
+            comp.MissCheckAt = now + TimeSpan.FromSeconds(0.8);
+        }
+    }
+
+    private bool TryFire(EntityUid uid, UnbalancedComponent comp, Entity<GunComponent> gun, TransformComponent xform, Vector2 from, Vector2 at, EntityUid? target, TimeSpan now)
+    {
+        if (now < comp.ReloadUntil)
+        {
+            var delta = at - from;
+            if (delta.LengthSquared() > 0.0001f)
+                _transform.SetWorldRotation(uid, delta.ToWorldAngle());
+
+            return false;
+        }
+
+        if (!Shoot(uid, gun, xform, from, at, target))
+            return false;
+
+        if (comp.ReloadTime <= 0f)
+            return true;
+
+        comp.ShotsInMagazine++;
+        if (comp.ShotsInMagazine < comp.MagazineSize)
+            return true;
+
+        comp.ShotsInMagazine = 0;
+        comp.ReloadUntil = now + TimeSpan.FromSeconds(comp.ReloadTime);
+        comp.ReloadStartedAt = now;
+        comp.ReloadSoundStep = 0;
+        comp.ReloadSayAt = now + TimeSpan.FromSeconds(OutOfShellsLine.Length + 0.1f);
+        Say(uid, comp, now, OutOfShellsLine, true);
+        return true;
     }
 
     private Entity<GunComponent>? EnsureGun(EntityUid uid, UnbalancedComponent comp)
@@ -266,12 +485,30 @@ public sealed partial class UnbalancedSystem : EntitySystem
             return;
         }
 
+        if (now >= comp.NextIdleLine)
+        {
+            comp.NextIdleLine = now + TimeSpan.FromSeconds(_random.NextFloat(15f, 35f));
+
+            if (!comp.Screaming && now - comp.LastDamaged > TimeSpan.FromSeconds(6))
+                SayAny(uid, comp, now, IdleLines, false);
+        }
+
         Patrol(uid, comp, gun, xform, pos, now);
     }
 
     private bool TryShootLiving(EntityUid uid, UnbalancedComponent comp, Entity<GunComponent> gun, TransformComponent xform, Vector2 pos, TimeSpan now)
     {
         var map = xform.MapID;
+
+        if (comp.AimTarget is { } previous && (!Exists(previous) || _mobState.IsDead(previous)))
+        {
+            if (comp.EngagedShots > 0)
+                SayAny(uid, comp, now, KillLines, true);
+
+            comp.AimTarget = null;
+            comp.EngagedShots = 0;
+        }
+
         EntityUid? best = null;
         var bestPos = Vector2.Zero;
         var bestDist = float.MaxValue;
@@ -316,14 +553,29 @@ public sealed partial class UnbalancedSystem : EntitySystem
 
         if (best == null)
         {
+            if (comp.AimTarget != null && comp.EngagedShots > 0)
+                SayAny(uid, comp, now, FleeLines, false);
+
             comp.AimTarget = null;
+            comp.EngagedShots = 0;
             return false;
         }
 
         if (comp.AimTarget != best)
         {
+            var first = comp.AimTarget == null;
             comp.AimTarget = best;
             comp.AimReadyAt = now + TimeSpan.FromSeconds(comp.AimDelay);
+            comp.EngagedShots = 0;
+
+            if (first)
+                SayAny(uid, comp, now, SpotLines, true);
+        }
+
+        if (now >= comp.NextCloseLine && (bestPos - pos).Length() <= 3.5f)
+        {
+            comp.NextCloseLine = now + TimeSpan.FromSeconds(_random.NextFloat(10f, 18f));
+            SayAny(uid, comp, now, CloseLines, false);
         }
 
         if (now < comp.AimReadyAt)
@@ -335,7 +587,9 @@ public sealed partial class UnbalancedSystem : EntitySystem
             return true;
         }
 
-        Shoot(uid, gun, xform, pos, bestPos, best);
+        if (TryFire(uid, comp, gun, xform, pos, bestPos, best, now))
+            comp.EngagedShots++;
+
         return true;
     }
 
@@ -612,7 +866,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
             return;
         }
 
-        if (Shoot(uid, gun, xform, pos, obstaclePos, obstacle))
+        if (TryFire(uid, comp, gun, xform, pos, obstaclePos, obstacle, now))
         {
             comp.ObstacleShots++;
             comp.LastShot = now;

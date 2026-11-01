@@ -1,9 +1,11 @@
+// Nestation New City CC BY-NC 3.0
 using Content.Server.Administration.Logs;
 using Content.Server.Power.Components;
 using Content.Shared.Database;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Stacks;
+using Content.Shared.Wall;
 using Content.Shared.Whitelist;
 using Robust.Shared.Map.Components;
 
@@ -34,7 +36,17 @@ public sealed partial class CableSystem
         var snapPos = _map.TileIndicesFor((gridUid, grid), args.ClickLocation);
         var tileDef = (ContentTileDefinition)_tileManager[_map.GetTileRef(gridUid, grid, snapPos).Tile.TypeId];
 
-        if ((!component.OverTile && !tileDef.IsSubFloor) || !tileDef.Sturdy)
+        var inWall = false;
+        foreach (var anchored in _map.GetAnchoredEntities((gridUid, grid), snapPos))
+        {
+            if (HasComp<WallComponent>(anchored))
+            {
+                inWall = true;
+                break;
+            }
+        }
+
+        if (!inWall && ((!component.OverTile && !tileDef.IsSubFloor) || !tileDef.Sturdy))
             return;
 
         foreach (var anchored in _map.GetAnchoredEntities((gridUid, grid), snapPos))
