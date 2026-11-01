@@ -30,6 +30,18 @@ public sealed partial class UnbalancedComponent : Component
     public float ReloadTime = 3.3f;
 
     [DataField]
+    public float TurretScanRange = 24f;
+
+    [DataField]
+    public float TurretDangerRange = 13f;
+
+    [DataField]
+    public float TurretCloseRange = 6.5f;
+
+    [DataField]
+    public float TurretFireRange = 5.5f;
+
+    [DataField]
     public float ScreamBelow = 0.5f;
 
     [DataField]
@@ -80,6 +92,13 @@ public sealed partial class UnbalancedComponent : Component
     public HashSet<EntityUid> UnbreakableEnts = new();
     public HashSet<string> UnbreakableProtos = new();
 
+    public Dictionary<EntityUid, UnbalancedTurret> Turrets = new();
+    public HashSet<Vector2i> DangerTiles = new();
+    public EntityUid? TurretGrid;
+    public EntityUid? TurretTarget;
+    public Vector2i? ForcedGoal;
+    public TimeSpan NextTurretScan;
+
     public EntityUid? Obstacle;
     public int ObstacleShots;
     public bool ObstacleInfinite;
@@ -92,4 +111,14 @@ public sealed class UnbalancedGridMemory
 {
     public HashSet<Vector2i> Visited = new();
     public HashSet<Vector2i> Unbreakable = new();
+}
+
+public sealed class UnbalancedTurret
+{
+    public bool Weak;
+    public bool Engage;
+    public int Shots;
+    public TimeSpan RefreshAt;
+    public TimeSpan IgnoreUntil;
+    public HashSet<Vector2i> Exposed = new();
 }

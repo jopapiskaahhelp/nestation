@@ -1,5 +1,7 @@
 // Nestation New City CC BY-NC 3.0
 using System.Numerics;
+using Content.Server.NPC.HTN;
+using Content.Shared._Nestation.XenoHive;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -479,7 +481,15 @@ public sealed partial class UnbalancedSystem : EntitySystem
         var pos = _transform.GetWorldPosition(xform);
         FixInWall(uid, comp, xform, ref pos);
 
+        RefreshTurrets(uid, comp, xform, pos, now);
+
         if (TryShootLiving(uid, comp, gun, xform, pos, now))
+        {
+            comp.MoveDir = Vector2.Zero;
+            return;
+        }
+
+        if (HandleTurret(uid, comp, gun, xform, pos, now))
         {
             comp.MoveDir = Vector2.Zero;
             return;
@@ -650,6 +660,232 @@ public sealed partial class UnbalancedSystem : EntitySystem
         memory.Unbreakable.Add(tile);
     }
 
+    private bool IsTurret(EntityUid entity)
+    {
+        if (HasComp<MobStateComponent>(entity) || HasComp<ItemComponent>(entity))
+            return false;
+
+        if (HasComp<HTNComponent>(entity))
+            return true;
+
+        return MetaData(entity).EntityPrototype?.ID is { } id
+               && id.Contains("Turret", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool IsWeakTurret(EntityUid entity)
+    {
+        if (HasComp<XenoHiveStructureComponent>(entity))
+            return true;
+
+        return MetaData(entity).EntityPrototype?.ID is { } id
+               && id.Contains("Xeno", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private HashSet<Vector2i> ComputeExposure(UnbalancedComponent comp, EntityUid turret, Vector2 turretPos, EntityUid gridUid, MapGridComponent grid, MapId map)
+    {
+        var result = new HashSet<Vector2i>();
+        var center = _maps.WorldToTile(gridUid, grid, turretPos);
+        var radius = (int) MathF.Ceiling(comp.TurretDangerRange);
+        var rangeSq = comp.TurretDangerRange * comp.TurretDangerRange;
+
+        for (var dx = -radius; dx <= radius; dx++)
+        {
+            for (var dy = -radius; dy <= radius; dy++)
+            {
+                if (dx * dx + dy * dy > rangeSq)
+                    continue;
+
+                var tile = new Vector2i(center.X + dx, center.Y + dy);
+                if (!_maps.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
+                    continue;
+
+                var delta = TileCenter(gridUid, grid, tile) - turretPos;
+                var length = delta.Length();
+                if (length < 0.5f)
+                {
+                    result.Add(tile);
+                    continue;
+                }
+
+                if (Cast(null, map, turretPos, delta / length, length - 0.4f, SightMask, turret, out _, out _))
+                    continue;
+
+                result.Add(tile);
+            }
+        }
+
+        return result;
+    }
+
+    private void RefreshTurrets(EntityUid uid, UnbalancedComponent comp, TransformComponent xform, Vector2 pos, TimeSpan now)
+    {
+        if (now < comp.NextTurretScan)
+            return;
+
+        comp.NextTurretScan = now + TimeSpan.FromSeconds(1);
+
+        if (!_maps.TryFindGridAt(xform.MapID, pos, out var gridUid, out var grid))
+            return;
+
+        var changed = false;
+
+        if (comp.TurretGrid != gridUid)
+        {
+            comp.TurretGrid = gridUid;
+            comp.Turrets.Clear();
+            comp.DangerTiles.Clear();
+            comp.TurretTarget = null;
+            comp.ForcedGoal = null;
+            changed = true;
+        }
+
+        var found = new HashSet<EntityUid>();
+        var coords = new MapCoordinates(pos, xform.MapID);
+        var flags = LookupFlags.Static | LookupFlags.Dynamic;
+
+        foreach (var (entity, _) in _lookup.GetEntitiesInRange<HTNComponent>(coords, comp.TurretScanRange, flags))
+        {
+            if (IsTurret(entity))
+                found.Add(entity);
+        }
+
+        foreach (var (entity, _) in _lookup.GetEntitiesInRange<GunComponent>(coords, comp.TurretScanRange, flags))
+        {
+            if (IsTurret(entity))
+                found.Add(entity);
+        }
+
+        List<EntityUid>? stale = null;
+        foreach (var known in comp.Turrets.Keys)
+        {
+            if (!found.Contains(known) || TerminatingOrDeleted(known))
+                (stale ??= new List<EntityUid>()).Add(known);
+        }
+
+        if (stale != null)
+        {
+            foreach (var entity in stale)
+            {
+                comp.Turrets.Remove(entity);
+            }
+
+            changed = true;
+        }
+
+        foreach (var entity in found)
+        {
+            if (comp.Turrets.ContainsKey(entity))
+                continue;
+
+            comp.Turrets[entity] = new UnbalancedTurret { Weak = IsWeakTurret(entity) };
+            changed = true;
+        }
+
+        foreach (var (turret, info) in comp.Turrets)
+        {
+            var turretPos = _transform.GetWorldPosition(turret);
+
+            if (!info.Engage && (info.Weak || (turretPos - pos).Length() <= comp.TurretCloseRange))
+            {
+                info.Engage = true;
+                changed = true;
+            }
+
+            if (info.Engage || now < info.RefreshAt)
+                continue;
+
+            info.RefreshAt = now + TimeSpan.FromSeconds(10);
+            info.Exposed = ComputeExposure(comp, turret, turretPos, gridUid, grid, xform.MapID);
+            changed = true;
+        }
+
+        if (!changed)
+            return;
+
+        comp.DangerTiles.Clear();
+        foreach (var info in comp.Turrets.Values)
+        {
+            if (!info.Engage)
+                comp.DangerTiles.UnionWith(info.Exposed);
+        }
+
+        var tile = _maps.WorldToTile(gridUid, grid, pos);
+        if (comp.DangerTiles.Contains(tile) || comp.Path.Exists(comp.DangerTiles.Contains))
+            comp.Path.Clear();
+    }
+
+    private bool HandleTurret(EntityUid uid, UnbalancedComponent comp, Entity<GunComponent> gun, TransformComponent xform, Vector2 pos, TimeSpan now)
+    {
+        EntityUid? best = null;
+        var bestDist = float.MaxValue;
+        var bestPos = Vector2.Zero;
+
+        foreach (var (turret, info) in comp.Turrets)
+        {
+            if (!info.Engage || now < info.IgnoreUntil || TerminatingOrDeleted(turret))
+                continue;
+
+            var turretPos = _transform.GetWorldPosition(turret);
+            var dist = (turretPos - pos).Length();
+            if (dist >= bestDist)
+                continue;
+
+            best = turret;
+            bestDist = dist;
+            bestPos = turretPos;
+        }
+
+        if (best is not { } target)
+        {
+            if (comp.TurretTarget != null)
+            {
+                comp.TurretTarget = null;
+                comp.ForcedGoal = null;
+                comp.Path.Clear();
+            }
+
+            return false;
+        }
+
+        if (comp.TurretTarget != target)
+        {
+            comp.TurretTarget = target;
+            comp.ForcedGoal = null;
+            comp.Path.Clear();
+        }
+
+        var info2 = comp.Turrets[target];
+
+        var visible = bestDist <= 0.3f
+                      || !Cast(null, xform.MapID, pos, (bestPos - pos) / bestDist, bestDist - 0.3f, SightMask, uid, out _, out var blocker)
+                      || blocker == target;
+
+        if (bestDist <= comp.TurretFireRange && visible)
+        {
+            if (TryFire(uid, comp, gun, xform, pos, bestPos, target, now))
+                info2.Shots++;
+
+            if (info2.Shots >= 40)
+            {
+                info2.Shots = 0;
+                info2.IgnoreUntil = now + TimeSpan.FromSeconds(120);
+                comp.TurretTarget = null;
+                comp.ForcedGoal = null;
+                comp.Path.Clear();
+            }
+
+            return true;
+        }
+
+        if (comp.ForcedGoal == null && _maps.TryFindGridAt(xform.MapID, bestPos, out var gridUid, out var grid))
+        {
+            comp.ForcedGoal = _maps.WorldToTile(gridUid, grid, bestPos);
+            comp.Path.Clear();
+        }
+
+        return false;
+    }
+
     private void Patrol(EntityUid uid, UnbalancedComponent comp, Entity<GunComponent> gun, TransformComponent xform, Vector2 pos, TimeSpan now)
     {
         var map = xform.MapID;
@@ -686,8 +922,20 @@ public sealed partial class UnbalancedSystem : EntitySystem
         while (comp.Path.Count > 0 && (TileCenter(gridUid, grid, comp.Path[0]) - pos).LengthSquared() < WaypointRadiusSq)
             comp.Path.RemoveAt(0);
 
-        if (comp.Path.Count == 0 && !Plan(comp, memory, gridUid, grid, tile))
+        if (comp.Path.Count == 0 && !Plan(comp, memory, gridUid, grid, tile, false)
+            && !(comp.DangerTiles.Contains(tile) && comp.ForcedGoal == null && Plan(comp, memory, gridUid, grid, tile, true)))
         {
+            if (comp.ForcedGoal != null)
+            {
+                if (comp.TurretTarget is { } unreachable && comp.Turrets.TryGetValue(unreachable, out var unreachableInfo))
+                    unreachableInfo.IgnoreUntil = now + TimeSpan.FromSeconds(60);
+
+                comp.TurretTarget = null;
+                comp.ForcedGoal = null;
+                comp.MoveDir = Vector2.Zero;
+                return;
+            }
+
             memory.Visited.Clear();
             comp.MoveDir = Vector2.Zero;
             comp.NextAction = now + TimeSpan.FromSeconds(2);
@@ -1016,10 +1264,13 @@ public sealed partial class UnbalancedSystem : EntitySystem
         }
     }
 
-    private bool Plan(UnbalancedComponent comp, UnbalancedGridMemory memory, EntityUid gridUid, MapGridComponent grid, Vector2i start)
+    private bool Plan(UnbalancedComponent comp, UnbalancedGridMemory memory, EntityUid gridUid, MapGridComponent grid, Vector2i start, bool ignoreVisited)
     {
         comp.Path.Clear();
         comp.Goal = null;
+
+        var forced = comp.ForcedGoal;
+        var startInDanger = comp.DangerTiles.Contains(start);
 
         var costs = new Dictionary<Vector2i, float>();
         var best = new Dictionary<Vector2i, float> { [start] = 0f };
@@ -1036,7 +1287,14 @@ public sealed partial class UnbalancedSystem : EntitySystem
             if (!closed.Add(current))
                 continue;
 
-            if (current != start && !memory.Visited.Contains(current) && GetCost(current) <= 1f)
+            var reached = forced is { } forcedTile
+                ? current == forcedTile
+                : current != start
+                  && (ignoreVisited || !memory.Visited.Contains(current))
+                  && GetCost(current) <= 1f
+                  && !comp.DangerTiles.Contains(current);
+
+            if (reached)
             {
                 goal = current;
                 break;
@@ -1082,6 +1340,10 @@ public sealed partial class UnbalancedSystem : EntitySystem
                 return cached;
 
             var value = TileCost(comp, memory, gridUid, grid, tile);
+
+            if (value >= 0f && comp.DangerTiles.Contains(tile) && tile != forced)
+                value = startInDanger ? value + 4f : -1f;
+
             costs[tile] = value;
             return value;
         }
