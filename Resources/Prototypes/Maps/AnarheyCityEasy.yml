@@ -5,7 +5,7 @@
   mapPath: /Maps/Corvax/AnarheyCityEasy.yml
   minPlayers: 0
   stations:
-    AnarheyCityEasy:
+    AnarheyCity:
       stationProto: StandardNanotrasenStation
       components:
         - type: StationNameSetup
