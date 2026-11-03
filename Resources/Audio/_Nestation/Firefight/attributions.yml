@@ -1,0 +1,4 @@
+- files: ["ear_ringing.ogg"]
+  license: "CC-BY-NC-3.0"
+  copyright: "Synthesized sine tones (ffmpeg), created for Nestation New City"
+  source: "https://github.com/jopapiskaahhelp/nestation"

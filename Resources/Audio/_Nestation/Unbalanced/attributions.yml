@@ -1,3 +1,8 @@
+- files: ["close_closer_tired.ogg"]
+  license: "Custom"
+  copyright: "Voice line from the Roblox place \"Examination\". Converted to mono OGG."
+  source: "Roblox place \"Examination\""
+
 - files: ["close_skull.ogg"]
   license: "Custom"
   copyright: "Voice line from the Roblox place \"Examination\". Converted to mono OGG."
@@ -9,6 +14,11 @@
   source: "Roblox place \"Examination\""
 
 - files: ["close_stay_away_2.ogg"]
+  license: "Custom"
+  copyright: "Voice line from the Roblox place \"Examination\". Converted to mono OGG."
+  source: "Roblox place \"Examination\""
+
+- files: ["close_stay_away_3.ogg"]
   license: "Custom"
   copyright: "Voice line from the Roblox place \"Examination\". Converted to mono OGG."
   source: "Roblox place \"Examination\""
@@ -94,6 +104,16 @@
   source: "Roblox place \"Examination\""
 
 - files: ["spot_contact.ogg"]
+  license: "Custom"
+  copyright: "Voice line from the Roblox place \"Examination\". Converted to mono OGG."
+  source: "Roblox place \"Examination\""
+
+- files: ["spot_demons.ogg"]
+  license: "Custom"
+  copyright: "Voice line from the Roblox place \"Examination\". Converted to mono OGG."
+  source: "Roblox place \"Examination\""
+
+- files: ["taunt_hit_like_girl.ogg"]
   license: "Custom"
   copyright: "Voice line from the Roblox place \"Examination\". Converted to mono OGG."
   source: "Roblox place \"Examination\""

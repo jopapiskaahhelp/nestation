@@ -1,6 +1,7 @@
+# Nestation New City CC BY-NC 3.0
 - type: gameMap
   id: AnarheyCity
-  mapName: Anarhey City
+  mapName: New City
   mapPath: /Maps/Corvax/AnarheyCity.yml
   minPlayers: 0
   stations:
@@ -8,10 +9,10 @@
       stationProto: StandardNanotrasenStation
       components:
         - type: StationNameSetup
-          mapNameTemplate: "Anarhey City {1}"
+          mapNameTemplate: "New City {1}"
           nameGenerator:
             !type:NanotrasenNameGenerator
-            prefixCreator: "AC"
+            prefixCreator: "NC"
         - type: StationJobs
           availableJobs:
             Passenger: [ -1, -1 ]

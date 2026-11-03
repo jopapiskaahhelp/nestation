@@ -40,7 +40,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Nestation.Unbalanced;
 
-public sealed partial class UnbalancedSystem : EntitySystem
+public sealed class UnbalancedSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -72,6 +72,15 @@ public sealed partial class UnbalancedSystem : EntitySystem
     private const float GlowEnergy = 7.5f;
     private const float GlowTime = 3f;
 
+    private const int PrioIdle = 0;
+    private const int PrioChatter = 1;
+    private const int PrioEvent = 2;
+    private const int PrioKill = 3;
+    private const int PrioCritical = 4;
+
+    private const float WarnRange = 9f;
+    private const float CloseRange = 3.5f;
+
     private const float ThinkInterval = 0.1f;
     private const float HealthCheckInterval = 0.5f;
     private const float WallStop = 1.05f;
@@ -96,9 +105,19 @@ public sealed partial class UnbalancedSystem : EntitySystem
         new("spot_contact", 3.19f), new("spot_arms_up", 5.83f),
     };
 
+    private static readonly VoiceLine[] WarnLines =
+    {
+        new("close_stay_away_1", 5.11f), new("close_stay_away_2", 7.16f), new("close_stay_away_3", 2.46f),
+    };
+
     private static readonly VoiceLine[] CloseLines =
     {
-        new("close_stay_away_1", 5.11f), new("close_stay_away_2", 7.16f), new("close_skull", 2.2f),
+        new("close_closer_tired", 3.34f), new("close_skull", 2.2f),
+    };
+
+    private static readonly VoiceLine[] CloseXenoLines =
+    {
+        new("spot_demons", 3.07f), new("close_skull", 2.2f),
     };
 
     private static readonly VoiceLine[] KillLines =
@@ -111,6 +130,8 @@ public sealed partial class UnbalancedSystem : EntitySystem
         new("flee_cowards", 4.24f), new("flee_keep_running", 4.97f),
     };
 
+    private static readonly VoiceLine SpotDemonsLine = new("spot_demons", 3.07f);
+    private static readonly VoiceLine TauntLine = new("taunt_hit_like_girl", 2.74f);
     private static readonly VoiceLine ScreamLine = new("scream_phase2", 3.29f);
     private static readonly VoiceLine RecoveredLine = new("hit_still_fighting", 4.82f);
     private static readonly VoiceLine AmbushedLine = new("hit_noo", 1.46f);
@@ -289,7 +310,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
                     comp.Screaming = false;
 
                     if (!_mobState.IsDead(uid))
-                        Say(uid, comp, now, RecoveredLine, true);
+                        Say(uid, comp, now, RecoveredLine, PrioCritical);
                 }
             }
         }
@@ -298,7 +319,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
             return;
 
         comp.NextScream = now + TimeSpan.FromSeconds(comp.ScreamInterval);
-        Say(uid, comp, now, ScreamLine, true);
+        Say(uid, comp, now, ScreamLine, PrioCritical);
     }
 
     private void StartGlow(EntityUid uid, UnbalancedComponent comp, TimeSpan now)
@@ -320,22 +341,60 @@ public sealed partial class UnbalancedSystem : EntitySystem
         RemComp<PointLightComponent>(uid);
     }
 
-    private bool Say(EntityUid uid, UnbalancedComponent comp, TimeSpan now, VoiceLine line, bool force)
+    private bool CanSpeak(UnbalancedComponent comp, TimeSpan now, int priority)
     {
-        if (!force && now < comp.SpeechBusyUntil)
-            return false;
+        return priority >= PrioCritical || now >= comp.SpeechBusyUntil || priority > comp.SpeechPriority;
+    }
 
-        if (force)
+    private void Play(EntityUid uid, UnbalancedComponent comp, TimeSpan now, VoiceLine line, int priority)
+    {
+        if (now < comp.SpeechBusyUntil)
             comp.Voice = _audio.Stop(comp.Voice);
 
         comp.Voice = _audio.PlayPvs(new SoundPathSpecifier(VoicePath + line.Name + ".ogg"), uid)?.Entity;
         comp.SpeechBusyUntil = now + TimeSpan.FromSeconds(line.Length + 0.3f);
+        comp.SpeechPriority = priority;
+    }
+
+    private bool Say(EntityUid uid, UnbalancedComponent comp, TimeSpan now, VoiceLine line, int priority)
+    {
+        if (!CanSpeak(comp, now, priority))
+            return false;
+
+        Play(uid, comp, now, line, priority);
         return true;
     }
 
-    private bool SayAny(EntityUid uid, UnbalancedComponent comp, TimeSpan now, VoiceLine[] lines, bool force)
+    private bool SayFrom(EntityUid uid, UnbalancedComponent comp, TimeSpan now, string key, VoiceLine[] lines, int priority)
     {
-        return Say(uid, comp, now, _random.Pick(lines), force);
+        if (!CanSpeak(comp, now, priority))
+            return false;
+
+        if (!comp.Bags.TryGetValue(key, out var bag))
+        {
+            bag = new List<int>();
+            comp.Bags[key] = bag;
+        }
+
+        if (bag.Count == 0)
+        {
+            for (var i = 0; i < lines.Length; i++)
+            {
+                bag.Add(i);
+            }
+
+            _random.Shuffle(bag);
+
+            if (lines.Length > 1 && comp.LastLine.TryGetValue(key, out var last) && bag[^1] == last)
+                (bag[0], bag[^1]) = (bag[^1], bag[0]);
+        }
+
+        var index = bag[^1];
+        bag.RemoveAt(bag.Count - 1);
+        comp.LastLine[key] = index;
+
+        Play(uid, comp, now, lines[index], priority);
+        return true;
     }
 
     private void HandleVoiceTimers(EntityUid uid, UnbalancedComponent comp, TimeSpan now)
@@ -350,17 +409,18 @@ public sealed partial class UnbalancedSystem : EntitySystem
         if (comp.ReloadSayAt != TimeSpan.Zero && now >= comp.ReloadSayAt)
         {
             comp.ReloadSayAt = TimeSpan.Zero;
-            Say(uid, comp, now, ReloadLine, true);
+            Say(uid, comp, now, ReloadLine, PrioCritical);
         }
 
         if (comp.MissCheckAt != TimeSpan.Zero && now >= comp.MissCheckAt)
         {
             comp.MissCheckAt = TimeSpan.Zero;
 
-            if (comp.LastDamaged < comp.MissShotAt && now >= comp.NextMissLine)
+            if (comp.LastDamaged < comp.MissShotAt
+                && now >= comp.NextMissLine
+                && Say(uid, comp, now, MissLine, PrioChatter))
             {
-                comp.NextMissLine = now + TimeSpan.FromSeconds(_random.NextFloat(6f, 12f));
-                Say(uid, comp, now, MissLine, false);
+                comp.NextMissLine = now + TimeSpan.FromSeconds(_random.NextFloat(8f, 14f));
             }
         }
     }
@@ -373,11 +433,19 @@ public sealed partial class UnbalancedSystem : EntitySystem
         var now = _timing.CurTime;
         comp.LastDamaged = now;
 
-        if (comp.AimTarget != null || comp.Screaming || now < comp.NextHitLine)
+        if (comp.Screaming)
             return;
 
-        comp.NextHitLine = now + TimeSpan.FromSeconds(_random.NextFloat(5f, 10f));
-        Say(uid, comp, now, AmbushedLine, false);
+        if (comp.AimTarget == null)
+        {
+            if (now >= comp.NextHitLine && Say(uid, comp, now, AmbushedLine, PrioChatter))
+                comp.NextHitLine = now + TimeSpan.FromSeconds(_random.NextFloat(8f, 15f));
+
+            return;
+        }
+
+        if (now >= comp.NextTauntLine && Say(uid, comp, now, TauntLine, PrioChatter))
+            comp.NextTauntLine = now + TimeSpan.FromSeconds(_random.NextFloat(10f, 20f));
     }
 
     private void OnAnyGunShot(Entity<ItemComponent> ent, ref GunShotEvent args)
@@ -436,7 +504,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
         comp.ReloadStartedAt = now;
         comp.ReloadSoundStep = 0;
         comp.ReloadSayAt = now + TimeSpan.FromSeconds(OutOfShellsLine.Length + 0.1f);
-        Say(uid, comp, now, OutOfShellsLine, true);
+        Say(uid, comp, now, OutOfShellsLine, PrioCritical);
         return true;
     }
 
@@ -500,7 +568,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
             comp.NextIdleLine = now + TimeSpan.FromSeconds(_random.NextFloat(15f, 35f));
 
             if (!comp.Screaming && now - comp.LastDamaged > TimeSpan.FromSeconds(6))
-                SayAny(uid, comp, now, IdleLines, false);
+                SayFrom(uid, comp, now, "idle", IdleLines, PrioIdle);
         }
 
         Patrol(uid, comp, gun, xform, pos, now);
@@ -513,7 +581,7 @@ public sealed partial class UnbalancedSystem : EntitySystem
         if (comp.AimTarget is { } previous && (!Exists(previous) || _mobState.IsDead(previous)))
         {
             if (comp.EngagedShots > 0)
-                SayAny(uid, comp, now, KillLines, true);
+                SayFrom(uid, comp, now, "kill", KillLines, PrioKill);
 
             comp.AimTarget = null;
             comp.EngagedShots = 0;
@@ -563,8 +631,13 @@ public sealed partial class UnbalancedSystem : EntitySystem
 
         if (best == null)
         {
-            if (comp.AimTarget != null && comp.EngagedShots > 0)
-                SayAny(uid, comp, now, FleeLines, false);
+            if (comp.AimTarget != null
+                && comp.EngagedShots > 0
+                && now >= comp.NextFleeLine
+                && SayFrom(uid, comp, now, "flee", FleeLines, PrioChatter))
+            {
+                comp.NextFleeLine = now + TimeSpan.FromSeconds(_random.NextFloat(25f, 40f));
+            }
 
             comp.AimTarget = null;
             comp.EngagedShots = 0;
@@ -578,14 +651,32 @@ public sealed partial class UnbalancedSystem : EntitySystem
             comp.AimReadyAt = now + TimeSpan.FromSeconds(comp.AimDelay);
             comp.EngagedShots = 0;
 
-            if (first)
-                SayAny(uid, comp, now, SpotLines, true);
+            if (first && now >= comp.NextSpotLine)
+            {
+                var spotted = HasComp<XenoCasteComponent>(best.Value)
+                    ? Say(uid, comp, now, SpotDemonsLine, PrioEvent)
+                    : SayFrom(uid, comp, now, "spot", SpotLines, PrioEvent);
+
+                if (spotted)
+                    comp.NextSpotLine = now + TimeSpan.FromSeconds(30);
+            }
         }
 
-        if (now >= comp.NextCloseLine && (bestPos - pos).Length() <= 3.5f)
+        var targetDist = (bestPos - pos).Length();
+        var xenoTarget = HasComp<XenoCasteComponent>(best.Value);
+
+        if (targetDist <= CloseRange)
         {
-            comp.NextCloseLine = now + TimeSpan.FromSeconds(_random.NextFloat(10f, 18f));
-            SayAny(uid, comp, now, CloseLines, false);
+            if (now >= comp.NextCloseLine
+                && SayFrom(uid, comp, now, xenoTarget ? "close_xeno" : "close", xenoTarget ? CloseXenoLines : CloseLines, PrioChatter))
+            {
+                comp.NextCloseLine = now + TimeSpan.FromSeconds(_random.NextFloat(10f, 18f));
+            }
+        }
+        else if (!xenoTarget && targetDist <= WarnRange)
+        {
+            if (now >= comp.NextWarnLine && SayFrom(uid, comp, now, "warn", WarnLines, PrioChatter))
+                comp.NextWarnLine = now + TimeSpan.FromSeconds(_random.NextFloat(14f, 24f));
         }
 
         if (now < comp.AimReadyAt)

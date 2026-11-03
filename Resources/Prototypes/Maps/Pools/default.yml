@@ -1,4 +1,6 @@
+# Nestation New City CC BY-NC 3.0
 - type: gameMapPool
   id: DefaultMapPool
   maps:
     - AnarheyCity
+    - AnarheyCityEasy

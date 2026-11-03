@@ -65,6 +65,10 @@ public sealed partial class UnbalancedComponent : Component
     public TimeSpan SpeechBusyUntil;
     public TimeSpan NextIdleLine;
     public TimeSpan NextCloseLine;
+    public TimeSpan NextSpotLine;
+    public TimeSpan NextFleeLine;
+    public TimeSpan NextWarnLine;
+    public TimeSpan NextTauntLine;
     public TimeSpan NextHitLine;
     public TimeSpan NextMissLine;
     public TimeSpan LastDamaged;
@@ -77,6 +81,9 @@ public sealed partial class UnbalancedComponent : Component
     public int ReloadSoundStep;
 
     public EntityUid? Voice;
+    public int SpeechPriority;
+    public Dictionary<string, List<int>> Bags = new();
+    public Dictionary<string, int> LastLine = new();
     public int ShotsInMagazine;
     public int EngagedShots;
 
