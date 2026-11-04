@@ -625,7 +625,6 @@ sealed class Explosion
     private readonly List<ExplosionData> _explosionData = new();
 
     private Entity<MapGridComponent, TileHistoryComponent?>? _currentGrid;
-    private (TileHistoryChunk? Chunk, Vector2i Indices)? _currentChunk;
 
     /// <summary>
     ///     The explosion intensity associated with each tile iteration.
@@ -823,7 +822,6 @@ sealed class Explosion
                 _currentEnumerator = tileList.GetEnumerator();
                 _currentLookup = _explosionData[_currentDataIndex].Lookup;
                 _currentGrid = _explosionData[_currentDataIndex].MapGrid;
-                _currentChunk = null;
                 _currentDataIndex++;
 
                 // sanity checks, in case something changed while the explosion was being processed over several ticks.
