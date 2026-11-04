@@ -1,0 +1,71 @@
+- type: decal
+  id: BlastCrater1
+  tags: ["burnt"]
+  defaultCleanable: false
+  sprite:
+    sprite: Decals/blast.rsi
+    state: crater1
+
+- type: decal
+  id: BlastCrater2
+  tags: ["burnt"]
+  defaultCleanable: false
+  sprite:
+    sprite: Decals/blast.rsi
+    state: crater2
+
+- type: decal
+  id: BlastCraterBig
+  tags: ["burnt"]
+  defaultCleanable: false
+  sprite:
+    sprite: Decals/blast_big.rsi
+    state: crater_big
+
+- type: decal
+  id: BlastScorch1
+  tags: ["burnt"]
+  defaultCleanable: true
+  sprite:
+    sprite: Decals/blast.rsi
+    state: scorch1
+
+- type: decal
+  id: BlastScorch2
+  tags: ["burnt"]
+  defaultCleanable: true
+  sprite:
+    sprite: Decals/blast.rsi
+    state: scorch2
+
+- type: decal
+  id: BlastScorch3
+  tags: ["burnt"]
+  defaultCleanable: true
+  sprite:
+    sprite: Decals/blast.rsi
+    state: scorch3
+
+- type: decal
+  id: BlastScorchBig
+  tags: ["burnt"]
+  defaultCleanable: true
+  sprite:
+    sprite: Decals/blast_big.rsi
+    state: scorch_big
+
+- type: decal
+  id: BlastSoot1
+  tags: ["burnt"]
+  defaultCleanable: true
+  sprite:
+    sprite: Decals/blast.rsi
+    state: soot1
+
+- type: decal
+  id: BlastSoot2
+  tags: ["burnt"]
+  defaultCleanable: true
+  sprite:
+    sprite: Decals/blast.rsi
+    state: soot2

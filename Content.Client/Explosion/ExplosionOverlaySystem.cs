@@ -1,9 +1,8 @@
+// Nestation New City CC BY-NC 3.0
 using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
 using Robust.Client.Graphics;
-using Robust.Client.ResourceManagement;
 using Robust.Shared.GameStates;
-using Robust.Shared.Graphics.RSI;
 
 namespace Content.Client.Explosion;
 
@@ -13,7 +12,6 @@ namespace Content.Client.Explosion;
 /// </summary>
 public sealed partial class ExplosionOverlaySystem : EntitySystem
 {
-    [Dependency] private IResourceCache _resCache = default!;
     [Dependency] private IOverlayManager _overlayMan = default!;
     [Dependency] private SharedPointLightSystem _lights = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
@@ -25,6 +23,7 @@ public sealed partial class ExplosionOverlaySystem : EntitySystem
 
         SubscribeLocalEvent<ExplosionVisualsComponent, ComponentInit>(OnExplosionInit);
         SubscribeLocalEvent<ExplosionVisualsComponent, ComponentRemove>(OnCompRemove);
+        SubscribeLocalEvent<ExplosionVisualsTexturesComponent, ComponentShutdown>(OnTexturesShutdown);
         SubscribeLocalEvent<ExplosionVisualsComponent, ComponentHandleState>(OnExplosionHandleState);
         _overlayMan.AddOverlay(new ExplosionOverlay(_appearance));
     }
@@ -47,6 +46,11 @@ public sealed partial class ExplosionOverlaySystem : EntitySystem
         component.ExplosionType = state.ExplosionType;
         component.SpaceMatrix = state.SpaceMatrix;
         component.SpaceTileSize = state.SpaceTileSize;
+    }
+
+    private void OnTexturesShutdown(EntityUid uid, ExplosionVisualsTexturesComponent component, ComponentShutdown args)
+    {
+        component.DisposeFields();
     }
 
     private void OnCompRemove(EntityUid uid, ExplosionVisualsComponent component, ComponentRemove args)
@@ -80,15 +84,6 @@ public sealed partial class ExplosionOverlaySystem : EntitySystem
 
 
         textures.FireColor = type.FireColor;
-        textures.IntensityPerState = type.IntensityPerState;
-
-        var fireRsi = _resCache.GetResource<RSIResource>(type.TexturePath).RSI;
-        foreach (var state in fireRsi)
-        {
-            textures.FireFrames.Add(state.GetFrames(RsiDirection.South));
-            if (textures.FireFrames.Count == type.FireStates)
-                break;
-        }
     }
 
     public override void Shutdown()

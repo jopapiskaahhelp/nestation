@@ -1,0 +1,150 @@
+// Nestation New City CC BY-NC 3.0
+light_mode unshaded;
+
+uniform sampler2D uHeat;
+uniform sampler2D uBirth;
+uniform highp vec2 uSize;
+uniform highp vec2 uEpi;
+uniform highp float uNow;
+uniform highp float uSeed;
+uniform highp float uPower;
+uniform highp float uSpeed;
+uniform highp vec3 uTint;
+uniform highp float uTintMix;
+
+const highp float BIRTH_RANGE = 12.0;
+
+highp float xHash(highp vec2 p) {
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y);
+}
+
+highp float xNoise(highp vec2 p) {
+    highp vec2 i = floor(p);
+    highp vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    highp float a = xHash(i);
+    highp float b = xHash(i + vec2(1.0, 0.0));
+    highp float c = xHash(i + vec2(0.0, 1.0));
+    highp float d = xHash(i + vec2(1.0, 1.0));
+    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+
+highp float xFbm(highp vec2 p) {
+    highp float v = 0.0;
+    highp float a = 0.5;
+    for (int i = 0; i < 4; i++) {
+        v += a * xNoise(p);
+        p = p * 2.03 + vec2(17.1, 9.2);
+        a *= 0.5;
+    }
+    return v;
+}
+
+highp vec3 xTexel(highp vec2 uv) {
+    return vec3(texture2D(TEXTURE, uv).a, texture2D(uHeat, uv).a, texture2D(uBirth, uv).a);
+}
+
+highp vec3 xField(highp vec2 p) {
+    highp vec2 q = p - 0.5;
+    highp vec2 i = floor(q);
+    highp vec2 f = fract(q);
+    highp vec2 inv = 1.0 / uSize;
+    highp vec2 uv = (i + 0.5) * inv;
+    highp vec2 dx = vec2(inv.x, 0.0);
+    highp vec2 dy = vec2(0.0, inv.y);
+    highp vec3 a = mix(xTexel(uv), xTexel(uv + dx), f.x);
+    highp vec3 b = mix(xTexel(uv + dy), xTexel(uv + dx + dy), f.x);
+    return mix(a, b, f.y);
+}
+
+highp vec3 xRamp(highp float t) {
+    highp vec3 c0 = vec3(0.12, 0.02, 0.01);
+    highp vec3 c1 = vec3(0.62, 0.10, 0.02);
+    highp vec3 c2 = vec3(1.00, 0.38, 0.05);
+    highp vec3 c3 = vec3(1.00, 0.72, 0.20);
+    highp vec3 c4 = vec3(1.00, 0.95, 0.78);
+    highp vec3 c;
+    if (t < 0.25) {
+        c = mix(c0, c1, t / 0.25);
+    } else if (t < 0.5) {
+        c = mix(c1, c2, (t - 0.25) / 0.25);
+    } else if (t < 0.8) {
+        c = mix(c2, c3, (t - 0.5) / 0.3);
+    } else {
+        c = mix(c3, c4, clamp((t - 0.8) / 0.4, 0.0, 1.0));
+    }
+
+    highp vec3 tinted = mix(mix(uTint * 0.12, uTint, clamp(t / 0.6, 0.0, 1.0)),
+                            mix(uTint, vec3(1.0), 0.8),
+                            clamp((t - 0.6) / 0.5, 0.0, 1.0));
+    return mix(c, tinted, uTintMix);
+}
+
+void fragment() {
+    highp vec2 p = UV * uSize;
+    highp float t = uNow;
+    highp vec2 rel = p - uEpi;
+    highp float r = length(rel);
+    highp vec2 dir = rel / max(r, 0.001);
+
+    highp vec2 sp = p * 0.55 + vec2(uSeed * 31.7, uSeed * 17.3);
+    highp float w1 = xFbm(sp + vec2(t * 0.35, -t * 0.22));
+    highp float w2 = xFbm(sp * 1.7 - vec2(t * 0.28, -t * 0.4) + 5.2);
+    highp vec2 warp = (vec2(w1, w2) - 0.5) * 2.4;
+    highp vec2 q = p + warp - dir * (min(t, 3.0) * 0.45);
+
+    highp vec3 f = xField(q);
+    highp float cov = f.x;
+    if (cov < 0.02) {
+        discard;
+    }
+
+    highp float heat = clamp(f.y / cov, 0.0, 1.0);
+    highp float birth = f.z / cov * BIRTH_RANGE;
+    highp float age = t - birth;
+    if (age < 0.0) {
+        discard;
+    }
+
+    highp float life = (0.55 + 0.9 * heat) * (0.7 + 0.5 * uPower);
+    highp float smokeLife = life + 3.2 + 1.5 * uPower;
+    highp float fa = clamp(age / life, 0.0, 1.0);
+    highp float sa = clamp((age - life * 0.5) / (smokeLife - life * 0.5), 0.0, 1.0);
+
+    highp float n1 = xFbm(q * 0.9 + vec2(uSeed * 7.1) + vec2(0.0, t * 0.6));
+    highp float n2 = xFbm(q * 2.1 - vec2(t * 0.8) + 3.7);
+    highp float dens = cov * (0.45 + 0.9 * n1);
+
+    highp float flash = exp(-age * 7.0) * (0.5 + 0.5 * heat);
+    highp float core = exp(-(r * r) / (1.2 + 1.8 * uPower)) * exp(-t * 9.0);
+    highp float burn = pow(1.0 - fa, 1.5);
+    highp float temp = burn * (0.5 + 0.8 * heat) * (0.5 + 1.0 * n2) + flash + core * 1.5;
+
+    highp float fireA = smoothstep(0.18, 0.5, temp * dens * 1.6) * 0.96 * (1.0 - smoothstep(0.85, 1.0, fa));
+    highp vec3 fireC = xRamp(clamp(temp, 0.0, 1.3));
+
+    highp float ringR = uSpeed * t;
+    highp float ringD = (r - ringR) / 0.55;
+    highp float ring = exp(-(ringD * ringD)) * clamp(1.0 - t * 1.6, 0.0, 1.0);
+    highp float ringA = ring * 0.4 * cov;
+    fireC = mix(fireC, vec3(1.0, 0.93, 0.8), clamp(ringA * 2.0, 0.0, 1.0));
+    fireA = max(fireA, ringA);
+
+    highp float smokeDens = dens * (0.6 + 0.8 * n1);
+    highp float smokeA = smoothstep(0.1, 0.45, smokeDens) * 0.62
+        * smoothstep(0.0, 0.35, age)
+        * (1.0 - smoothstep(0.55, 1.0, sa));
+    highp vec3 smokeC = mix(vec3(0.05, 0.045, 0.04), vec3(0.2, 0.19, 0.18), n2 * 0.8 + 0.2 * sa);
+    smokeC = mix(smokeC, uTint * 0.12 + vec3(0.03), uTintMix);
+    smokeC += fireC * (clamp(temp, 0.0, 1.0) * 0.35);
+
+    highp float outA = fireA + smokeA * (1.0 - fireA);
+    if (outA < 0.004) {
+        discard;
+    }
+
+    highp vec3 outC = (fireC * fireA + smokeC * smokeA * (1.0 - fireA)) / outA;
+    COLOR = vec4(pow(clamp(outC, 0.0, 1.0), vec3(2.2)), outA);
+}

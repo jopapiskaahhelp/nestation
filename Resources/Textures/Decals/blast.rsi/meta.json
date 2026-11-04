@@ -1,0 +1,32 @@
+{
+    "version": 1,
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "license": "CC-BY-NC-3.0",
+    "copyright": "Nestation New City, generated procedurally",
+    "states": [
+        {
+            "name": "crater1"
+        },
+        {
+            "name": "crater2"
+        },
+        {
+            "name": "scorch1"
+        },
+        {
+            "name": "scorch2"
+        },
+        {
+            "name": "scorch3"
+        },
+        {
+            "name": "soot1"
+        },
+        {
+            "name": "soot2"
+        }
+    ]
+}

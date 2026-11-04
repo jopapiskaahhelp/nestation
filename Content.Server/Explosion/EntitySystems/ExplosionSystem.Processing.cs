@@ -1,3 +1,4 @@
+// Nestation New City CC BY-NC 3.0
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -453,6 +454,7 @@ public sealed partial class ExplosionSystem
 
                 // TODO EXPLOSIONS turn explosions into entities, and pass the the entity in as the damage origin.
                 _damageableSystem.ChangeDamage((entity, damageable), damage);
+                ApplyBlastConcussion(entity, damage.GetTotal().Float());
 
                 if (_actorQuery.HasComp(entity))
                 {
@@ -693,6 +695,8 @@ sealed class Explosion
     /// </summary>
     private readonly float _tileBreakScale;
 
+    private int _marksLeft = ExplosionSystem.BlastMarksPerExplosion;
+
     /// <summary>
     ///     Maximum number of times that an explosion will break a single tile.
     /// </summary>
@@ -882,12 +886,6 @@ sealed class Explosion
                 _mapSystem.TryGetTileRef(currentGrid.Owner, currentGrid.Comp1, _currentEnumerator.Current, out var tileRef) &&
                 !tileRef.Tile.IsEmpty)
             {
-                if (!_tileUpdateDict.TryGetValue((currentGrid.Owner, currentGrid.Comp1), out var tileUpdateList))
-                {
-                    tileUpdateList = new();
-                    _tileUpdateDict[(currentGrid.Owner, currentGrid.Comp1)] = tileUpdateList;
-                }
-
                 // damage entities on the tile. Also figures out whether there are any solid entities blocking the floor
                 // from being destroyed.
                 var canDamageFloor = _system.ExplodeTile(_currentLookup,
@@ -903,25 +901,15 @@ sealed class Explosion
                     _currentIntensity,
                     Cause);
 
-                // If the floor is not blocked by some dense object, damage the floor tiles.
-                if (canDamageFloor)
-                {
-                    var tileIndices = _currentEnumerator.Current;
-                    var chunkIndices = SharedMapSystem.GetChunkIndices(tileIndices, TileSystem.ChunkSize);
-                    if (_currentChunk?.Indices != chunkIndices)
-                    {
-                        var chunk = currentGrid.Comp2?.ChunkHistory.GetValueOrDefault(chunkIndices);
-                        _currentChunk = (chunk, chunkIndices);
-                    }
-
-                    _system.DamageFloorTile(tileRef,
+                if (canDamageFloor && _marksLeft > 0 &&
+                    _system.MarkBlastTile(
+                        (currentGrid.Owner, currentGrid.Comp1),
+                        _currentEnumerator.Current,
                         _currentIntensity * _tileBreakScale,
-                        _maxTileBreak,
-                        _canCreateVacuum,
-                        tileUpdateList,
                         ExplosionType,
-                        currentGrid.Comp2,
-                        ref _currentChunk);
+                        Epicenter))
+                {
+                    _marksLeft--;
                 }
             }
             else
