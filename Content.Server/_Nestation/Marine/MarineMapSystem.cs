@@ -21,17 +21,17 @@ using Robust.Shared.Map;
 
 namespace Content.Server._NeStation.Marine;
 
-public sealed class MarineMapSystem : EntitySystem
+public sealed partial class MarineMapSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ISharedPlayerManager _players = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IComponentFactory _factory = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ISharedPlayerManager _players = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IComponentFactory _factory = default!;
 
     private static readonly EntProtoId ActionProto = "ActionMarineMap";
 
@@ -330,7 +330,7 @@ public sealed class MarineMapSystem : EntitySystem
         if (HasComp<OccluderComponent>(uid))
             return true;
 
-        return _airtightType != null && EntityManager.HasComponent(uid, _airtightType);
+        return _airtightType != null && HasComp(uid, _airtightType);
     }
 
     private MarineMapLayout? BuildLayout(EntityUid gridUid, MapGridComponent grid)
