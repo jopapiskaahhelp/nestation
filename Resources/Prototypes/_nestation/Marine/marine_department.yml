@@ -1,0 +1,13 @@
+# Nestation New City CC BY-NC 3.0
+- type: department
+  id: Marines
+  name: department-Marines
+  description: department-Marines-description
+  color: "#4b6b3a"
+  roles:
+  - MarineCommander
+  - MarineOfficer
+  - MarineGunner
+  - MarineMedic
+  - MarineLogistician
+  - MarinePrivate
