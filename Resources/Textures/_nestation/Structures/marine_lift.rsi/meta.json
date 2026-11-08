@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-3.0",
+  "copyright": "Nestation New City",
+  "size": {
+    "x": 64,
+    "y": 96
+  },
+  "states": [
+    {
+      "name": "raised"
+    },
+    {
+      "name": "lowered"
+    },
+    {
+      "name": "lowering",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          6.0
+        ]
+      ]
+    },
+    {
+      "name": "raising",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          6.0
+        ]
+      ]
+    }
+  ]
+}

@@ -3,6 +3,8 @@ using System.Numerics;
 using Content.Server._Nestation.XenoHive;
 using Content.Shared._Nestation.XenoHive;
 using Robust.Shared.Map;
+using Robust.Shared.Maths;
+using Robust.Shared.Network;
 
 namespace Content.Server._Nestation.XenoBrain;
 
@@ -103,6 +105,15 @@ public sealed partial class XenoBrainComponent : Component
     [DataField] public float FeedSeconds = 5f;
     [DataField] public float FeedMaxSeconds = 40f;
 
+    [DataField] public float MeetRange = 14f;
+    [DataField] public int MeetPlayers = 2;
+    [DataField] public float MeetWindowSeconds = 300f;
+    [DataField] public float RepairFleeSeconds = 12f;
+    [DataField] public float RepairMinSeconds = 45f;
+    [DataField] public float RepairMaxSeconds = 240f;
+    [DataField] public float MaintainSeconds = 60f;
+    [DataField] public bool RepairUpgradeWalls = true;
+    [DataField] public bool ProvokeOnSight = false;
 
     [DataField] public float ProvokeRange = 7f;
     [DataField] public float ProvokeChance = 0.25f;
@@ -247,6 +258,25 @@ public sealed partial class XenoBrainComponent : Component
     public int StallStrikes;
     public bool HiveOwned;
     public TimeSpan NextAmbushAt;
+
+    public readonly Dictionary<NetUserId, TimeSpan> Met = new();
+    public Vector2 LastMeetPos;
+    public TimeSpan RepairUntil;
+    public TimeSpan RepairMinUntil;
+    public bool RepairFleeing;
+    public bool RepairUpgrade;
+    public readonly List<Vector2i> Path = new();
+    public int PathIndex;
+    public Vector2i PathGoal;
+    public bool PathActive;
+    public Vector2 PathGoalPos;
+    public int PathReplans;
+    public TimeSpan NextReplanAt;
+    public TimeSpan RepairFleeUntil;
+    public TimeSpan NextFleeAt;
+    public XenoRepairKind RepairKind;
+    public int RepairIdlePicks;
+    public int BuildIdlePicks;
     public readonly List<(Vector2 Pos, TimeSpan Expire)> RecentRoam = new();
     public Vector2 OscAnchor;
     public Vector2 OscLast;

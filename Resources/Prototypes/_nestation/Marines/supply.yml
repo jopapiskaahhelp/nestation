@@ -1,0 +1,98 @@
+# Nestation New City CC BY-NC 3.0
+- type: entity
+  id: MarineSupplyLift
+  name: supply lift
+  description: A 2x3 cargo platform. Ordered supplies arrive on it after it sinks into the floor and rises again.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _nestation/Structures/marine_lift.rsi
+    drawdepth: FloorObjects
+    layers:
+    - state: raised
+      map: [ "enum.MarineLiftLayers.Base" ]
+      offset: 0.5,0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.MarineLiftVisuals.State:
+        enum.MarineLiftLayers.Base:
+          Raised: { state: raised }
+          Lowering: { state: lowering }
+          Lowered: { state: lowered }
+          Raising: { state: raising }
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      lift:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-1.5,1.5,1.5"
+        mask:
+        - MobMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+        hard: false
+      pit:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-1.5,1.5,1.5"
+        layer:
+        - WallLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+  - type: Chasm
+  - type: StepTrigger
+    active: false
+    requiredTriggeredSpeed: 0
+    intersectRatio: 0.4
+  - type: MarineSupplyLift
+
+- type: entity
+  parent: BaseComputer
+  id: MarineSupplyConsole
+  name: supply console
+  description: Order weapons and gear for the landing. Credits are earned by raising flags.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "computerLayerBody" ]
+      state: computer
+    - map: [ "computerLayerKeyboard" ]
+      state: generic_keyboard
+    - map: [ "computerLayerScreen" ]
+      state: request
+    - map: [ "computerLayerKeys" ]
+      state: generic_keys
+  - type: ApcPowerReceiver
+    needsPower: false
+  - type: MarineSupplyConsole
+  - type: ActivatableUI
+    key: enum.MarineSupplyUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.MarineSupplyUiKey.Key:
+        type: MarineSupplyBoundUserInterface
+
+- type: entity
+  id: MarineParachuteCanopy
+  name: parachute
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+  - type: Sprite
+    sprite: _nestation/Effects/parachute.rsi
+    state: canopy
+    drawdepth: Effects
+    noRot: true
+  - type: MarineParachute
+    endOffset: 0,0.9
+  - type: TimedDespawn
+    lifetime: 3.5

@@ -1,0 +1,190 @@
+# Nestation New City CC BY-NC 3.0
+- type: localizedDataset
+  id: NamesMarineFirst
+  values:
+    prefix: names-marine-first-dataset-
+    count: 60
+
+- type: localizedDataset
+  id: NamesMarineLast
+  values:
+    prefix: names-marine-last-dataset-
+    count: 60
+
+- type: startingGear
+  id: MarineGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    shoes: ClothingShoesBootsMercFilled
+    gloves: ClothingHandsGlovesMercFingerless
+    head: ClothingHeadHelmetMerc
+    outerClothing: ClothingOuterVestWebMerc
+    back: ClothingBackpackMerc
+    belt: ClothingBeltMercWebbing
+    eyes: ClothingEyesGlassesMercenary
+    mask: ClothingMaskBandMerc
+
+- type: entity
+  parent: CartridgeRifle
+  id: CartridgeRifleMarine
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+
+- type: entity
+  parent: BaseItem
+  id: WeaponRifleLecterMarine
+  name: Lecter
+  description: Popular gas-operated combat rifle used heavily by Nanotrasen and SolGov. Operating in semi or fully automatic, its accuracy, stopping power, and reliability make it excel in all manner of environments.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Rifles/lecter.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,3,2
+  - type: Clothing
+    sprite: Objects/Weapons/Guns/Rifles/lecter.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: Gun
+    fireRate: 4
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    minAngle: 2
+    maxAngle: 14
+    angleIncrease: 3
+    angleDecay: 12
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/ltrifle.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeRifleMarine
+  - type: Unremoveable
+    deleteOnDrop: false
+
+- type: entity
+  parent: MobHuman
+  id: MobMarine
+  name: Pvt. Marine
+  description: A rank-and-file mercenary marine taking part in the landing against the xenos.
+  components:
+  - type: Loadout
+    prototypes:
+    - MarineGear
+  - type: RandomMetadata
+    nameSegments:
+    - NamesMarineFirst
+    - NamesMarineLast
+    nameFormat: name-format-marine
+  - type: NpcFactionMember
+    factions:
+    - NanoTrasen
+  - type: InputMover
+  - type: MobMover
+  - type: Marine
+
+- type: entity
+  parent: MarkerBase
+  id: MarineSpawnZone
+  name: marine spawn zone
+  description: Spawns marines when triggered by a mission console, a flag raise or a signal.
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: ai
+  - type: MarineSpawnZone
+  - type: DeviceLinkSink
+    ports:
+    - Trigger
+
+- type: entity
+  id: MarineFlagpole
+  name: flagpole
+  description: Marines raise the flag of democracy here. Each raised flag calls in reinforcements.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _nestation/Structures/marine_flagpole.rsi
+    drawdepth: Mobs
+    layers:
+    - state: pole
+      offset: 0,0.5
+    - sprite: Structures/Wallmounts/flags.rsi
+      state: poryadok
+      map: [ "enum.MarineFlagLayers.Flag" ]
+      visible: false
+      offset: 0,0.875
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.MarineFlagVisuals.Raised:
+        enum.MarineFlagLayers.Flag:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      pole:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.15
+        density: 50
+        hard: false
+  - type: MarineFlagpole
+
+- type: entity
+  parent: BaseItem
+  id: MarineMissionTablet
+  name: mission tablet
+  description: A tablet for starting the landing mission.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/tablets.rsi
+    state: tablet
+  - type: MarineMissionConsole
+  - type: ActivatableUI
+    key: enum.MarineMissionUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.MarineMissionUiKey.Key:
+        type: MarineMissionBoundUserInterface
+
+- type: entity
+  parent: BlastDoor
+  id: MarineGateSegment
+  name: landing gate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ApcPowerReceiver
+    needsPower: false
+  - type: AccessReader
+    enabled: false
+
+- type: entity
+  parent: BlastDoor
+  id: MarineGate
+  name: landing gate
+  description: A long gate that opens as soon as the mission starts.
+  components:
+  - type: ApcPowerReceiver
+    needsPower: false
+  - type: AccessReader
+    enabled: false
+  - type: MarineGate

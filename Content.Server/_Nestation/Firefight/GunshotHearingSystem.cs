@@ -25,6 +25,7 @@ public sealed partial class GunshotHearingSystem : EntitySystem
     [Dependency] private IComponentFactory _factory = default!;
     [Dependency] private BlindableSystem _blindable = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private HearingProtectionSystem _protection = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedMapSystem _maps = default!;
     [Dependency] private SharedRoofSystem _roof = default!;
@@ -100,6 +101,9 @@ public sealed partial class GunshotHearingSystem : EntitySystem
 
     private void AddDose(EntityUid uid, float amount, float strength)
     {
+        if (_protection.IsProtected(uid))
+            return;
+
         var comp = EnsureComp<EarRingingComponent>(uid);
         var now = _timing.CurTime;
         var elapsed = (float) (now - comp.DoseUpdated).TotalSeconds;

@@ -1,0 +1,26 @@
+# Nestation new city CC BY-NC 3.0
+- type: entity
+  parent: BaseComputer
+  id: ComputerMarineAnnounce
+  name: консоль объявлений
+  description: Консоль для объявлений всем на станции. Объявление можно отправлять раз в 10 секунд.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "computerLayerBody" ]
+      state: computer
+    - map: [ "computerLayerKeyboard" ]
+      state: generic_keyboard
+    - map: [ "computerLayerScreen" ]
+      state: comm
+    - map: [ "computerLayerKeys" ]
+      state: tech_key
+  - type: MarineAnnounceConsole
+    cooldown: 10
+    maxLength: 300
+  - type: ActivatableUI
+    key: enum.MarineAnnounceUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.MarineAnnounceUiKey.Key:
+        type: MarineAnnounceBoundUserInterface

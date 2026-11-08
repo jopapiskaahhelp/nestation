@@ -1,0 +1,191 @@
+# Nestation New City CC BY-NC 3.0
+- type: playTimeTracker
+  id: JobMarineOfficer
+
+- type: playTimeTracker
+  id: JobMarineGunner
+
+- type: playTimeTracker
+  id: JobMarineCommander
+
+- type: playTimeTracker
+  id: JobMarinePrivate
+
+- type: playTimeTracker
+  id: JobMarineMedic
+
+- type: playTimeTracker
+  id: JobMarineLogistician
+
+- type: job
+  id: MarineOfficer
+  name: job-name-marine-officer
+  description: job-description-marine-officer
+  playTimeTracker: JobMarineOfficer
+  startingGear: MarineOfficerGear
+  icon: JobIconCaptain
+  supervisors: job-supervisors-marine-commander
+  canBeAntag: false
+
+- type: job
+  id: MarineGunner
+  name: job-name-marine-gunner
+  description: job-description-marine-gunner
+  playTimeTracker: JobMarineGunner
+  startingGear: MarineGunnerGear
+  icon: JobIconSecurityOfficer
+  supervisors: job-supervisors-marine-commander
+  canBeAntag: false
+
+- type: job
+  id: MarineCommander
+  name: job-name-marine-commander
+  description: job-description-marine-commander
+  playTimeTracker: JobMarineCommander
+  startingGear: MarineCommanderGear
+  icon: JobIconHeadOfSecurity
+  supervisors: job-supervisors-marine-officer
+  canBeAntag: false
+
+- type: job
+  id: MarinePrivate
+  name: job-name-marine-private
+  description: job-description-marine-private
+  playTimeTracker: JobMarinePrivate
+  startingGear: MarinePrivateGear
+  icon: JobIconSecurityCadet
+  supervisors: job-supervisors-marine-commander
+  canBeAntag: false
+
+- type: job
+  id: MarineMedic
+  name: job-name-marine-medic
+  description: job-description-marine-medic
+  playTimeTracker: JobMarineMedic
+  startingGear: MarineMedicGear
+  icon: JobIconMedicalDoctor
+  supervisors: job-supervisors-marine-commander
+  canBeAntag: false
+
+- type: job
+  id: MarineLogistician
+  name: job-name-marine-logistician
+  description: job-description-marine-logistician
+  playTimeTracker: JobMarineLogistician
+  startingGear: MarineLogisticianGear
+  icon: JobIconCargoTechnician
+  supervisors: job-supervisors-marine-commander
+  canBeAntag: false
+
+- type: startingGear
+  id: MarineOfficerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    shoes: ClothingShoesBootsMercFilled
+    gloves: ClothingHandsGlovesMercFingerless
+    head: ClothingHeadHelmetMerc
+    outerClothing: ClothingOuterVestWebMerc
+    back: ClothingBackpackMerc
+    belt: ClothingBeltMercWebbing
+    eyes: ClothingEyesGlassesMercenary
+    mask: ClothingMaskBandMerc
+    ears: ClothingHeadsetMarine
+    id: MarineOfficerIDCard
+
+- type: startingGear
+  id: MarineGunnerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    shoes: ClothingShoesBootsMercFilled
+    gloves: ClothingHandsGlovesMercFingerless
+    head: ClothingHeadHelmetMerc
+    outerClothing: ClothingOuterArmorHeavy
+    back: ClothingBackpackMerc
+    belt: ClothingBeltMercWebbing
+    eyes: ClothingEyesGlassesMercenary
+    mask: ClothingMaskBandMerc
+    ears: ClothingHeadsetMarine
+    id: MarineGunnerIDCard
+  inhand:
+  - WeaponLightMachineGunL6
+  storage:
+    back:
+    - MagazineLightRifleBox
+    - MagazineLightRifleBox
+    - MagazineLightRifleBox
+
+- type: startingGear
+  id: MarineCommanderGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    shoes: ClothingShoesBootsMercFilled
+    gloves: ClothingHandsGlovesMercFingerless
+    head: ClothingHeadHatBeretMerc
+    outerClothing: ClothingOuterVestWebMerc
+    back: ClothingBackpackMerc
+    belt: ClothingBeltMercWebbing
+    eyes: ClothingEyesGlassesMercenary
+    mask: ClothingMaskBandMerc
+    ears: ClothingHeadsetMarine
+    id: MarineCommanderIDCard
+  inhand:
+  - WeaponRifleLecter
+  storage:
+    back:
+    - MagazineRifle
+    - MagazineRifle
+    - MagazineRifle
+    - MagazineRifle
+
+- type: startingGear
+  id: MarinePrivateGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    shoes: ClothingShoesBootsMercFilled
+    gloves: ClothingHandsGlovesMercFingerless
+    head: ClothingHeadHelmetMerc
+    outerClothing: ClothingOuterVestWebMerc
+    back: ClothingBackpackMerc
+    belt: ClothingBeltMercWebbing
+    eyes: ClothingEyesGlassesMercenary
+    mask: ClothingMaskBandMerc
+    ears: ClothingHeadsetMarine
+    id: MarinePrivateIDCard
+  inhand:
+  - WeaponRifleLecter
+  storage:
+    back:
+    - MagazineRifle
+    - MagazineRifle
+    - MagazineRifle
+    - MagazineRifle
+
+- type: startingGear
+  id: MarineMedicGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    shoes: ClothingShoesBootsMercFilled
+    gloves: ClothingHandsGlovesMercFingerless
+    head: ClothingHeadHelmetMerc
+    outerClothing: ClothingOuterVestWebMerc
+    back: ClothingBackpackMerc
+    belt: ClothingBeltMercWebbing
+    eyes: ClothingEyesGlassesMercenary
+    mask: ClothingMaskBandMerc
+    ears: ClothingHeadsetMarine
+    id: MarineMedicIDCard
+
+- type: startingGear
+  id: MarineLogisticianGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    shoes: ClothingShoesBootsMercFilled
+    gloves: ClothingHandsGlovesMercFingerless
+    head: ClothingHeadHelmetMerc
+    outerClothing: ClothingOuterVestWebMerc
+    back: ClothingBackpackMerc
+    belt: ClothingBeltMercWebbing
+    eyes: ClothingEyesGlassesMercenary
+    mask: ClothingMaskBandMerc
+    ears: ClothingHeadsetMarine
+    id: MarineLogisticianIDCard

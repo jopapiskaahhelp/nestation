@@ -1,0 +1,182 @@
+# Nestation new city CC BY-NC 3.0
+- type: entity
+  id: ActionMarineMap
+  name: Тактическая карта
+  description: Вид сверху на весь грид. Синие точки — морпехи.
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Misc/id_cards.rsi
+      state: default
+    itemIconStyle: NoItem
+    checkCanInteract: false
+  - type: InstantAction
+    event: !type:OpenMarineMapEvent
+
+- type: entity
+  parent: IDCardStandard
+  id: MarineIDCardBase
+  abstract: true
+  components:
+  - type: MarineIdCard
+
+- type: entity
+  parent: MarineIDCardBase
+  id: MarineOfficerIDCard
+  name: айди карта офицера
+  description: Карта офицера морпехов. Даёт доступы капитана и позволяет рисовать на тактической карте.
+  components:
+  - type: Sprite
+    layers:
+    - state: gold
+    - state: stripe_top
+      color: "#4b6b3a"
+    - state: stripe_bottom
+      color: "#2f4524"
+    - sprite: Interface/Misc/job_icons.rsi
+      offset: -0.09375, 0.0625
+      state: Captain
+  - type: Item
+    heldPrefix: gold
+  - type: IdCard
+    jobTitle: job-title-marine-officer
+    jobIcon: JobIconCaptain
+  - type: Access
+    groups:
+    - AllAccess
+  - type: MarineMapDrawer
+
+- type: entity
+  parent: MarineIDCardBase
+  id: MarineGunnerIDCard
+  name: айди карта пулеметчика
+  description: Карта пулемётчика морпехов. Доступы главы службы безопасности.
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: stripe_top
+      color: "#4b6b3a"
+    - state: stripe_bottom
+      color: "#2f4524"
+    - sprite: Interface/Misc/job_icons.rsi
+      offset: -0.09375, 0.0625
+      state: SecurityOfficer
+  - type: IdCard
+    jobTitle: job-title-marine-gunner
+    jobIcon: JobIconSecurityOfficer
+  - type: Access
+    groups:
+    - Security
+    tags:
+    - Command
+    - Maintenance
+    - External
+    - GenpopEnter
+    - GenpopLeave
+
+- type: entity
+  parent: MarineIDCardBase
+  id: MarineCommanderIDCard
+  name: айди карта командира
+  description: Карта командира морпехов. Доступы главы службы безопасности.
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: "#4b6b3a"
+    - state: stripe_bottom
+      color: "#2f4524"
+    - sprite: Interface/Misc/job_icons.rsi
+      offset: -0.09375, 0.0625
+      state: HeadOfSecurity
+  - type: Item
+    heldPrefix: silver
+  - type: IdCard
+    jobTitle: job-title-marine-commander
+    jobIcon: JobIconHeadOfSecurity
+  - type: Access
+    groups:
+    - Security
+    tags:
+    - Command
+    - Maintenance
+    - External
+    - GenpopEnter
+    - GenpopLeave
+
+- type: entity
+  parent: MarineIDCardBase
+  id: MarinePrivateIDCard
+  name: айди карта рядового
+  description: Карта рядового морпеха. Доступы главы службы безопасности.
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: stripe_top
+      color: "#4b6b3a"
+    - state: stripe_bottom
+      color: "#2f4524"
+    - sprite: Interface/Misc/job_icons.rsi
+      offset: -0.09375, 0.0625
+      state: SecurityCadet
+  - type: IdCard
+    jobTitle: job-title-marine-private
+    jobIcon: JobIconSecurityCadet
+  - type: Access
+    groups:
+    - Security
+    tags:
+    - Command
+    - Maintenance
+    - External
+    - GenpopEnter
+    - GenpopLeave
+
+- type: entity
+  parent: MarineIDCardBase
+  id: MarineMedicIDCard
+  name: айди карта медика
+  description: Карта медика морпехов. Доступы медицинского отдела.
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: stripe_top
+      color: "#4b6b3a"
+    - state: stripe_bottom
+      color: "#2f4524"
+    - sprite: Interface/Misc/job_icons.rsi
+      offset: -0.09375, 0.0625
+      state: MedicalDoctor
+  - type: IdCard
+    jobTitle: job-title-marine-medic
+    jobIcon: JobIconMedicalDoctor
+  - type: Access
+    groups:
+    - Medical
+
+- type: entity
+  parent: MarineIDCardBase
+  id: MarineLogisticianIDCard
+  name: айди карта логиста
+  description: Карта логиста морпехов. Доступы грузового отдела.
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: stripe_top
+      color: "#4b6b3a"
+    - state: stripe_bottom
+      color: "#2f4524"
+    - sprite: Interface/Misc/job_icons.rsi
+      offset: -0.09375, 0.0625
+      state: CargoTechnician
+  - type: IdCard
+    jobTitle: job-title-marine-logistician
+    jobIcon: JobIconCargoTechnician
+  - type: Access
+    groups:
+    - Cargo

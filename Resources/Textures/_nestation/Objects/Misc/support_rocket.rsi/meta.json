@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-3.0",
+  "copyright": "Nestation Anarhey",
+  "size": {
+    "x": 32,
+    "y": 96
+  },
+  "states": [
+    {
+      "name": "rocket",
+      "delays": [
+        [
+          0.06,
+          0.06,
+          0.06,
+          0.06
+        ]
+      ]
+    }
+  ]
+}

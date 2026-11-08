@@ -20,6 +20,10 @@ public sealed partial class ExplosionVisualsTexturesComponent : Component
 
     public float MaxIntensity = 1f;
 
+    public float Total;
+
+    public int BurnSeed;
+
     public Dictionary<EntityUid, ExplosionField?> Fields = new();
 
     public ExplosionField? SpaceField;

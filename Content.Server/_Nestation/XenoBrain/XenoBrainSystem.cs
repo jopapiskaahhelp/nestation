@@ -677,6 +677,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         TrackChase(ctx);
         TrackIdle(ctx);
         TryScream(ctx);
+        TrackMeetings(ctx);
 
         if (b.Mode == XenoMode.Duel)
         {
@@ -698,6 +699,13 @@ public sealed partial class XenoBrainSystem : EntitySystem
                     break;
                 case XenoMode.Feed:
                     ThinkFeed(ctx);
+                    break;
+                case XenoMode.Heal:
+                    if (b.Caste == XenoCaste.Burrower)
+                        ThinkRepair(ctx);
+                    else
+                        Decide(ctx);
+
                     break;
                 case XenoMode.Retreat:
                     ThinkRetreat(ctx);
@@ -1087,6 +1095,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
             case XenoMode.Weave:
             case XenoMode.Lure:
             case XenoMode.Unstick:
+                if (b.PathActive && b.BuildStand != null)
+                    return (b.PathGoalPos - x.Pos).Length() > 1f;
+
                 return (b.BuildEntry != null || b.BuildStand != null) && (b.BuildStandPos - x.Pos).Length() > 1f;
             case XenoMode.Duel:
                 return b.GoalPos is { } duelGoal && (b.TargetDist > 2.5f || LineBlocked(x, duelGoal));
@@ -1228,7 +1239,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
         if (HandleObstacle(x, now))
             return;
 
-        if (b.Mode == XenoMode.Build)
+        if (b.Mode == XenoMode.Build || (b.Mode == XenoMode.Heal && b.Caste == XenoCaste.Burrower))
         {
             OnBuildStuck(x, now);
             return;
@@ -1301,6 +1312,12 @@ public sealed partial class XenoBrainSystem : EntitySystem
     private bool HandleObstacle(XenoInfo x, TimeSpan now)
     {
         var b = x.Brain;
+        if (b.Caste == XenoCaste.Burrower && b.HiveOwned)
+        {
+            b.SmashActive = false;
+            return false;
+        }
+
         var forward = ForwardDir(x.Uid, b, x.Pos);
 
         var ob = FindObstacle(x, forward);
@@ -1416,6 +1433,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
 
     private bool CanXenoBreak(EntityUid ob, XenoBrainComponent b)
     {
+        if (HasComp<XenoHiveStructureComponent>(ob))
+            return false;
+
         if (!HasComp<DamageableComponent>(ob))
             return false;
 
@@ -1655,6 +1675,8 @@ public sealed partial class XenoBrainSystem : EntitySystem
         }
 
         b.Mode = mode;
+        b.PathActive = false;
+        b.Path.Clear();
         b.ModeSince = now;
         b.StuckAnchor = x.Pos;
         b.StuckSince = now;
@@ -1671,7 +1693,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
         var b = x.Brain;
         var m = b.BaseSpeed;
 
-        if (b.Mode is XenoMode.Retreat or XenoMode.Heal or XenoMode.Lure or XenoMode.Weave)
+        if (b.Mode == XenoMode.Heal && b.Caste == XenoCaste.Burrower)
+            m = b.RepairFleeing ? b.RetreatSpeed : b.BaseSpeed;
+        else if (b.Mode is XenoMode.Retreat or XenoMode.Heal or XenoMode.Lure or XenoMode.Weave)
             m = b.RetreatSpeed;
         else if (now < b.LeapUntil)
             m = b.LeapSpeed;

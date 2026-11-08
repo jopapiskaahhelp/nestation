@@ -1,5 +1,6 @@
 // Nestation New City CC BY-NC 3.0
 using System.Numerics;
+using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
 using JetBrains.Annotations;
 using Robust.Client.Graphics;
@@ -95,7 +96,7 @@ public sealed partial class ExplosionOverlay : Overlay
                 continue;
 
             var gridBounds = invWorldMatrix.TransformBox(worldBounds).Enlarged(grid.TileSize * 2);
-            DrawField(drawHandle, field, worldMatrix, grid.TileSize, gridBounds, tiles, visuals, index, now);
+            DrawField(drawHandle, field, worldMatrix, grid.TileSize, gridBounds, tiles, visuals, index, now, textures.BurnSeed, true);
         }
 
         if (visuals.SpaceTiles == null)
@@ -114,7 +115,7 @@ public sealed partial class ExplosionOverlay : Overlay
 
         Matrix3x2.Invert(visuals.SpaceMatrix, out var invSpace);
         var spaceBounds = invSpace.TransformBox(worldBounds).Enlarged(2);
-        DrawField(drawHandle, textures.SpaceField, visuals.SpaceMatrix, visuals.SpaceTileSize, spaceBounds, visuals.SpaceTiles, visuals, index, now);
+        DrawField(drawHandle, textures.SpaceField, visuals.SpaceMatrix, visuals.SpaceTileSize, spaceBounds, visuals.SpaceTiles, visuals, index, now, textures.BurnSeed, false);
     }
 
     private void Start(EntityUid uid, ExplosionVisualsComponent visuals, ExplosionVisualsTexturesComponent textures)
@@ -122,6 +123,28 @@ public sealed partial class ExplosionOverlay : Overlay
         textures.Started = true;
         textures.StartTime = _timing.RealTime;
         textures.Seed = (uid.Id % 997) / 997f;
+        textures.BurnSeed = _entMan.GetNetEntity(uid).Id;
+
+        var total = 0f;
+        foreach (var tileSets in visuals.Tiles.Values)
+        {
+            foreach (var (iteration, list) in tileSets)
+            {
+                if (iteration < visuals.Intensity.Count)
+                    total += visuals.Intensity[iteration] * list.Count;
+            }
+        }
+
+        if (visuals.SpaceTiles != null)
+        {
+            foreach (var (iteration, list) in visuals.SpaceTiles)
+            {
+                if (iteration < visuals.Intensity.Count)
+                    total += visuals.Intensity[iteration] * list.Count;
+            }
+        }
+
+        textures.Total = total;
 
         var max = 0f;
         foreach (var intensity in visuals.Intensity)
@@ -184,6 +207,8 @@ public sealed partial class ExplosionOverlay : Overlay
         var tint = textures.FireColor;
         shader.SetParameter("uHeat", field.Heat);
         shader.SetParameter("uBirth", field.Birth);
+        shader.SetParameter("uBurn", field.Burn);
+        shader.SetParameter("uLinger", BlastBurn.LingerSeconds(textures.Total));
         shader.SetParameter("uSize", new Vector2(size.X, size.Y));
         shader.SetParameter("uEpi", field.Epicenter);
         shader.SetParameter("uSeed", textures.Seed);
@@ -205,9 +230,11 @@ public sealed partial class ExplosionOverlay : Overlay
         Dictionary<int, List<Vector2i>> tileSets,
         ExplosionVisualsComponent visuals,
         int index,
-        float now)
+        float now,
+        int burnSeed,
+        bool allowBurn)
     {
-        Reveal(field, tileSets, visuals, index, now);
+        Reveal(field, tileSets, visuals, index, now, burnSeed, allowBurn);
 
         var rect = new Box2(field.Origin * tileSize, (field.Origin + field.Size) * tileSize);
         if (!rect.Intersects(bounds))
@@ -224,10 +251,14 @@ public sealed partial class ExplosionOverlay : Overlay
         Dictionary<int, List<Vector2i>> tileSets,
         ExplosionVisualsComponent visuals,
         int index,
-        float now)
+        float now,
+        int burnSeed,
+        bool allowBurn)
     {
         if (field.Revealed >= index)
             return;
+
+        var count = visuals.Intensity.Count;
 
         var maxIntensity = 0f;
         foreach (var intensity in visuals.Intensity)
@@ -245,6 +276,7 @@ public sealed partial class ExplosionOverlay : Overlay
             var ratio = Math.Clamp(visuals.Intensity[j] / maxIntensity, 0f, 1f);
             var heat = 0.3f + 0.7f * MathF.Pow(ratio, 0.6f);
             var heatByte = (byte) (heat * 255f);
+            var fraction = count > 1 ? j / (float) (count - 1) : 0f;
 
             foreach (var tile in tiles)
             {
@@ -256,6 +288,9 @@ public sealed partial class ExplosionOverlay : Overlay
                 field.PresenceData[i] = new Rgba32(255, 255, 255, 255);
                 field.HeatData[i] = new Rgba32(0, 0, 0, heatByte);
                 field.BirthData[i] = new Rgba32(0, 0, 0, birthByte);
+
+                if (allowBurn && BlastBurn.IsBurning(tile, burnSeed, fraction))
+                    field.BurnData[i] = new Rgba32(0, 0, 0, 255);
             }
         }
 

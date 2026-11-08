@@ -1,0 +1,28 @@
+- type: entity
+  id: BlastFire
+  name: огонь
+  description: Догорающее пламя после взрыва.
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fire:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        hard: false
+        layer:
+        - LowImpassable
+  - type: StepTrigger
+    intersectRatio: 0.2
+    requiredTriggeredSpeed: 0
+  - type: TriggerOnStepTrigger
+  - type: FireStackOnTrigger
+    targetUser: true
+    fireStacks: 2
+    doIgnite: true
+  - type: TimedDespawn
+    lifetime: 10

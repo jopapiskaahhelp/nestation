@@ -1,0 +1,14 @@
+- type: shader
+  id: RealisticLookGrade
+  kind: source
+  path: "/Textures/Shaders/RealisticLook/grade.swsl"
+
+- type: shader
+  id: RealisticLookBloom
+  kind: source
+  path: "/Textures/Shaders/RealisticLook/bloom.swsl"
+
+- type: shader
+  id: RealisticLookFog
+  kind: source
+  path: "/Textures/Shaders/RealisticLook/fog.swsl"

@@ -203,7 +203,8 @@ public sealed partial class ExplosionSystem
         float? fireStacks,
         float? temperature,
         float currentIntensity,
-        EntityUid? cause)
+        EntityUid? cause,
+        BlastContext blast)
     {
         var size = grid.Comp.TileSize;
         var gridBox = new Box2(tile * size, (tile + 1) * size);
@@ -232,6 +233,9 @@ public sealed partial class ExplosionSystem
         // process those entities
         foreach (var (uid, xform) in list)
         {
+            if (ApplyBlastGore(uid, epicenter, blast))
+                continue;
+
             ProcessEntity(uid, epicenter, damage, throwForce, id, xform, fireStacks, cause);
         }
 
@@ -313,7 +317,8 @@ public sealed partial class ExplosionSystem
         HashSet<EntityUid> processed,
         string id,
         float? fireStacks,
-        EntityUid? cause)
+        EntityUid? cause,
+        BlastContext blast)
     {
         var gridBox = Box2.FromDimensions(tile * DefaultTileSize, new Vector2(DefaultTileSize, DefaultTileSize));
         var worldBox = spaceMatrix.TransformBox(gridBox);
@@ -329,6 +334,9 @@ public sealed partial class ExplosionSystem
         foreach (var (uid, xform) in state.Item1)
         {
             processed.Add(uid);
+            if (ApplyBlastGore(uid, epicenter, blast))
+                continue;
+
             ProcessEntity(uid, epicenter, damage, throwForce, id, xform, fireStacks, cause);
         }
 
@@ -696,6 +704,14 @@ sealed class Explosion
 
     private int _marksLeft = ExplosionSystem.BlastMarksPerExplosion;
 
+    private readonly float _totalIntensity;
+
+    private readonly bool _physical;
+
+    private readonly int _burnSeed;
+
+    private int _fireLeft;
+
     /// <summary>
     ///     Maximum number of times that an explosion will break a single tile.
     /// </summary>
@@ -734,7 +750,8 @@ sealed class Explosion
         EntityUid? cause,
         SharedMapSystem mapSystem,
         DamageableSystem damageable,
-        EntityQuery<TileHistoryComponent> historyQuery)
+        EntityQuery<TileHistoryComponent> historyQuery,
+        float totalIntensity)
     {
         VisualEnt = visualEnt;
         Cause = cause;
@@ -744,6 +761,12 @@ sealed class Explosion
         _tileSetIntensity = tileSetIntensity;
         Epicenter = epicenter;
         Area = area;
+
+        _totalIntensity = totalIntensity;
+        _physical = ExplosionSystem.IsPhysicalBlast(explosionType);
+
+        _burnSeed = system.BlastSeed(visualEnt);
+        _fireLeft = (int) Math.Clamp(totalIntensity / 10f, 40f, 150f);
 
         _tileBreakScale = tileBreakScale;
         _maxTileBreak = maxTileBreak;
@@ -879,6 +902,11 @@ sealed class Explosion
                 break;
             }
 
+            var blast = new BlastContext(
+                _tileSetIntensity.Count > 1 ? CurrentIteration / (float) (_tileSetIntensity.Count - 1) : 0f,
+                _totalIntensity,
+                _physical);
+
             // Is the current tile on a grid (instead of in space)?
             if (_currentGrid is { } currentGrid &&
                 _mapSystem.TryGetTileRef(currentGrid.Owner, currentGrid.Comp1, _currentEnumerator.Current, out var tileRef) &&
@@ -897,7 +925,19 @@ sealed class Explosion
                     ExplosionType.FireStacks,
                     ExplosionType.Temperature,
                     _currentIntensity,
-                    Cause);
+                    Cause,
+                    blast);
+
+                if (canDamageFloor && _physical && _fireLeft > 0 &&
+                    _system.TrySpawnBlastFire(
+                        (currentGrid.Owner, currentGrid.Comp1),
+                        _currentEnumerator.Current,
+                        _burnSeed,
+                        blast.Fraction,
+                        _totalIntensity))
+                {
+                    _fireLeft--;
+                }
 
                 if (canDamageFloor && _marksLeft > 0 &&
                     _system.MarkBlastTile(
@@ -923,7 +963,8 @@ sealed class Explosion
                     ProcessedEntities,
                     ExplosionType.ID,
                     ExplosionType.FireStacks,
-                    Cause);
+                    Cause,
+                    blast);
             }
 
             if (!MoveNext())

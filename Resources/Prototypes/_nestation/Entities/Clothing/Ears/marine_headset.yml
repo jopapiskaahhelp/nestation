@@ -1,0 +1,33 @@
+# Nestation New City CC BY-NC 3.0
+- type: entity
+  parent: EncryptionKey
+  id: EncryptionKeyMarine
+  name: marine encryption key
+  description: An encryption key used by marines.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Marine
+    defaultChannel: Marine
+  - type: Sprite
+    layers:
+    - state: crypt_gray
+    - state: sec_label
+      color: "#9aa34a"
+
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetMarine
+  name: marine headset
+  description: A hardened tactical headset. Muffles explosions and gunfire, and carries the marine channel alongside the common one.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyMarine
+      - EncryptionKeyCommon
+  - type: HearingProtection
+  - type: Sprite
+    sprite: _nestation/Clothing/Ears/Headsets/marine.rsi
+  - type: Clothing
+    sprite: _nestation/Clothing/Ears/Headsets/marine.rsi

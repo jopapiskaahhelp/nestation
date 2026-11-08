@@ -1,0 +1,182 @@
+# Nestation new city CC BY-NC 3.0
+- type: entity
+  parent: BaseStructure
+  id: XenoTurret
+  name: xeno turret
+  description: A living spire of chitin. Its glands pulse with toxin.
+  components:
+  - type: Sprite
+    sprite: Structures/Specific/xeno_building.rsi
+    layers:
+    - state: wardingtower
+    - state: wardingtower-unshaded
+      shader: unshaded
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+        - BulletImpassable
+  - type: PointLight
+    color: "#9dff3c"
+    radius: 2.5
+    energy: 1.2
+    castShadows: false
+  - type: NpcFactionMember
+    factions:
+    - Xeno
+  - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: XenoTurretChitin
+          params:
+            volume: 4
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: XenoTurret
+    range: 4
+    interval: 5
+    projectile: BulletXenoTurretToxin
+    shootSound:
+      path: /Audio/Effects/sizzle.ogg
+      params:
+        volume: 2
+        pitch: 1.3
+    burstSound:
+      path: /Audio/Effects/sizzle.ogg
+      params:
+        volume: 5
+        pitch: 0.7
+    limbTearSound:
+      path: /Audio/Effects/Fluids/splat.ogg
+      params:
+        volume: 3
+        variation: 0.2
+    defaultGibSounds:
+    - collection: gib
+      params:
+        volume: 4
+    - collection: blood
+    gibSounds:
+      Human:
+      - collection: gib
+        params:
+          volume: 4
+      - collection: blood
+      Dwarf:
+      - collection: gib
+        params:
+          volume: 4
+          pitch: 0.85
+      - collection: blood
+      Vulpkanin:
+      - collection: gib
+        params:
+          volume: 4
+          pitch: 1.12
+      - collection: blood
+      Reptilian:
+      - collection: gib
+        params:
+          volume: 4
+          pitch: 0.88
+      - path: /Audio/Effects/snap.ogg
+      - collection: blood
+      Vox:
+      - collection: gib
+        params:
+          volume: 3
+          pitch: 1.22
+      - path: /Audio/Effects/snap.ogg
+      Moth:
+      - collection: XenoTurretChitin
+        params:
+          volume: 5
+      - path: /Audio/Effects/packetrip.ogg
+        params:
+          volume: 3
+      Arachnid:
+      - collection: XenoTurretChitin
+        params:
+          volume: 5
+          pitch: 0.8
+      - path: /Audio/Effects/metal_crunch.ogg
+        params:
+          volume: -2
+      - path: /Audio/Effects/Fluids/splat.ogg
+      Diona:
+      - collection: XenoTurretWood
+        params:
+          volume: 4
+      - path: /Audio/Effects/plant_rustle.ogg
+        params:
+          volume: 3
+      SlimePerson:
+      - path: /Audio/Voice/Slime/slime_squish.ogg
+        params:
+          volume: 4
+      - collection: XenoTurretSlime
+        params:
+          volume: 3
+      - path: /Audio/Effects/Fluids/splat.ogg
+      Skeleton:
+      - path: /Audio/Effects/bone_rattle.ogg
+        params:
+          volume: 4
+      - path: /Audio/Effects/snap.ogg
+        params:
+          volume: 4
+      - collection: XenoTurretChitin
+        params:
+          pitch: 0.75
+      Gingerbread:
+      - path: /Audio/Effects/chopstickbreak.ogg
+        params:
+          volume: 4
+      - path: /Audio/Effects/snap.ogg
+
+- type: entity
+  parent: BulletAcid
+  id: BulletXenoTurretToxin
+  categories: [ HideSpawnMenu ]
+  name: toxin glob
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Caustic: 1
+    soundHit:
+      path: /Audio/Effects/Fluids/splat.ogg
+
+- type: entity
+  id: XenoTurretBurstLight
+  categories: [ HideSpawnMenu ]
+  name: toxic flash
+  components:
+  - type: Transform
+  - type: PointLight
+    color: "#9dff3c"
+    radius: 5
+    energy: 6
+    softness: 1
+    castShadows: false
+  - type: TimedDespawn
+    lifetime: 0.45
+  - type: Tag
+    tags:
+    - HideContextMenu

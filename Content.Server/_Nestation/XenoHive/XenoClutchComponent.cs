@@ -20,6 +20,9 @@ public sealed partial class XenoHiveEntry
 
     [DataField]
     public TimeSpan MaturationMax;
+
+    [DataField]
+    public bool NoScale;
 }
 
 [RegisterComponent]
@@ -52,6 +55,54 @@ public sealed partial class XenoClutchComponent : Component
     [DataField]
     public TimeSpan ReinforcedBuildInterval = TimeSpan.FromSeconds(6);
 
+    [DataField]
+    public int MaxRadius = 34;
+
+    [DataField]
+    public bool SchemaEnabled = true;
+
+    [DataField]
+    public TimeSpan SchemaInterval = TimeSpan.FromSeconds(300);
+
+    [DataField]
+    public TimeSpan SchemaFirstDelay = TimeSpan.FromSeconds(60);
+
+    [DataField]
+    public int SchemaMaxSectors = 3;
+
+    [DataField]
+    public int SchemaMaxEntries = 160;
+
+    [DataField]
+    public int InitialBurrowers;
+
+    [DataField]
+    public EntProtoId? BurrowerProto;
+
+    [DataField]
+    public TimeSpan InitialBurrowerSpacing = TimeSpan.FromSeconds(4);
+
+    [DataField]
+    public float SpawnDelayScale = 1f;
+
+    [DataField]
+    public TimeSpan HeadStart;
+
+    [DataField]
+    public float HeadStartBuildScale = 0.5f;
+
+    [DataField]
+    public int SchemaFrontSector = -1;
+
+    [DataField]
+    public float SchemaFrontThreat;
+
+    [DataField]
+    public List<string> NoBuildTiles = new();
+
+    [DataField]
+    public TimeSpan MendInterval = TimeSpan.FromSeconds(1.5);
+
     [ViewVariables]
     public bool Started;
 
@@ -82,4 +133,6 @@ public sealed partial class XenoClutchComponent : Component
     public XenoMazePlan? Plan;
     public TimeSpan NextRescan;
     public TimeSpan NextFix;
+    public TimeSpan NextAudit;
+    public TimeSpan NextSchemaAt;
 }

@@ -29,6 +29,7 @@
       layers:
         - state: green
     - type: XenoClutch
+      schemaEnabled: false
       opening:
         - { proto: MobXeno, delay: 120, class: 1, maturation: 120 }
         - { proto: MobXenoDrone, delay: 120, class: 1, maturation: 120 }
@@ -47,3 +48,26 @@
         - { proto: MobXenoRunner, delay: 180, class: 2, maturation: 240 }
         - { proto: MobXenoRunner, delay: 180, class: 2, maturation: 240 }
         - { proto: MobXenoRavager, delay: 240, class: 3, maturation: 240, maturationMax: 360 }
+
+- type: entity
+  parent: XenoClutch
+  id: XenoClutchAssault
+  name: xeno clutch assault
+  components:
+    - type: XenoClutch
+      burrowerProto: MobXeno
+      initialBurrowers: 8
+      initialBurrowerSpacing: 3
+      spawnDelayScale: 0.4
+      headStart: 600
+      headStartBuildScale: 0.5
+      buildInterval: 2
+      reinforcedBuildInterval: 3.5
+      maxRadius: 118
+      schemaEnabled: true
+      schemaInterval: 300
+      schemaFirstDelay: 60
+      schemaMaxSectors: 4
+      schemaMaxEntries: 260
+      schemaFrontSector: 2
+      schemaFrontThreat: 1.2

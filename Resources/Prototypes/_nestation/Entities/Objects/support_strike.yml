@@ -1,0 +1,92 @@
+# Nestation New City CC BY-NC 3.0
+- type: entity
+  parent: BaseItem
+  id: SupportTablet
+  name: support tablet
+  description: A targeting tablet that launches a rocket at a thrown support flare.
+  components:
+  - type: Sprite
+    sprite: _nestation/Objects/Devices/support_tablet.rsi
+    layers:
+    - state: icon
+  - type: Item
+    size: Small
+  - type: SupportTablet
+    cooldown: 90
+    rocketProto: SupportRocket
+  - type: ActivatableUI
+    inHandsOnly: true
+    singleUser: true
+    key: enum.SupportTabletUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.SupportTabletUiKey.Key:
+        type: SupportTabletBoundUserInterface
+
+- type: entity
+  parent: Flare
+  id: SupportFlare
+  name: support flare
+  description: A signal flare for the support tablet. Throw it where the rocket should land.
+  components:
+  - type: SupportFlare
+  - type: Sprite
+    sprite: Objects/Misc/flare.rsi
+    layers:
+      - map: [ enum.ExpendableLightVisualLayers.Base ]
+        state: flare_base
+      - map: [ enum.ExpendableLightVisualLayers.Glow ]
+        state: flare_burn
+        color: "#FFFFFF"
+        visible: false
+        shader: unshaded
+      - map: [ enum.ExpendableLightVisualLayers.Overlay ]
+        state: flare_unlit
+        color: "#22C55E"
+  - type: PointLight
+    color: "#80FF80"
+
+- type: entity
+  id: SupportRocket
+  name: support rocket
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _nestation/Objects/Misc/support_rocket.rsi
+    drawdepth: Overlays
+    noRot: true
+    layers:
+    - state: rocket
+  - type: PointLight
+    radius: 8
+    energy: 3
+    color: "#FF9A3C"
+  - type: Physics
+    bodyType: Dynamic
+    linearDamping: 0
+    angularDamping: 0
+  - type: Fixtures
+    fixtures:
+      rocket:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.1,0.1,0.1"
+        hard: false
+        mask: []
+        layer: []
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 2000
+    intensitySlope: 4
+    maxIntensity: 100
+  - type: SupportRocket
+    flightTime: 2.6
+    spawnHeight: 28
+    concussionRange: 30
+    concussionMaxSeconds: 25
+    concussionMinSeconds: 3
+    flightSound:
+      path: /Audio/Weapons/Guns/Gunshots/rocket1.ogg
+      params:
+        volume: 4
+        maxDistance: 60

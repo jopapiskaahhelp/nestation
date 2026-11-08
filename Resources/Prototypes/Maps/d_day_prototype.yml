@@ -1,0 +1,19 @@
+- type: gameMap
+  id: DDay
+  mapName: 'D Day'
+  mapPath: /Maps/d_day.yml
+  minPlayers: 0
+  stations:
+    DDay:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'D Day'
+        - type: StationJobs
+          availableJobs:
+            MarineCommander: [ 1, 1 ]
+            MarineOfficer: [ 1, 1 ]
+            MarineGunner: [ 2, 2 ]
+            MarineMedic: [ 2, 2 ]
+            MarineLogistician: [ 2, 2 ]
+            MarinePrivate: [ -1, -1 ]

@@ -3,6 +3,8 @@ light_mode unshaded;
 
 uniform sampler2D uHeat;
 uniform sampler2D uBirth;
+uniform sampler2D uBurn;
+uniform highp float uLinger;
 uniform highp vec2 uSize;
 uniform highp vec2 uEpi;
 uniform highp float uNow;
@@ -42,11 +44,11 @@ highp float xFbm(highp vec2 p) {
     return v;
 }
 
-highp vec3 xTexel(highp vec2 uv) {
-    return vec3(texture2D(TEXTURE, uv).a, texture2D(uHeat, uv).a, texture2D(uBirth, uv).a);
+highp vec4 xTexel(highp vec2 uv) {
+    return vec4(texture2D(TEXTURE, uv).a, texture2D(uHeat, uv).a, texture2D(uBirth, uv).a, texture2D(uBurn, uv).a);
 }
 
-highp vec3 xField(highp vec2 p) {
+highp vec4 xField(highp vec2 p) {
     highp vec2 q = p - 0.5;
     highp vec2 i = floor(q);
     highp vec2 f = fract(q);
@@ -54,8 +56,8 @@ highp vec3 xField(highp vec2 p) {
     highp vec2 uv = (i + 0.5) * inv;
     highp vec2 dx = vec2(inv.x, 0.0);
     highp vec2 dy = vec2(0.0, inv.y);
-    highp vec3 a = mix(xTexel(uv), xTexel(uv + dx), f.x);
-    highp vec3 b = mix(xTexel(uv + dy), xTexel(uv + dx + dy), f.x);
+    highp vec4 a = mix(xTexel(uv), xTexel(uv + dx), f.x);
+    highp vec4 b = mix(xTexel(uv + dy), xTexel(uv + dx + dy), f.x);
     return mix(a, b, f.y);
 }
 
@@ -95,7 +97,7 @@ void fragment() {
     highp vec2 warp = (vec2(w1, w2) - 0.5) * 2.4;
     highp vec2 q = p + warp - dir * (min(t, 3.0) * 0.45);
 
-    highp vec3 f = xField(q);
+    highp vec4 f = xField(q);
     highp float cov = f.x;
     if (cov < 0.02) {
         discard;
@@ -141,10 +143,34 @@ void fragment() {
     smokeC += fireC * (clamp(temp, 0.0, 1.0) * 0.35);
 
     highp float outA = fireA + smokeA * (1.0 - fireA);
+    highp vec3 outP = fireC * fireA + smokeC * smokeA * (1.0 - fireA);
+
+    highp float linger = uLinger * (0.6 + 0.8 * xNoise(p * 0.5 + vec2(uSeed * 11.0, 3.0)));
+    highp float la = clamp((age - life * 0.3) / linger, 0.0, 1.0);
+    highp float lin = smoothstep(0.0, 0.12, la) * step(0.0001, age - life * 0.3);
+
+    highp vec2 fp = vec2(p.x * 2.3 + uSeed * 9.0, p.y * 1.5 - t * 2.6);
+    highp float tg1 = xFbm(fp);
+    highp float tg2 = xFbm(fp * 2.1 + vec2(3.3, t * 1.7));
+    highp float lift = (0.4 + 0.8 * tg1) * 0.9 * (1.0 - 0.6 * la);
+    highp vec4 fb = xField(vec2(p.x + (tg2 - 0.5) * 0.9, p.y - lift));
+
+    highp float coalN = xFbm(p * 1.6 + vec2(uSeed * 5.0, t * 0.15));
+    highp float coalA = f.w * (0.3 + 0.7 * coalN) * (1.0 - smoothstep(0.7, 1.0, la)) * lin * 0.6;
+    highp vec3 coalC = xRamp(0.1 + 0.28 * coalN * (1.0 - la));
+    outP = coalC * coalA + outP * (1.0 - coalA);
+    outA = coalA + outA * (1.0 - coalA);
+
+    highp float flame = fb.w * (0.5 + 0.8 * tg1) - 0.25 - la * la * 0.55;
+    highp float flameA = smoothstep(0.04, 0.45, flame) * 0.95 * lin;
+    highp float flameT = clamp(flame * (0.75 + 0.5 * tg2) * 1.5, 0.0, 1.2) * (1.0 - 0.35 * la);
+    highp vec3 flameC = xRamp(flameT);
+    outP = flameC * flameA + outP * (1.0 - flameA);
+    outA = flameA + outA * (1.0 - flameA);
+
     if (outA < 0.004) {
         discard;
     }
 
-    highp vec3 outC = (fireC * fireA + smokeC * smokeA * (1.0 - fireA)) / outA;
-    COLOR = vec4(pow(clamp(outC, 0.0, 1.0), vec3(2.2)), outA);
+    COLOR = vec4(pow(clamp(outP / outA, 0.0, 1.0), vec3(2.2)), outA);
 }

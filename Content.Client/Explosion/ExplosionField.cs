@@ -16,10 +16,12 @@ public sealed class ExplosionField
     public readonly OwnedTexture Presence;
     public readonly OwnedTexture Heat;
     public readonly OwnedTexture Birth;
+    public readonly OwnedTexture Burn;
 
     public readonly Rgba32[] PresenceData;
     public readonly Rgba32[] HeatData;
     public readonly Rgba32[] BirthData;
+    public readonly Rgba32[] BurnData;
 
     public readonly ShaderInstance Shader;
 
@@ -36,7 +38,7 @@ public sealed class ExplosionField
         Origin = origin;
         Size = size;
         EpicenterTiles = epicenterTiles;
-        Epicenter = new Vector2(epicenterTiles.X - origin.X, size.Y - (epicenterTiles.Y - origin.Y));
+        Epicenter = new Vector2(epicenterTiles.X - origin.X, epicenterTiles.Y - origin.Y);
         Speed = speed;
         Shader = shader;
 
@@ -44,10 +46,12 @@ public sealed class ExplosionField
         PresenceData = new Rgba32[count];
         HeatData = new Rgba32[count];
         BirthData = new Rgba32[count];
+        BurnData = new Rgba32[count];
 
         Presence = clyde.CreateBlankTexture<Rgba32>(size);
         Heat = clyde.CreateBlankTexture<Rgba32>(size);
         Birth = clyde.CreateBlankTexture<Rgba32>(size);
+        Burn = clyde.CreateBlankTexture<Rgba32>(size);
 
         Upload();
     }
@@ -64,6 +68,7 @@ public sealed class ExplosionField
         Presence.SetSubImage(Vector2i.Zero, Size, new ReadOnlySpan<Rgba32>(PresenceData));
         Heat.SetSubImage(Vector2i.Zero, Size, new ReadOnlySpan<Rgba32>(HeatData));
         Birth.SetSubImage(Vector2i.Zero, Size, new ReadOnlySpan<Rgba32>(BirthData));
+        Burn.SetSubImage(Vector2i.Zero, Size, new ReadOnlySpan<Rgba32>(BurnData));
     }
 
     public void Dispose()
@@ -71,5 +76,6 @@ public sealed class ExplosionField
         (Presence as IDisposable)?.Dispose();
         (Heat as IDisposable)?.Dispose();
         (Birth as IDisposable)?.Dispose();
+        (Burn as IDisposable)?.Dispose();
     }
 }

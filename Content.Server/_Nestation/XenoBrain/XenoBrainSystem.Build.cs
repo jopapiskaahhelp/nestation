@@ -15,10 +15,18 @@ public sealed partial class XenoBrainSystem
     private void DecideBurrower(Ctx c, Entity<XenoClutchComponent> hive, XenoMazePlan plan)
     {
         var x = c.X;
+        var b = x.Brain;
         var now = c.Now;
 
-        if (TryProvoke(x, now))
+        if (now >= b.RepairUntil && TryProvoke(x, now))
             return;
+
+        if (now < b.RepairUntil)
+        {
+            SetMode(x, XenoMode.Heal, now);
+            ThinkRepair(c);
+            return;
+        }
 
         SetMode(x, XenoMode.Build, now);
         ThinkBuild(x, hive, plan, now);
@@ -55,6 +63,9 @@ public sealed partial class XenoBrainSystem
                     victim = p;
                 }
             }
+
+            if (!b.ProvokeOnSight)
+                return false;
 
             if (victim == null || nearDist > b.ProvokeRange || now < b.NextProvokeAt)
                 return false;
@@ -131,6 +142,7 @@ public sealed partial class XenoBrainSystem
                 _hive.Skip(plan, current, now, 90f);
                 b.BuildEntry = null;
                 b.BuildStand = null;
+                b.PathActive = false;
             }
         }
 
@@ -141,31 +153,66 @@ public sealed partial class XenoBrainSystem
             {
                 b.BuildEntry = entry;
                 b.BuildSince = now;
-                SetStand(b, plan, stand);
+                b.BuildIdlePicks = 0;
+                b.PathReplans = 0;
+                SetWalk(x, plan, stand, now);
             }
             else
             {
-                if (entry != null)
-                    _hive.Skip(plan, entry, now, 90f);
-                else if (_hive.AnyPending(plan))
-                    hive.Comp.NextFix = TimeSpan.Zero;
+                var delay = 2.0;
 
-                b.NextPickAt = now + TimeSpan.FromSeconds(2);
+                if (entry != null)
+                {
+                    _hive.Skip(plan, entry, now, 90f);
+                }
+                else
+                {
+                    b.BuildIdlePicks++;
+
+                    if (_hive.AnyGap(plan))
+                    {
+                        if (b.BuildIdlePicks >= 15)
+                        {
+                            hive.Comp.NextFix = TimeSpan.Zero;
+                            _hive.ParkUnreachable(plan, x.Pos, now);
+                            b.BuildIdlePicks = 0;
+                        }
+                    }
+                    else if (_hive.HasMendWork(hive, plan, now))
+                    {
+                        StartRepair(x, now, false, x.Pos, false);
+                        return;
+                    }
+                    else if (_hive.TryExpand(hive, plan))
+                    {
+                        b.BuildIdlePicks = 0;
+                        delay = 0.2;
+                    }
+                    else
+                    {
+                        StartRepair(x, now, false, x.Pos, true);
+                        return;
+                    }
+                }
+
+                b.NextPickAt = now + TimeSpan.FromSeconds(delay);
             }
         }
 
         if (b.BuildEntry == null)
         {
-            if ((b.BuildStand == null || now >= b.IdlePickAt) && _hive.TryRandomOpen(plan, x.Pos, out var idle))
+            if ((b.BuildStand == null || now >= b.IdlePickAt) && _hive.TryRandomReachable(plan, x.Pos, 40, out var idle))
             {
-                SetStand(b, plan, idle);
+                SetWalk(x, plan, idle, now);
                 b.IdlePickAt = now + TimeSpan.FromSeconds(12);
             }
 
+            StepWalk(x, plan, now);
             b.GoalPos = b.BuildStand != null ? b.BuildStandPos : (Vector2?) null;
             return;
         }
 
+        StepWalk(x, plan, now);
         b.GoalPos = b.BuildStandPos;
 
         var entryPos = _hive.EntryWorld(plan, b.BuildEntry.Offset);
@@ -176,9 +223,9 @@ public sealed partial class XenoBrainSystem
         switch (_hive.Place(hive, plan, done, now))
         {
             case XenoPlaceResult.Placed:
-                b.NextBuildAt = now + (done.Kind == XenoPlanKind.Reinforced
+                b.NextBuildAt = now + _hive.BuildDelay(hive.Comp, done.Kind == XenoPlanKind.Reinforced
                     ? hive.Comp.ReinforcedBuildInterval
-                    : hive.Comp.BuildInterval);
+                    : hive.Comp.BuildInterval, now);
                 b.BuildEntry = null;
                 b.BuildStand = null;
                 break;
@@ -187,6 +234,87 @@ public sealed partial class XenoBrainSystem
                 b.BuildStand = null;
                 break;
         }
+    }
+
+    private void SetWalk(XenoInfo x, XenoMazePlan plan, Vector2i goal, TimeSpan now)
+    {
+        var b = x.Brain;
+        b.PathGoal = goal;
+        b.PathGoalPos = _hive.EntryWorld(plan, goal);
+        b.PathActive = true;
+        b.PathIndex = 0;
+        b.NextReplanAt = now + TimeSpan.FromSeconds(1);
+
+        if (!_hive.TryWalkPath(plan, x.Pos, goal, b.Path))
+            b.Path.Clear();
+
+        ApplyWaypoint(x, plan, now);
+    }
+
+    private void StepWalk(XenoInfo x, XenoMazePlan plan, TimeSpan now)
+    {
+        var b = x.Brain;
+        if (!b.PathActive)
+            return;
+
+        if (b.BuildStand == null)
+        {
+            b.PathActive = false;
+            return;
+        }
+
+        ApplyWaypoint(x, plan, now);
+    }
+
+    private void ApplyWaypoint(XenoInfo x, XenoMazePlan plan, TimeSpan now)
+    {
+        var b = x.Brain;
+
+        if (b.Path.Count == 0)
+        {
+            SetStand(b, plan, b.PathGoal);
+            return;
+        }
+
+        var best = b.PathIndex;
+        var bestDist = float.MaxValue;
+        var window = Math.Min(b.Path.Count - 1, b.PathIndex + 10);
+        for (var i = b.PathIndex; i <= window; i++)
+        {
+            var d = (_hive.EntryWorld(plan, b.Path[i]) - x.Pos).LengthSquared();
+            if (d < bestDist)
+            {
+                bestDist = d;
+                best = i;
+            }
+        }
+
+        if (bestDist > 36f && now >= b.NextReplanAt)
+        {
+            SetWalk(x, plan, b.PathGoal, now);
+            return;
+        }
+
+        if (best > b.PathIndex)
+        {
+            b.BuildSince = now;
+            b.PathReplans = 0;
+        }
+
+        b.PathIndex = best;
+
+        var last = b.Path.Count - 1;
+        var pick = Math.Min(last, best + 1);
+        for (var i = Math.Min(last, best + 14); i > pick; i--)
+        {
+            if (!_hive.WalkClear(plan, x.Pos, _hive.EntryWorld(plan, b.Path[i])))
+                continue;
+
+            pick = i;
+            break;
+        }
+
+        SetStand(b, plan, b.Path[pick]);
     }
 
     private void SetStand(XenoBrainComponent b, XenoMazePlan plan, Vector2i tile)
@@ -198,11 +326,29 @@ public sealed partial class XenoBrainSystem
     private void OnBuildStuck(XenoInfo x, TimeSpan now)
     {
         var b = x.Brain;
-        if (b.BuildEntry is { } entry && _hive.TryGetHive(x.Map, out var hive) && hive.Comp.Plan is { } plan)
-            _hive.Skip(plan, entry, now, 60f);
+        if (b.Mode == XenoMode.Heal && b.RepairFleeing)
+        {
+            b.RepairFleeing = false;
+        }
+        else if (b.BuildEntry is { } entry && _hive.TryGetHive(x.Map, out var hive) && hive.Comp.Plan is { } plan)
+        {
+            if (b.PathActive && b.PathReplans < 3)
+            {
+                b.PathReplans++;
+                SetWalk(x, plan, b.PathGoal, now);
+                return;
+            }
+
+            if (b.Mode == XenoMode.Heal && b.RepairKind != XenoRepairKind.Rebuild)
+                _hive.Defer(plan, entry, now, 60f);
+            else
+                _hive.Skip(plan, entry, now, 60f);
+        }
 
         b.BuildEntry = null;
         b.BuildStand = null;
+        b.PathActive = false;
+        b.Path.Clear();
         b.IdlePickAt = TimeSpan.Zero;
     }
 

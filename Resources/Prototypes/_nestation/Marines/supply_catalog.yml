@@ -1,0 +1,315 @@
+# Nestation New City CC BY-NC 3.0
+- type: marineSupply
+  id: MarineSupplyPistol
+  name: Пистолет Mk58
+  category: weapons
+  price: 120
+  entities:
+  - WeaponPistolMk58
+
+- type: marineSupply
+  id: MarineSupplySmgDrozd
+  name: ПП Дрозд
+  category: weapons
+  price: 260
+  entities:
+  - WeaponSubMachineGunDrozd
+
+- type: marineSupply
+  id: MarineSupplySmgWt550
+  name: ПП WT-550
+  category: weapons
+  price: 280
+  entities:
+  - WeaponSubMachineGunWt550
+
+- type: marineSupply
+  id: MarineSupplyRifleAk
+  name: Автомат АК
+  category: weapons
+  price: 340
+  entities:
+  - WeaponRifleAk
+
+- type: marineSupply
+  id: MarineSupplyRifleLecter
+  name: Винтовка Lecter
+  category: weapons
+  price: 380
+  entities:
+  - WeaponRifleLecter
+
+- type: marineSupply
+  id: MarineSupplyShotgunBulldog
+  name: Дробовик Bulldog
+  category: weapons
+  price: 420
+  entities:
+  - WeaponShotgunBulldog
+
+- type: marineSupply
+  id: MarineSupplySniperHristov
+  name: Снайперская винтовка Христов
+  category: weapons
+  price: 650
+  entities:
+  - WeaponSniperHristov
+
+- type: marineSupply
+  id: MarineSupplyLauncherRocket
+  name: Ракетомёт
+  category: weapons
+  price: 900
+  entities:
+  - WeaponLauncherRocket
+
+- type: marineSupply
+  id: MarineSupplyAmmoPistol
+  name: Магазины к Mk58 (x3)
+  category: ammo
+  price: 45
+  entities:
+  - MagazinePistol
+  - MagazinePistol
+  - MagazinePistol
+
+- type: marineSupply
+  id: MarineSupplyAmmoSmgDrozd
+  name: Магазины к Дрозду (x3)
+  category: ammo
+  price: 75
+  entities:
+  - MagazinePistolSubMachineGun
+  - MagazinePistolSubMachineGun
+  - MagazinePistolSubMachineGun
+
+- type: marineSupply
+  id: MarineSupplyAmmoSmgWt550
+  name: Магазины к WT-550 (x3)
+  category: ammo
+  price: 75
+  entities:
+  - MagazinePistolSubMachineGunTopMounted
+  - MagazinePistolSubMachineGunTopMounted
+  - MagazinePistolSubMachineGunTopMounted
+
+- type: marineSupply
+  id: MarineSupplyAmmoRifleAk
+  name: Магазины к АК (x3)
+  category: ammo
+  price: 90
+  entities:
+  - MagazineLightRifle
+  - MagazineLightRifle
+  - MagazineLightRifle
+
+- type: marineSupply
+  id: MarineSupplyAmmoRifleLecter
+  name: Магазины к Lecter (x3)
+  category: ammo
+  price: 90
+  entities:
+  - MagazineRifle
+  - MagazineRifle
+  - MagazineRifle
+
+- type: marineSupply
+  id: MarineSupplyAmmoShotgun
+  name: Магазины к Bulldog (x2)
+  category: ammo
+  price: 70
+  entities:
+  - MagazineShotgun
+  - MagazineShotgun
+
+- type: marineSupply
+  id: MarineSupplyAmmoSniper
+  name: Патроны Христов (x5)
+  category: ammo
+  price: 150
+  entities:
+  - CartridgeAntiMateriel
+  - CartridgeAntiMateriel
+  - CartridgeAntiMateriel
+  - CartridgeAntiMateriel
+  - CartridgeAntiMateriel
+
+- type: marineSupply
+  id: MarineSupplyAmmoRocket
+  name: Ракеты (x2)
+  category: ammo
+  price: 300
+  entities:
+  - CartridgeRocket
+  - CartridgeRocket
+
+- type: marineSupply
+  id: MarineSupplyGrenadeFlash
+  name: Светошумовые гранаты (x2)
+  category: grenades
+  price: 70
+  entities:
+  - GrenadeFlashBang
+  - GrenadeFlashBang
+
+- type: marineSupply
+  id: MarineSupplyGrenadeIncendiary
+  name: Зажигательные гранаты (x2)
+  category: grenades
+  price: 110
+  entities:
+  - GrenadeIncendiary
+  - GrenadeIncendiary
+
+- type: marineSupply
+  id: MarineSupplyGrenadeExplosive
+  name: Разрывные гранаты (x2)
+  category: grenades
+  price: 160
+  entities:
+  - ExGrenade
+  - ExGrenade
+
+- type: marineSupply
+  id: MarineSupplyHelmetBasic
+  name: Шлем
+  category: armor
+  price: 60
+  entities:
+  - ClothingHeadHelmetBasic
+
+- type: marineSupply
+  id: MarineSupplyWebbing
+  name: Разгрузочный пояс
+  category: armor
+  price: 40
+  entities:
+  - ClothingBeltMilitaryWebbing
+
+- type: marineSupply
+  id: MarineSupplyArmorBasic
+  name: Бронежилет
+  category: armor
+  price: 100
+  entities:
+  - ClothingOuterArmorBasic
+
+- type: marineSupply
+  id: MarineSupplyHelmetSwat
+  name: Шлем SWAT
+  category: armor
+  price: 140
+  entities:
+  - ClothingHeadHelmetSwat
+
+- type: marineSupply
+  id: MarineSupplyArmorBulletproof
+  name: Пуленепробиваемый жилет
+  category: armor
+  price: 180
+  entities:
+  - ClothingOuterArmorBulletproof
+
+- type: marineSupply
+  id: MarineSupplyArmorHeavy
+  name: Тяжёлая броня
+  category: armor
+  price: 900
+  entities:
+  - ClothingOuterArmorHeavy
+
+- type: marineSupply
+  id: MarineSupplyBrutepacks
+  name: Бинты от травм (x4)
+  category: medical
+  price: 50
+  entities:
+  - Brutepack
+  - Brutepack
+  - Brutepack
+  - Brutepack
+
+- type: marineSupply
+  id: MarineSupplyMedkitBrute
+  name: Аптечка от травм
+  category: medical
+  price: 80
+  entities:
+  - MedkitBrute
+
+- type: marineSupply
+  id: MarineSupplyMedkitBurn
+  name: Аптечка от ожогов
+  category: medical
+  price: 80
+  entities:
+  - MedkitBurn
+
+- type: marineSupply
+  id: MarineSupplyMedipens
+  name: Боевые медипены (x3)
+  category: medical
+  price: 120
+  entities:
+  - CombatMedipen
+  - CombatMedipen
+  - CombatMedipen
+
+- type: marineSupply
+  id: MarineSupplyMedkitCombat
+  name: Боевая аптечка
+  category: medical
+  price: 180
+  entities:
+  - MedkitCombat
+
+- type: marineSupply
+  id: MarineSupplyMedkitAdvanced
+  name: Продвинутая аптечка
+  category: medical
+  price: 240
+  entities:
+  - MedkitAdvanced
+
+- type: marineSupply
+  id: MarineSupplyDefibrillator
+  name: Дефибриллятор
+  category: medical
+  price: 250
+  entities:
+  - Defibrillator
+
+- type: marineSupply
+  id: MarineSupplyFlares
+  name: Сигнальные шашки (x4)
+  category: utility
+  price: 20
+  entities:
+  - Flare
+  - Flare
+  - Flare
+  - Flare
+
+- type: marineSupply
+  id: MarineSupplyCrowbar
+  name: Монтировка
+  category: utility
+  price: 30
+  entities:
+  - Crowbar
+
+- type: marineSupply
+  id: MarineSupplyKnife
+  name: Боевой нож
+  category: utility
+  price: 60
+  entities:
+  - CombatKnife
+
+- type: marineSupply
+  id: MarineSupplyRadio
+  name: Рация
+  category: utility
+  price: 60
+  entities:
+  - RadioHandheld

@@ -1,0 +1,41 @@
+
+uniform sampler2D SCREEN_TEXTURE;
+
+uniform highp float bloomStrength;
+uniform highp float bloomThreshold;
+uniform highp float bloomRadius;
+uniform highp float bloomR;
+uniform highp float bloomG;
+uniform highp float bloomB;
+
+highp float hash12(highp vec2 p) {
+    highp vec3 p3 = fract(vec3(p.x, p.y, p.x) * 0.1031);
+    p3 += dot(p3, vec3(p3.y, p3.z, p3.x) + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
+void fragment() {
+    highp vec2 uv = FRAGCOORD.xy * SCREEN_PIXEL_SIZE.xy;
+    highp vec4 base = zTextureSpec(SCREEN_TEXTURE, uv);
+
+    highp vec2 radiusUv = vec2(bloomRadius / 1080.0) * vec2(SCREEN_PIXEL_SIZE.x / SCREEN_PIXEL_SIZE.y, 1.0);
+    highp float jitter = hash12(FRAGCOORD.xy) * 6.2831853;
+
+    highp vec3 acc = vec3(0.0);
+    highp float wsum = 0.0;
+    for (int i = 0; i < 24; i++) {
+        highp float fi = float(i);
+        highp float r = sqrt((fi + 0.5) / 24.0);
+        highp float a = fi * 2.39996323 + jitter;
+        highp vec2 off = vec2(cos(a), sin(a)) * r * radiusUv;
+        highp vec3 s = zTextureSpec(SCREEN_TEXTURE, uv + off).rgb;
+        highp float w = 1.0 - r * 0.75;
+        acc += max(s - vec3(bloomThreshold), vec3(0.0)) * w;
+        wsum += w;
+    }
+    acc /= wsum;
+    acc *= bloomStrength / max(1.0 - bloomThreshold, 0.05);
+
+    highp vec3 col = base.rgb + acc * vec3(bloomR, bloomG, bloomB);
+    COLOR = vec4(col, 1.0);
+}

@@ -1,0 +1,99 @@
+# Nestation new city CC BY-NC 3.0
+- type: decal
+  id: NestationXenoToxinSplatA
+  tags: ["xenotoxin"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/xeno_toxin.rsi
+    state: splat_a
+
+- type: decal
+  id: NestationXenoToxinSplatB
+  tags: ["xenotoxin"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/xeno_toxin.rsi
+    state: splat_b
+
+- type: decal
+  id: NestationXenoToxinSplatC
+  tags: ["xenotoxin"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/xeno_toxin.rsi
+    state: splat_c
+
+- type: decal
+  id: NestationXenoToxinStreakA
+  tags: ["xenotoxin"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/xeno_toxin.rsi
+    state: streak_a
+
+- type: decal
+  id: NestationXenoToxinStreakB
+  tags: ["xenotoxin"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/xeno_toxin.rsi
+    state: streak_b
+
+- type: decal
+  id: NestationXenoToxinStreakC
+  tags: ["xenotoxin"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/xeno_toxin.rsi
+    state: streak_c
+
+- type: decal
+  id: NestationXenoToxinDotA
+  tags: ["xenotoxin"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/xeno_toxin.rsi
+    state: dot_a
+
+- type: decal
+  id: NestationXenoToxinDotB
+  tags: ["xenotoxin"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/xeno_toxin.rsi
+    state: dot_b
+
+- type: decal
+  id: NestationXenoToxinDotC
+  tags: ["xenotoxin"]
+  showMenu: false
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: _nestation/Effects/xeno_toxin.rsi
+    state: dot_c

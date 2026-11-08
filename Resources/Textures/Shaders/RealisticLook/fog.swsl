@@ -1,0 +1,67 @@
+
+uniform sampler2D SCREEN_TEXTURE;
+
+uniform highp float viewOriginX;
+uniform highp float viewOriginY;
+uniform highp float viewSizeX;
+uniform highp float viewSizeY;
+
+uniform highp float fogDensity;
+uniform highp float fogScale;
+uniform highp float fogSpeed;
+uniform highp float fogWindX;
+uniform highp float fogWindY;
+uniform highp float fogLit;
+uniform highp float fogAmbient;
+uniform highp float fogR;
+uniform highp float fogG;
+uniform highp float fogB;
+
+highp float hash12(highp vec2 p) {
+    highp vec3 p3 = fract(vec3(p.x, p.y, p.x) * 0.1031);
+    p3 += dot(p3, vec3(p3.y, p3.z, p3.x) + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
+highp float vnoise(highp vec2 p) {
+    highp vec2 i = floor(p);
+    highp vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    highp float a = hash12(i);
+    highp float b = hash12(i + vec2(1.0, 0.0));
+    highp float c = hash12(i + vec2(0.0, 1.0));
+    highp float d = hash12(i + vec2(1.0, 1.0));
+    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+
+highp float fbm(highp vec2 p) {
+    highp float v = 0.0;
+    highp float amp = 0.5;
+    for (int i = 0; i < 4; i++) {
+        v += amp * vnoise(p);
+        p = p * 2.03 + vec2(11.7, 5.3);
+        amp *= 0.5;
+    }
+    return v;
+}
+
+void fragment() {
+    highp vec2 uv = FRAGCOORD.xy * SCREEN_PIXEL_SIZE.xy;
+    highp vec4 base = zTextureSpec(SCREEN_TEXTURE, uv);
+
+    highp vec2 world = vec2(viewOriginX, viewOriginY) + uv * vec2(viewSizeX, viewSizeY);
+    highp float t = TIME * fogSpeed;
+    highp vec2 wind = vec2(fogWindX, fogWindY);
+
+    highp float n1 = fbm(world * fogScale + wind * t);
+    highp float n2 = fbm(world * fogScale * 2.1 + vec2(17.3, 4.1) - wind * t * 0.7);
+    highp float n = smoothstep(0.25, 0.8, n1 * 0.65 + n2 * 0.35);
+
+    highp float dens = clamp(fogDensity * n, 0.0, 0.95);
+
+    highp float l = dot(base.rgb, vec3(0.2126, 0.7152, 0.0722));
+    highp float lit = smoothstep(0.02, 0.6, l);
+    highp vec3 fogCol = vec3(fogR, fogG, fogB) * (fogAmbient + fogLit * lit);
+
+    COLOR = vec4(mix(base.rgb, fogCol, dens), 1.0);
+}

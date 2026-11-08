@@ -1,0 +1,23 @@
+# Nestation new city CC BY-NC 3.0
+- type: soundCollection
+  id: XenoTurretChitin
+  files:
+  - /Audio/Effects/glass_crack1.ogg
+  - /Audio/Effects/glass_crack2.ogg
+  - /Audio/Effects/glass_crack3.ogg
+  - /Audio/Effects/glass_crack4.ogg
+
+- type: soundCollection
+  id: XenoTurretWood
+  files:
+  - /Audio/Effects/wood_destroy1.ogg
+  - /Audio/Effects/wood_destroy2.ogg
+  - /Audio/Effects/wood_destroy3.ogg
+
+- type: soundCollection
+  id: XenoTurretSlime
+  files:
+  - /Audio/Effects/Footsteps/slime1.ogg
+  - /Audio/Effects/Footsteps/slime2.ogg
+  - /Audio/Effects/Footsteps/slime3.ogg
+  - /Audio/Effects/Footsteps/slime4.ogg
