@@ -8,11 +8,11 @@ using Robust.Shared.IoC;
 
 namespace Content.Client.RealisticLook;
 
-public sealed class RealisticLookSystem : EntitySystem
+public sealed partial class RealisticLookSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IConsoleHost _console = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IConsoleHost _console = default!;
 
     private RealisticFogOverlay? _fog;
     private RealisticBloomOverlay? _bloom;

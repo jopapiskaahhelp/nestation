@@ -8,7 +8,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._Nestation.Marines;
 
-public sealed class MarineSupplyWindow : DefaultWindow
+public sealed partial class MarineSupplyWindow : DefaultWindow
 {
     [Dependency] private IPrototypeManager _prototypes = default!;
 

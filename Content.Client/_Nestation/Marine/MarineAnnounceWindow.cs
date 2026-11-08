@@ -11,9 +11,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._NeStation.Marine;
 
-public sealed class MarineAnnounceWindow : DefaultWindow
+public sealed partial class MarineAnnounceWindow : DefaultWindow
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly LineEdit _input;
     private readonly Button _send;

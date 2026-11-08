@@ -6,9 +6,9 @@ using Robust.Shared.IoC;
 
 namespace Content.Client._NeStation.Marine;
 
-public sealed class MarineMapSystem : EntitySystem
+public sealed partial class MarineMapSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private MarineMapWindow? _window;
 
