@@ -1,0 +1,267 @@
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: BaseStoreFridge
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/store_fridges.rsi
+  - type: Rotatable
+    rotateWhileAnchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 75
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Damageable
+    damageModifierSet: Glass
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          ShardGlass:
+            min: 1
+            max: 2
+      - !type:ChangeConstructionNodeBehavior
+        node: broken
+
+- type: entity
+  abstract: true
+  parent: BaseStoreFridge
+  id: BaseStoreFridgeBroken
+  components:
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 80
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: BaseStoreFridge
+  id: StoreFridgeSoda
+  name: холодильник с газировкой
+  description: Витрина со стеклянной дверцей, внутри газировка и вода.
+  components:
+  - type: Sprite
+    state: fridge_soda
+  - type: Construction
+    graph: StoreFridgeSoda
+    node: fridge
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreFridgeBroken
+  id: StoreFridgeSodaBroken
+  name: разбитый холодильник с газировкой
+  description: Стекло дверцы разбито, а осколки лежат на полу.
+  components:
+  - type: Sprite
+    state: fridge_soda_broken
+  - type: Construction
+    graph: StoreFridgeSoda
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: StoreFridgeSoda
+  start: fridge
+  graph:
+  - node: fridge
+    entity: StoreFridgeSoda
+  - node: broken
+    entity: StoreFridgeSodaBroken
+    edges:
+    - to: fridge
+      steps:
+      - material: Glass
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreFridge
+  id: StoreFridgeJuice
+  name: холодильник с соками и молоком
+  description: Витрина со стеклянной дверцей, внутри соки, молоко и кофейные напитки.
+  components:
+  - type: Sprite
+    state: fridge_juice
+  - type: Construction
+    graph: StoreFridgeJuice
+    node: fridge
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreFridgeBroken
+  id: StoreFridgeJuiceBroken
+  name: разбитый холодильник с соками и молоком
+  description: Стекло дверцы разбито, а осколки лежат на полу.
+  components:
+  - type: Sprite
+    state: fridge_juice_broken
+  - type: Construction
+    graph: StoreFridgeJuice
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: StoreFridgeJuice
+  start: fridge
+  graph:
+  - node: fridge
+    entity: StoreFridgeJuice
+  - node: broken
+    entity: StoreFridgeJuiceBroken
+    edges:
+    - to: fridge
+      steps:
+      - material: Glass
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreFridge
+  id: StoreFridgeBeer
+  name: холодильник с пивом
+  description: Витрина со стеклянной дверцей, внутри холодное пиво.
+  components:
+  - type: Sprite
+    state: fridge_beer
+  - type: Construction
+    graph: StoreFridgeBeer
+    node: fridge
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreFridgeBroken
+  id: StoreFridgeBeerBroken
+  name: разбитый холодильник с пивом
+  description: Стекло дверцы разбито, а осколки лежат на полу.
+  components:
+  - type: Sprite
+    state: fridge_beer_broken
+  - type: Construction
+    graph: StoreFridgeBeer
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: StoreFridgeBeer
+  start: fridge
+  graph:
+  - node: fridge
+    entity: StoreFridgeBeer
+  - node: broken
+    entity: StoreFridgeBeerBroken
+    edges:
+    - to: fridge
+      steps:
+      - material: Glass
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreFridge
+  id: StoreFridgeSoju
+  name: холодильник с соджу и макколи
+  description: Витрина со стеклянной дверцей, внутри соджу и рисовое вино.
+  components:
+  - type: Sprite
+    state: fridge_soju
+  - type: Construction
+    graph: StoreFridgeSoju
+    node: fridge
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreFridgeBroken
+  id: StoreFridgeSojuBroken
+  name: разбитый холодильник с соджу и макколи
+  description: Стекло дверцы разбито, а осколки лежат на полу.
+  components:
+  - type: Sprite
+    state: fridge_soju_broken
+  - type: Construction
+    graph: StoreFridgeSoju
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: StoreFridgeSoju
+  start: fridge
+  graph:
+  - node: fridge
+    entity: StoreFridgeSoju
+  - node: broken
+    entity: StoreFridgeSojuBroken
+    edges:
+    - to: fridge
+      steps:
+      - material: Glass
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreFridge
+  id: StoreFridgeWine
+  name: холодильник с вином и крепким
+  description: Витрина со стеклянной дверцей, внутри вино и крепкие напитки.
+  components:
+  - type: Sprite
+    state: fridge_wine
+  - type: Construction
+    graph: StoreFridgeWine
+    node: fridge
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreFridgeBroken
+  id: StoreFridgeWineBroken
+  name: разбитый холодильник с вином и крепким
+  description: Стекло дверцы разбито, а осколки лежат на полу.
+  components:
+  - type: Sprite
+    state: fridge_wine_broken
+  - type: Construction
+    graph: StoreFridgeWine
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: StoreFridgeWine
+  start: fridge
+  graph:
+  - node: fridge
+    entity: StoreFridgeWine
+  - node: broken
+    entity: StoreFridgeWineBroken
+    edges:
+    - to: fridge
+      steps:
+      - material: Glass
+        amount: 1
+        doAfter: 2

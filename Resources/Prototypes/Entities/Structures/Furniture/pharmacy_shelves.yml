@@ -1,0 +1,171 @@
+- type: entity
+  parent: BaseStoreShelf
+  id: PharmacyShelfMeds
+  name: аптечный стеллаж с лекарствами
+  description: Белый металлический стеллаж с коробками лекарств.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/pharmacy_shelves.rsi
+    state: pharm_meds
+  - type: Construction
+    graph: PharmacyShelfMeds
+    node: shelf
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreShelfBroken
+  id: PharmacyShelfMedsBroken
+  name: сломанный аптечный стеллаж с лекарствами
+  description: Одна из полок выпала, а товары разбросаны.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/pharmacy_shelves.rsi
+    state: pharm_meds_broken
+  - type: Construction
+    graph: PharmacyShelfMeds
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: PharmacyShelfMeds
+  start: shelf
+  graph:
+  - node: shelf
+    entity: PharmacyShelfMeds
+  - node: broken
+    entity: PharmacyShelfMedsBroken
+    edges:
+    - to: shelf
+      steps:
+      - material: Steel
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreShelf
+  id: PharmacyShelfBottles
+  name: аптечный стеллаж с флаконами
+  description: Белый металлический стеллаж с баночками таблеток, сиропами и мазями.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/pharmacy_shelves.rsi
+    state: pharm_bottles
+  - type: Construction
+    graph: PharmacyShelfBottles
+    node: shelf
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreShelfBroken
+  id: PharmacyShelfBottlesBroken
+  name: сломанный аптечный стеллаж с флаконами
+  description: Одна из полок выпала, а товары разбросаны.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/pharmacy_shelves.rsi
+    state: pharm_bottles_broken
+  - type: Construction
+    graph: PharmacyShelfBottles
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: PharmacyShelfBottles
+  start: shelf
+  graph:
+  - node: shelf
+    entity: PharmacyShelfBottles
+  - node: broken
+    entity: PharmacyShelfBottlesBroken
+    edges:
+    - to: shelf
+      steps:
+      - material: Steel
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreShelf
+  id: PharmacyShelfFirstAid
+  name: аптечный стеллаж с перевязочными средствами
+  description: Белый металлический стеллаж с аптечками, бинтами, масками и антисептиками.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/pharmacy_shelves.rsi
+    state: pharm_firstaid
+  - type: Construction
+    graph: PharmacyShelfFirstAid
+    node: shelf
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreShelfBroken
+  id: PharmacyShelfFirstAidBroken
+  name: сломанный аптечный стеллаж с перевязочными средствами
+  description: Одна из полок выпала, а товары разбросаны.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/pharmacy_shelves.rsi
+    state: pharm_firstaid_broken
+  - type: Construction
+    graph: PharmacyShelfFirstAid
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: PharmacyShelfFirstAid
+  start: shelf
+  graph:
+  - node: shelf
+    entity: PharmacyShelfFirstAid
+  - node: broken
+    entity: PharmacyShelfFirstAidBroken
+    edges:
+    - to: shelf
+      steps:
+      - material: Steel
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreShelf
+  id: PharmacyShelfVitamins
+  name: аптечный стеллаж с витаминами
+  description: Белый металлический стеллаж с витаминами и тонизирующими напитками.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/pharmacy_shelves.rsi
+    state: pharm_vitamins
+  - type: Construction
+    graph: PharmacyShelfVitamins
+    node: shelf
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreShelfBroken
+  id: PharmacyShelfVitaminsBroken
+  name: сломанный аптечный стеллаж с витаминами
+  description: Одна из полок выпала, а товары разбросаны.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/pharmacy_shelves.rsi
+    state: pharm_vitamins_broken
+  - type: Construction
+    graph: PharmacyShelfVitamins
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: PharmacyShelfVitamins
+  start: shelf
+  graph:
+  - node: shelf
+    entity: PharmacyShelfVitamins
+  - node: broken
+    entity: PharmacyShelfVitaminsBroken
+    edges:
+    - to: shelf
+      steps:
+      - material: Steel
+        amount: 1
+        doAfter: 2

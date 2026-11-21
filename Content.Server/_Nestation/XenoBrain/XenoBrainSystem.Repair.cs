@@ -251,6 +251,7 @@ public sealed partial class XenoBrainSystem
                 && _hive.TryPickStand(plan, entry, x.Pos, out var stand))
             {
                 b.BuildEntry = entry;
+                b.BuildEntryPos = _hive.EntryWorld(plan, entry.Offset);
                 b.RepairKind = kind;
                 b.BuildSince = now;
                 b.RepairIdlePicks = 0;

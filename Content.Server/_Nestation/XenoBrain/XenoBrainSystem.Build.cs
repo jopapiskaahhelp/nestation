@@ -152,6 +152,7 @@ public sealed partial class XenoBrainSystem
             if (entry != null && _hive.TryPickStand(plan, entry, x.Pos, out var stand))
             {
                 b.BuildEntry = entry;
+                b.BuildEntryPos = _hive.EntryWorld(plan, entry.Offset);
                 b.BuildSince = now;
                 b.BuildIdlePicks = 0;
                 b.PathReplans = 0;
@@ -295,6 +296,22 @@ public sealed partial class XenoBrainSystem
             return;
         }
 
+        var look = Math.Min(b.Path.Count - 1, best + 10);
+        for (var i = best + 1; i <= look; i++)
+        {
+            if (_hive.IsPassable(plan, b.Path[i]))
+                continue;
+
+            if (now >= b.NextReplanAt)
+            {
+                SetWalk(x, plan, b.PathGoal, now);
+                return;
+            }
+
+            look = i - 1;
+            break;
+        }
+
         if (best > b.PathIndex)
         {
             b.BuildSince = now;
@@ -302,19 +319,7 @@ public sealed partial class XenoBrainSystem
         }
 
         b.PathIndex = best;
-
-        var last = b.Path.Count - 1;
-        var pick = Math.Min(last, best + 1);
-        for (var i = Math.Min(last, best + 14); i > pick; i--)
-        {
-            if (!_hive.WalkClear(plan, x.Pos, _hive.EntryWorld(plan, b.Path[i])))
-                continue;
-
-            pick = i;
-            break;
-        }
-
-        SetStand(b, plan, b.Path[pick]);
+        SetStand(b, plan, b.Path[look]);
     }
 
     private void SetStand(XenoBrainComponent b, XenoMazePlan plan, Vector2i tile)

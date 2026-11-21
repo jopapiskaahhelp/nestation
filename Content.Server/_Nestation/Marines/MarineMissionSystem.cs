@@ -35,9 +35,16 @@ public sealed partial class MarineMissionSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<MarineSpawnZoneComponent, SignalReceivedEvent>(OnZoneSignal);
+        SubscribeLocalEvent<MarineSpawnZoneComponent, MapInitEvent>(OnZoneInit);
         SubscribeLocalEvent<MarineGateComponent, MapInitEvent>(OnGateInit);
         SubscribeLocalEvent<MarineMissionConsoleComponent, MarineMissionStartMessage>(OnStart);
         SubscribeLocalEvent<MarineMissionConsoleComponent, BoundUIOpenedEvent>(OnUiOpened);
+    }
+
+    private void OnZoneInit(Entity<MarineSpawnZoneComponent> ent, ref MapInitEvent args)
+    {
+        if (ent.Comp.SpawnOnInit)
+            TriggerZone(ent);
     }
 
     private void OnZoneSignal(Entity<MarineSpawnZoneComponent> ent, ref SignalReceivedEvent args)
@@ -127,6 +134,19 @@ public sealed partial class MarineMissionSystem : EntitySystem
                 if (SegmentAt(gate, coords) is { } segment)
                     OpenDoor(segment);
             }
+        }
+
+        var defenders = new List<Entity<MarineSpawnZoneComponent>>();
+        var zoneQuery = EntityQueryEnumerator<MarineSpawnZoneComponent>();
+        while (zoneQuery.MoveNext(out var zoneUid, out var zone))
+        {
+            if (zone.MissionId == ent.Comp.MissionId && zone.Group == ent.Comp.DefenderGroup)
+                defenders.Add((zoneUid, zone));
+        }
+
+        foreach (var defenderZone in defenders)
+        {
+            TriggerZone(defenderZone);
         }
 
         UpdateUi(ent);

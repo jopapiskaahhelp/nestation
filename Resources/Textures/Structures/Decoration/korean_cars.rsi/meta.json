@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-SA-3.0",
+  "copyright": "Made for Nestation New City",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "sedan",
+      "directions": 4
+    },
+    {
+      "name": "minivan",
+      "directions": 4
+    },
+    {
+      "name": "porter",
+      "directions": 4
+    },
+    {
+      "name": "compact",
+      "directions": 4
+    }
+  ]
+}

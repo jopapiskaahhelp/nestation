@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "license": "Nestation CC BY-NC 3.0",
+  "copyright": "Nestation",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "cooling0"
+    },
+    {
+      "name": "cooling1"
+    },
+    {
+      "name": "cooling2"
+    },
+    {
+      "name": "cooling3"
+    },
+    {
+      "name": "cooling4"
+    },
+    {
+      "name": "cooling5"
+    },
+    {
+      "name": "cooling6"
+    },
+    {
+      "name": "cooling7"
+    },
+    {
+      "name": "cooling8"
+    },
+    {
+      "name": "cooling9"
+    },
+    {
+      "name": "cooling10"
+    },
+    {
+      "name": "cooling11"
+    },
+    {
+      "name": "cooling12"
+    },
+    {
+      "name": "cooling13"
+    },
+    {
+      "name": "cooling14"
+    },
+    {
+      "name": "cooling15"
+    }
+  ]
+}

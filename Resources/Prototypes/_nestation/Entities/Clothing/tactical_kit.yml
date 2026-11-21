@@ -1,0 +1,33 @@
+# Nestation New City CC BY-NC 3.0
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterJacketPcuLevel5
+  name: PCU Level 5 tactical jacket
+  description: A gray softshell tactical jacket with zippered chest pockets.
+  components:
+  - type: Sprite
+    sprite: Clothing/OuterClothing/Coats/pcu_level5_jacket.rsi
+  - type: Clothing
+    sprite: Clothing/OuterClothing/Coats/pcu_level5_jacket.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatWatchCapDarkGreen
+  name: dark green watch cap
+  description: A plain knitted watch cap in dark green.
+  components:
+  - type: Sprite
+    sprite: Clothing/Head/Hats/dark_green_watch_cap.rsi
+  - type: Clothing
+    sprite: Clothing/Head/Hats/dark_green_watch_cap.rsi
+
+- type: entity
+  parent: ClothingOuterVestWebMerc
+  id: ClothingOuterVestWebMercCoyote
+  name: mercenary web vest (Coyote Brown)
+  description: A high-quality armored vest in Coyote Brown. It offers the same protection as the standard mercenary web vest.
+  components:
+  - type: Sprite
+    sprite: Clothing/OuterClothing/Vests/mercwebvest_coyote.rsi
+  - type: Clothing
+    sprite: Clothing/OuterClothing/Vests/mercwebvest_coyote.rsi

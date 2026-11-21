@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "license": "Nestation CC BY-NC 3.0",
+  "copyright": "Nestation",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "control0"
+    },
+    {
+      "name": "control1"
+    },
+    {
+      "name": "control2"
+    },
+    {
+      "name": "control3"
+    },
+    {
+      "name": "control4"
+    },
+    {
+      "name": "control5"
+    },
+    {
+      "name": "control6"
+    },
+    {
+      "name": "control7"
+    },
+    {
+      "name": "control8"
+    },
+    {
+      "name": "control9"
+    },
+    {
+      "name": "control10"
+    },
+    {
+      "name": "control11"
+    },
+    {
+      "name": "control12"
+    },
+    {
+      "name": "control13"
+    },
+    {
+      "name": "control14"
+    },
+    {
+      "name": "control15"
+    }
+  ]
+}

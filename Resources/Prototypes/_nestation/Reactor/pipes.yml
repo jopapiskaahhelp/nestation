@@ -1,0 +1,77 @@
+# Nestation CC BY-NC 3.0
+- type: entity
+  parent: BaseNestationPipe
+  id: NestationPipeCoolant
+  components:
+  - type: NestationPipe
+    medium: Coolant
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _nestation/Reactor/pipe_coolant.rsi
+    state: coolant0
+  - type: IconSmooth
+    key: nestation_coolant
+    base: coolant
+    mode: CardinalFlags
+
+- type: entity
+  parent: BaseNestationPipe
+  id: NestationPipeSteam
+  components:
+  - type: NestationPipe
+    medium: Steam
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _nestation/Reactor/pipe_steam.rsi
+    state: steam0
+  - type: IconSmooth
+    key: nestation_steam
+    base: steam
+    mode: CardinalFlags
+
+- type: entity
+  parent: BaseNestationPipe
+  id: NestationPipeFeed
+  components:
+  - type: NestationPipe
+    medium: Feed
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _nestation/Reactor/pipe_feed.rsi
+    state: feed0
+  - type: IconSmooth
+    key: nestation_feed
+    base: feed
+    mode: CardinalFlags
+
+- type: entity
+  parent: BaseNestationPipe
+  id: NestationPipeCooling
+  components:
+  - type: NestationPipe
+    medium: Cooling
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _nestation/Reactor/pipe_cooling.rsi
+    state: cooling0
+  - type: IconSmooth
+    key: nestation_cooling
+    additionalKeys:
+    - nestation_pool
+    base: cooling
+    mode: CardinalFlags
+
+- type: entity
+  parent: BaseNestationPipe
+  id: NestationPipeControl
+  components:
+  - type: NestationPipe
+    medium: Control
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _nestation/Reactor/pipe_control.rsi
+    state: control0
+  - type: IconSmooth
+    key: nestation_control
+    base: control
+    mode: CardinalFlags

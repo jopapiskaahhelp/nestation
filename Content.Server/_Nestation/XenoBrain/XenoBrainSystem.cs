@@ -1095,6 +1095,9 @@ public sealed partial class XenoBrainSystem : EntitySystem
             case XenoMode.Weave:
             case XenoMode.Lure:
             case XenoMode.Unstick:
+                if (b.BuildEntry != null && (b.BuildEntryPos - x.Pos).Length() <= b.BuildReach)
+                    return false;
+
                 if (b.PathActive && b.BuildStand != null)
                     return (b.PathGoalPos - x.Pos).Length() > 1f;
 

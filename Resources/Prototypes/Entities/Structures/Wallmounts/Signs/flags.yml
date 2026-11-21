@@ -71,3 +71,48 @@
   - type: Sprite
     state: poryadok
 
+- type: entity
+  parent: BaseFlag
+  id: DPRKFlag
+  name: флаг КНДР
+  description: Красная звезда на белом круге. Слава Чучхе!
+  components:
+  - type: Sprite
+    state: dprk_flag
+
+- type: entity
+  parent: BaseFlag
+  id: NATOFlag
+  name: флаг НАТО
+  description: Компас, который всегда указывает на коллективную безопасность.
+  components:
+  - type: Sprite
+    state: nato_flag
+
+- type: entity
+  parent: BaseFlag
+  id: ROKFlag
+  name: флаг Южной Кореи
+  description: Тайгык и четыре триграммы. Гармония инь и ян в каждой складке.
+  components:
+  - type: Sprite
+    state: rok_flag
+
+- type: entity
+  parent: BaseFlag
+  id: UkraineFlag
+  name: флаг Украины
+  description: Синее небо над жёлтым полем пшеницы.
+  components:
+  - type: Sprite
+    state: ukraine_flag
+
+- type: entity
+  parent: BaseFlag
+  id: USAFlag
+  name: флаг США
+  description: Звёзды и полосы. Свобода, демократия и бургеры.
+  components:
+  - type: Sprite
+    state: usa_flag
+

@@ -1202,37 +1202,15 @@ public sealed partial class XenoHiveSystem : EntitySystem
         return dist;
     }
 
-    public bool WalkClear(XenoMazePlan plan, Vector2 from, Vector2 to)
+    public bool IsPassable(XenoMazePlan plan, Vector2i offset)
     {
         var cache = plan.ClsCache;
         var r = plan.Radius;
         var size = 2 * r + 1;
-        if (cache == null || cache.GetLength(0) != size || !TryComp<MapGridComponent>(plan.Grid, out var gridComp))
-            return false;
-
-        var delta = to - from;
-        var len = delta.Length();
-        if (len < 0.05f)
-            return true;
-
-        var dir = delta / len;
-        var side = new Vector2(-dir.Y, dir.X) * 0.35f;
-
-        for (var t = 0f; ; t += 0.5f)
-        {
-            var step = MathF.Min(t, len);
-            for (var s = -1; s <= 1; s++)
-            {
-                var tile = _maps.WorldToTile(plan.Grid, gridComp, from + dir * step + side * s);
-                var ix = tile.X - plan.Origin.X + r;
-                var iy = tile.Y - plan.Origin.Y + r;
-                if (ix < 0 || iy < 0 || ix >= size || iy >= size || !Passable(cache[ix, iy]))
-                    return false;
-            }
-
-            if (t >= len)
-                return true;
-        }
+        var x = offset.X + r;
+        var y = offset.Y + r;
+        return cache != null && cache.GetLength(0) == size && x >= 0 && y >= 0 && x < size && y < size
+               && Passable(cache[x, y]);
     }
 
     public int WalkSteps(XenoMazePlan plan, Vector2 from, Vector2i offset)

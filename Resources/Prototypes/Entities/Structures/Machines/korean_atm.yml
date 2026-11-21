@@ -1,0 +1,90 @@
+- type: entity
+  parent: BaseStructure
+  id: KoreanATM
+  name: банкомат
+  description: Небольшой коричневый банкомат. Выглядит надёжно.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/korean_atm.rsi
+    state: atm
+  - type: Rotatable
+    rotateWhileAnchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.4,0.35,0.4"
+        density: 100
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 1
+      - !type:ChangeConstructionNodeBehavior
+        node: broken
+  - type: Construction
+    graph: KoreanATM
+    node: atm
+    deconstructionTarget: null
+
+- type: entity
+  parent: KoreanATM
+  id: KoreanATMBroken
+  name: сломанный банкомат
+  description: Экран разбит, из лотка торчит купюра.
+  components:
+  - type: Sprite
+    state: atm_broken
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: KoreanATM
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: KoreanATM
+  start: atm
+  graph:
+  - node: atm
+    entity: KoreanATM
+  - node: broken
+    entity: KoreanATMBroken
+    edges:
+    - to: atm
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 3

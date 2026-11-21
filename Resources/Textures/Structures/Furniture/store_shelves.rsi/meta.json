@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made for nestation",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "shelf_ramyeon",
+      "directions": 4
+    },
+    {
+      "name": "shelf_ramyeon_broken",
+      "directions": 4
+    },
+    {
+      "name": "shelf_drinks",
+      "directions": 4
+    },
+    {
+      "name": "shelf_drinks_broken",
+      "directions": 4
+    },
+    {
+      "name": "shelf_snacks",
+      "directions": 4
+    },
+    {
+      "name": "shelf_snacks_broken",
+      "directions": 4
+    },
+    {
+      "name": "shelf_household",
+      "directions": 4
+    },
+    {
+      "name": "shelf_household_broken",
+      "directions": 4
+    },
+    {
+      "name": "shelf_readymeals",
+      "directions": 4
+    },
+    {
+      "name": "shelf_readymeals_broken",
+      "directions": 4
+    }
+  ]
+}

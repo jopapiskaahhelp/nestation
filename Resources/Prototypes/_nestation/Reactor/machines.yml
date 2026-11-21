@@ -1,0 +1,410 @@
+# Nestation CC BY-NC 3.0
+- type: entity
+  parent: BaseNestationStructure
+  id: NestationPrimaryPump
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/pumps.rsi
+    layers:
+    - state: primary_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.NestationVisuals.State:
+        base:
+          Off: { state: primary_off }
+          Running: { state: primary_on }
+          Hot: { state: primary_on }
+          Alarm: { state: primary_on }
+          Broken: { state: primary_off }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.45,-1.45,1.45,1.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: NestationPorts
+    size: 3,3
+    ports:
+    - side: East
+      offset: 1,0
+      medium: Coolant
+      role: PumpIn
+    - side: West
+      offset: -1,0
+      medium: Coolant
+      role: PumpOut
+  - type: NestationPump
+    kind: Primary
+    nominalPower: 60000
+
+- type: entity
+  parent: BaseNestationStructure
+  id: NestationFeedPump
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/pumps.rsi
+    layers:
+    - state: feed_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.NestationVisuals.State:
+        base:
+          Off: { state: feed_off }
+          Running: { state: feed_on }
+          Hot: { state: feed_on }
+          Alarm: { state: feed_on }
+          Broken: { state: feed_off }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.45,-1.45,1.45,1.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: NestationPorts
+    size: 3,3
+    ports:
+    - side: East
+      offset: 1,0
+      medium: Feed
+      role: PumpIn
+    - side: West
+      offset: -1,0
+      medium: Feed
+      role: PumpOut
+  - type: NestationPump
+    kind: Feed
+    nominalPower: 25000
+    auto: true
+
+- type: entity
+  parent: BaseNestationStructure
+  id: NestationCirculationPump
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/pumps.rsi
+    layers:
+    - state: circ_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.NestationVisuals.State:
+        base:
+          Off: { state: circ_off }
+          Running: { state: circ_on }
+          Hot: { state: circ_on }
+          Alarm: { state: circ_on }
+          Broken: { state: circ_off }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.45,-1.45,1.45,1.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: NestationPorts
+    size: 3,3
+    ports:
+    - side: East
+      offset: 1,0
+      medium: Cooling
+      role: PumpIn
+    - side: West
+      offset: -1,0
+      medium: Cooling
+      role: PumpOut
+  - type: NestationPump
+    kind: Circulation
+    nominalPower: 15000
+    auto: true
+
+- type: entity
+  parent: BaseNestationStructure
+  id: NestationSteamGenerator
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/steamgen.rsi
+    layers:
+    - state: sg_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.NestationVisuals.State:
+        base:
+          Off: { state: sg_off }
+          Running: { state: sg_run }
+          Hot: { state: sg_hot }
+          Alarm: { state: sg_hot }
+          Broken: { state: sg_off }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.45,-2.45,1.45,2.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: NestationPorts
+    size: 3,5
+    ports:
+    - side: West
+      offset: -1,1
+      medium: Coolant
+      role: SgPrimaryIn
+    - side: West
+      offset: -1,-1
+      medium: Coolant
+      role: SgPrimaryOut
+    - side: North
+      offset: 0,2
+      medium: Steam
+      role: SgSteamOut
+    - side: South
+      offset: 0,-2
+      medium: Feed
+      role: SgFeedIn
+  - type: NestationSteamGenerator
+
+- type: entity
+  parent: BaseNestationStructure
+  id: NestationTurbine
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/turbine.rsi
+    layers:
+    - state: turbine_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.NestationVisuals.State:
+        base:
+          Off: { state: turbine_off }
+          Running: { state: turbine_run }
+          Hot: { state: turbine_hot }
+          Alarm: { state: turbine_hot }
+          Broken: { state: turbine_off }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-3.45,-1.45,3.45,1.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: NestationPorts
+    size: 7,3
+    ports:
+    - side: South
+      offset: -2,-1
+      medium: Steam
+      role: TurbineSteamIn
+    - side: South
+      offset: 2,-1
+      medium: Steam
+      role: TurbineExhaust
+    - side: East
+      offset: 3,0
+      medium: Shaft
+      role: TurbineShaft
+  - type: NestationTurbine
+
+- type: entity
+  parent: BaseNestationStructure
+  id: NestationGenerator
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/generator.rsi
+    layers:
+    - state: gen_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.NestationVisuals.State:
+        base:
+          Off: { state: gen_off }
+          Running: { state: gen_on }
+          Hot: { state: gen_on }
+          Alarm: { state: gen_on }
+          Broken: { state: gen_off }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-2.45,-1.45,2.45,1.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: NestationPorts
+    size: 5,3
+    ports:
+    - side: West
+      offset: -2,0
+      medium: Shaft
+      role: GeneratorShaft
+  - type: NestationGenerator
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+  - type: PowerSupplier
+    supplyRampRate: 500000
+    supplyRampTolerance: 100000
+
+- type: entity
+  parent: BaseNestationStructure
+  id: NestationCondenser
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/condenser.rsi
+    layers:
+    - state: cond_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.NestationVisuals.State:
+        base:
+          Off: { state: cond_off }
+          Running: { state: cond_run }
+          Hot: { state: cond_run }
+          Alarm: { state: cond_run }
+          Broken: { state: cond_off }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-2.45,-1.45,2.45,1.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: NestationPorts
+    size: 5,3
+    ports:
+    - side: North
+      offset: 0,1
+      medium: Steam
+      role: CondenserExhaustIn
+    - side: South
+      offset: -2,-1
+      medium: Feed
+      role: CondenserCondensateOut
+    - side: East
+      offset: 2,1
+      medium: Cooling
+      role: CondenserCoolingOut
+    - side: East
+      offset: 2,-1
+      medium: Cooling
+      role: CondenserCoolingIn
+  - type: NestationCondenser
+
+- type: entity
+  parent: BaseNestationStructure
+  id: NestationConsole
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/console.rsi
+    layers:
+    - state: console_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.NestationVisuals.State:
+        base:
+          Off: { state: console_off }
+          Running: { state: console_on }
+          Hot: { state: console_on }
+          Alarm: { state: console_alarm }
+          Broken: { state: console_off }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.45,-0.45,1.45,0.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: NestationPorts
+    control: true
+    size: 3,1
+  - type: NestationConsole
+  - type: ActivatableUI
+    key: enum.NestationConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.NestationConsoleUiKey.Key:
+        type: NestationConsoleBoundUserInterface
+
+- type: entity
+  parent: BaseNestationStructure
+  id: NestationPoolSegment
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/pool.rsi
+    layers:
+    - state: pool0
+      map: [ "base" ]
+    - state: steam
+      map: [ "steam" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.NestationVisuals.State:
+        steam:
+          Off: { visible: false }
+          Running: { visible: false }
+          Hot: { visible: true }
+          Alarm: { visible: true }
+          Broken: { visible: false }
+  - type: IconSmooth
+    key: nestation_pool
+    base: pool
+    mode: CardinalFlags
+  - type: Rotatable
+    rotateWhileAnchored: false
+  - type: NestationPool
+  - type: NestationPorts
+    ports:
+    - side: North
+      medium: Cooling
+      role: PoolPort
+    - side: East
+      medium: Cooling
+      role: PoolPort
+    - side: South
+      medium: Cooling
+      role: PoolPort
+    - side: West
+      medium: Cooling
+      role: PoolPort

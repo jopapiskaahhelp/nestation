@@ -1,0 +1,81 @@
+- type: entity
+  parent: [ BaseStructure, StructureHealthFurniture ]
+  id: KoreaStoreBase
+  abstract: true
+  components:
+  - type: InteractionOutline
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    sprite: Structures/Furniture/korean_store.rsi
+    noRot: true
+    drawdepth: Objects
+
+- type: entity
+  parent: KoreaStoreBase
+  id: KoreaCigRackTobacco
+  name: Korean tobacco rack
+  description: A tidy rack of cigarette packs with a Hangul sign.
+  components:
+  - type: Sprite
+    state: cig-rack-tobacco
+
+- type: entity
+  parent: KoreaStoreBase
+  id: KoreaCigRackVape
+  name: Korean vape rack
+  description: A glass rack of colourful vape pods with a neon sign.
+  components:
+  - type: Sprite
+    state: cig-rack-vape
+
+- type: entity
+  parent: KoreaStoreBase
+  id: KoreaCigRackCabinet
+  name: Korean tobacco cabinet
+  description: A wooden cabinet with cartons on display and a lock below.
+  components:
+  - type: Sprite
+    state: cig-rack-cabinet
+
+- type: entity
+  parent: KoreaStoreBase
+  id: KoreaCashRegister
+  name: Korean cash register
+  description: A checkout counter with a card payment terminal.
+  components:
+  - type: Sprite
+    state: cash-register
+    drawdepth: SmallObjects
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+
+- type: entity
+  parent: KoreaStoreBase
+  id: KoreaCandyStand
+  name: Korean candy stand
+  description: A counter stand full of lollipops and sweets.
+  components:
+  - type: Sprite
+    state: candy-stand
+    drawdepth: SmallObjects
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+
+- type: entity
+  parent: KoreaStoreBase
+  id: KoreaPastryCase
+  name: Korean pastry case
+  description: A glass case with fresh Korean pastries inside.
+  components:
+  - type: Sprite
+    state: pastry-case
+    drawdepth: SmallObjects
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false

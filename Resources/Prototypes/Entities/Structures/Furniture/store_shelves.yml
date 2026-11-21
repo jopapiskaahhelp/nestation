@@ -1,0 +1,267 @@
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: BaseStoreShelf
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/store_shelves.rsi
+  - type: Rotatable
+    rotateWhileAnchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 75
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 80
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 1
+      - !type:ChangeConstructionNodeBehavior
+        node: broken
+
+- type: entity
+  abstract: true
+  parent: BaseStoreShelf
+  id: BaseStoreShelfBroken
+  components:
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 80
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: BaseStoreShelf
+  id: StoreShelfRamyeon
+  name: стеллаж с лапшой
+  description: Металлический стеллаж с лапшой быстрого приготовления в стаканчиках и пачках.
+  components:
+  - type: Sprite
+    state: shelf_ramyeon
+  - type: Construction
+    graph: StoreShelfRamyeon
+    node: shelf
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreShelfBroken
+  id: StoreShelfRamyeonBroken
+  name: сломанный стеллаж с лапшой
+  description: Одна из полок выпала, а товары разбросаны.
+  components:
+  - type: Sprite
+    state: shelf_ramyeon_broken
+  - type: Construction
+    graph: StoreShelfRamyeon
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: StoreShelfRamyeon
+  start: shelf
+  graph:
+  - node: shelf
+    entity: StoreShelfRamyeon
+  - node: broken
+    entity: StoreShelfRamyeonBroken
+    edges:
+    - to: shelf
+      steps:
+      - material: Steel
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreShelf
+  id: StoreShelfDrinks
+  name: стеллаж с напитками
+  description: Металлический стеллаж с соджу, молоком, газировкой и водой.
+  components:
+  - type: Sprite
+    state: shelf_drinks
+  - type: Construction
+    graph: StoreShelfDrinks
+    node: shelf
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreShelfBroken
+  id: StoreShelfDrinksBroken
+  name: сломанный стеллаж с напитками
+  description: Одна из полок выпала, а товары разбросаны.
+  components:
+  - type: Sprite
+    state: shelf_drinks_broken
+  - type: Construction
+    graph: StoreShelfDrinks
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: StoreShelfDrinks
+  start: shelf
+  graph:
+  - node: shelf
+    entity: StoreShelfDrinks
+  - node: broken
+    entity: StoreShelfDrinksBroken
+    edges:
+    - to: shelf
+      steps:
+      - material: Steel
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreShelf
+  id: StoreShelfSnacks
+  name: стеллаж со снеками
+  description: Металлический стеллаж с чипсами, печеньем и сладостями.
+  components:
+  - type: Sprite
+    state: shelf_snacks
+  - type: Construction
+    graph: StoreShelfSnacks
+    node: shelf
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreShelfBroken
+  id: StoreShelfSnacksBroken
+  name: сломанный стеллаж со снеками
+  description: Одна из полок выпала, а товары разбросаны.
+  components:
+  - type: Sprite
+    state: shelf_snacks_broken
+  - type: Construction
+    graph: StoreShelfSnacks
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: StoreShelfSnacks
+  start: shelf
+  graph:
+  - node: shelf
+    entity: StoreShelfSnacks
+  - node: broken
+    entity: StoreShelfSnacksBroken
+    edges:
+    - to: shelf
+      steps:
+      - material: Steel
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreShelf
+  id: StoreShelfHousehold
+  name: стеллаж с бытовыми товарами
+  description: Металлический стеллаж с салфетками, туалетной бумагой и бытовой химией.
+  components:
+  - type: Sprite
+    state: shelf_household
+  - type: Construction
+    graph: StoreShelfHousehold
+    node: shelf
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreShelfBroken
+  id: StoreShelfHouseholdBroken
+  name: сломанный стеллаж с бытовыми товарами
+  description: Одна из полок выпала, а товары разбросаны.
+  components:
+  - type: Sprite
+    state: shelf_household_broken
+  - type: Construction
+    graph: StoreShelfHousehold
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: StoreShelfHousehold
+  start: shelf
+  graph:
+  - node: shelf
+    entity: StoreShelfHousehold
+  - node: broken
+    entity: StoreShelfHouseholdBroken
+    edges:
+    - to: shelf
+      steps:
+      - material: Steel
+        amount: 1
+        doAfter: 2
+
+- type: entity
+  parent: BaseStoreShelf
+  id: StoreShelfReadyMeals
+  name: стеллаж с готовой едой
+  description: Металлический стеллаж с треугольными кимбапами, ланч-боксами и хлебом.
+  components:
+  - type: Sprite
+    state: shelf_readymeals
+  - type: Construction
+    graph: StoreShelfReadyMeals
+    node: shelf
+    deconstructionTarget: null
+
+- type: entity
+  parent: BaseStoreShelfBroken
+  id: StoreShelfReadyMealsBroken
+  name: сломанный стеллаж с готовой едой
+  description: Одна из полок выпала, а товары разбросаны.
+  components:
+  - type: Sprite
+    state: shelf_readymeals_broken
+  - type: Construction
+    graph: StoreShelfReadyMeals
+    node: broken
+    deconstructionTarget: null
+
+- type: constructionGraph
+  id: StoreShelfReadyMeals
+  start: shelf
+  graph:
+  - node: shelf
+    entity: StoreShelfReadyMeals
+  - node: broken
+    entity: StoreShelfReadyMealsBroken
+    edges:
+    - to: shelf
+      steps:
+      - material: Steel
+        amount: 1
+        doAfter: 2

@@ -1,0 +1,79 @@
+# Nestation New City CC BY-NC 3.0
+- type: startingGear
+  id: NorthKoreanGuardGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMercenary
+    shoes: ClothingShoesBootsMercFilled
+    gloves: ClothingHandsGlovesMercFingerless
+    head: ClothingHeadHatUshanka
+
+- type: entity
+  parent: CartridgeLightRifle
+  id: CartridgeLightRifleNorthKoreanGuard
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+
+- type: entity
+  parent: BaseItem
+  id: WeaponRifleAkNorthKoreanGuard
+  name: AK
+  description: A well-worn assault rifle carried by a guard.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,3,2
+  - type: Clothing
+    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: Gun
+    fireRate: 4
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    minAngle: 2
+    maxAngle: 14
+    angleIncrease: 3
+    angleDecay: 12
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rifle2.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeLightRifleNorthKoreanGuard
+  - type: Unremoveable
+    deleteOnDrop: false
+
+- type: entity
+  parent: [ BaseBarricade, StructureHealthBarrier ]
+  id: NorthKoreanGuardBarricade
+  name: wooden barricade
+  description: A hastily built barricade.
+  components:
+  - type: NorthKoreanGuardFortification
+  - type: Damageable
+    damageModifierSet: WoodMod
+
+- type: entity
+  parent: MobHuman
+  id: MobNorthKoreanGuard
+  name: North Korean guard
+  description: A stern guard in a fur hat who stands his post and does not take kindly to strangers.
+  components:
+  - type: Loadout
+    prototypes:
+    - NorthKoreanGuardGear
+  - type: InputMover
+  - type: MobMover
+  - type: NorthKoreanGuard

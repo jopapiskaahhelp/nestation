@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "license": "Nestation CC BY-NC 3.0",
+  "copyright": "Nestation",
+  "size": {
+    "x": 96,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "console_off"
+    },
+    {
+      "name": "console_on",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "console_alarm",
+      "delays": [
+        [
+          0.3,
+          0.3
+        ]
+      ]
+    }
+  ]
+}

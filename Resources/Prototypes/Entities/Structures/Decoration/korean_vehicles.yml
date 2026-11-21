@@ -1,0 +1,104 @@
+- type: entity
+  parent: [ BaseStructure, StructureHealthFurniture ]
+  id: KoreaScooterBase
+  abstract: true
+  components:
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: Structures/Decoration/korean_scooters.rsi
+    noRot: false # BaseStructure ставит noRot: true; для 4-направленного спрайта нужен false (и без snapCardinals)
+    drawdepth: Objects
+  - type: Rotatable
+    rotateWhileAnchored: true
+
+- type: entity
+  parent: KoreaScooterBase
+  id: KoreaScooterDelivery
+  name: Korean delivery scooter
+  description: A red delivery scooter with a big white box on the back.
+  components:
+  - type: Sprite
+    state: delivery
+
+- type: entity
+  parent: KoreaScooterBase
+  id: KoreaScooterCity
+  name: Korean city scooter
+  description: A small mint-coloured scooter for getting around town.
+  components:
+  - type: Sprite
+    state: city
+
+- type: entity
+  parent: KoreaScooterBase
+  id: KoreaScooterSport
+  name: Korean sport scooter
+  description: A black scooter with blue accents and a small windscreen.
+  components:
+  - type: Sprite
+    state: sport
+
+- type: entity
+  parent: [ BaseStructure, StructureHealthFurnitureStrong ]
+  id: KoreaCarBase
+  abstract: true
+  placement:
+    mode: SnapgridBorder
+  components:
+  - type: InteractionOutline
+  - type: Transform
+    anchored: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.9,-0.9,0.9,0.9"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: Sprite
+    sprite: Structures/Decoration/korean_cars.rsi
+    noRot: false # BaseStructure ставит noRot: true; для 4-направленного спрайта нужен false (и без snapCardinals)
+    drawdepth: Objects
+  - type: Rotatable
+    rotateWhileAnchored: true
+
+- type: entity
+  parent: KoreaCarBase
+  id: KoreaCarSedan
+  name: Korean sedan
+  description: A dark executive sedan, a common sight on Korean roads.
+  components:
+  - type: Sprite
+    state: sedan
+
+- type: entity
+  parent: KoreaCarBase
+  id: KoreaCarMinivan
+  name: Korean minivan
+  description: A roomy white minivan with sliding doors.
+  components:
+  - type: Sprite
+    state: minivan
+
+- type: entity
+  parent: KoreaCarBase
+  id: KoreaCarPorter
+  name: Korean pickup truck
+  description: A small white pickup with a blue cargo bed and yellow plates.
+  components:
+  - type: Sprite
+    state: porter
+
+- type: entity
+  parent: KoreaCarBase
+  id: KoreaCarCompact
+  name: Korean compact car
+  description: A boxy yellow compact car, perfect for narrow city streets.
+  components:
+  - type: Sprite
+    state: compact

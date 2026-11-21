@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made for nestation",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "pharm_meds",
+      "directions": 4
+    },
+    {
+      "name": "pharm_meds_broken",
+      "directions": 4
+    },
+    {
+      "name": "pharm_bottles",
+      "directions": 4
+    },
+    {
+      "name": "pharm_bottles_broken",
+      "directions": 4
+    },
+    {
+      "name": "pharm_firstaid",
+      "directions": 4
+    },
+    {
+      "name": "pharm_firstaid_broken",
+      "directions": 4
+    },
+    {
+      "name": "pharm_vitamins",
+      "directions": 4
+    },
+    {
+      "name": "pharm_vitamins_broken",
+      "directions": 4
+    }
+  ]
+}

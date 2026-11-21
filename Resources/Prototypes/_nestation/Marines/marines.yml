@@ -92,6 +92,11 @@
   - type: InputMover
   - type: MobMover
   - type: Marine
+    gunPool:
+      WeaponRifleLecterMarine: 40
+      WeaponSmgDrozdMarine: 30
+      WeaponRifleEstocMarine: 20
+      WeaponShotgunKammererUnbalanced: 10
 
 - type: entity
   parent: MarkerBase
@@ -126,17 +131,16 @@
     - state: pole
       offset: 0,0.5
     - sprite: Structures/Wallmounts/flags.rsi
-      state: poryadok
+      state: dprk_flag
       map: [ "enum.MarineFlagLayers.Flag" ]
-      visible: false
       offset: 0,0.875
   - type: Appearance
   - type: GenericVisualizer
     visuals:
       enum.MarineFlagVisuals.Raised:
         enum.MarineFlagLayers.Flag:
-          True: { visible: true }
-          False: { visible: false }
+          True: { state: rok_flag }
+          False: { state: dprk_flag }
   - type: Physics
     bodyType: Static
   - type: Fixtures

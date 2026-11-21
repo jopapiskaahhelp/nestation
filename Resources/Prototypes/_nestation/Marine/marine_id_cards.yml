@@ -2,7 +2,7 @@
 - type: entity
   id: ActionMarineMap
   name: Тактическая карта
-  description: Вид сверху на весь грид. Синие точки — морпехи.
+  description: "Вид сверху на весь грид. Синие точки: морпехи."
   components:
   - type: Action
     icon:
@@ -44,13 +44,47 @@
   - type: Access
     groups:
     - AllAccess
+    tags:
+    - EmergencyShuttleRepealAll
+    - Captain
+    - HeadOfPersonnel
+    - ChiefEngineer
+    - ChiefMedicalOfficer
+    - HeadOfSecurity
+    - ResearchDirector
+    - Command
+    - Cryogenics
+    - Security
+    - Detective
+    - Armory
+    - Brig
+    - Lawyer
+    - Engineering
+    - Medical
+    - Quartermaster
+    - Salvage
+    - Cargo
+    - Research
+    - Service
+    - Maintenance
+    - External
+    - Janitor
+    - Theatre
+    - Bar
+    - Chemistry
+    - Kitchen
+    - Chapel
+    - Hydroponics
+    - Atmospherics
+    - GenpopEnter
+    - GenpopLeave
   - type: MarineMapDrawer
 
 - type: entity
   parent: MarineIDCardBase
   id: MarineGunnerIDCard
   name: айди карта пулеметчика
-  description: Карта пулемётчика морпехов. Доступы главы службы безопасности.
+  description: Карта пулемётчика морпехов.
   components:
   - type: Sprite
     layers:
@@ -69,17 +103,22 @@
     groups:
     - Security
     tags:
+    - HeadOfSecurity
+    - Security
+    - Armory
+    - Brig
+    - Detective
+    - Cryogenics
     - Command
     - Maintenance
     - External
     - GenpopEnter
     - GenpopLeave
-
 - type: entity
   parent: MarineIDCardBase
   id: MarineCommanderIDCard
   name: айди карта командира
-  description: Карта командира морпехов. Доступы главы службы безопасности.
+  description: Карта командира морпехов.
   components:
   - type: Sprite
     layers:
@@ -100,17 +139,22 @@
     groups:
     - Security
     tags:
+    - HeadOfSecurity
+    - Security
+    - Armory
+    - Brig
+    - Detective
+    - Cryogenics
     - Command
     - Maintenance
     - External
     - GenpopEnter
     - GenpopLeave
-
 - type: entity
   parent: MarineIDCardBase
   id: MarinePrivateIDCard
   name: айди карта рядового
-  description: Карта рядового морпеха. Доступы главы службы безопасности.
+  description: Карта рядового морпеха.
   components:
   - type: Sprite
     layers:
@@ -129,17 +173,22 @@
     groups:
     - Security
     tags:
+    - HeadOfSecurity
+    - Security
+    - Armory
+    - Brig
+    - Detective
+    - Cryogenics
     - Command
     - Maintenance
     - External
     - GenpopEnter
     - GenpopLeave
-
 - type: entity
   parent: MarineIDCardBase
   id: MarineMedicIDCard
   name: айди карта медика
-  description: Карта медика морпехов. Доступы медицинского отдела.
+  description: Карта медика морпехов.
   components:
   - type: Sprite
     layers:
@@ -156,13 +205,28 @@
     jobIcon: JobIconMedicalDoctor
   - type: Access
     groups:
+    - Security
     - Medical
-
+    tags:
+    - HeadOfSecurity
+    - Security
+    - Armory
+    - Brig
+    - Detective
+    - Cryogenics
+    - Command
+    - Maintenance
+    - External
+    - GenpopEnter
+    - GenpopLeave
+    - Medical
+    - Chemistry
+    - ChiefMedicalOfficer
 - type: entity
   parent: MarineIDCardBase
   id: MarineLogisticianIDCard
   name: айди карта логиста
-  description: Карта логиста морпехов. Доступы грузового отдела.
+  description: Карта логиста морпехов.
   components:
   - type: Sprite
     layers:
@@ -179,4 +243,20 @@
     jobIcon: JobIconCargoTechnician
   - type: Access
     groups:
+    - Security
     - Cargo
+    tags:
+    - HeadOfSecurity
+    - Security
+    - Armory
+    - Brig
+    - Detective
+    - Cryogenics
+    - Command
+    - Maintenance
+    - External
+    - GenpopEnter
+    - GenpopLeave
+    - Cargo
+    - Salvage
+    - Quartermaster

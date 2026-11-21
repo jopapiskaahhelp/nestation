@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-3.0",
+  "copyright": "Nestation New City",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "sandbag0"
+    },
+    {
+      "name": "sandbag1"
+    },
+    {
+      "name": "sandbag2"
+    },
+    {
+      "name": "sandbag3"
+    },
+    {
+      "name": "sandbag4"
+    },
+    {
+      "name": "sandbag5"
+    },
+    {
+      "name": "sandbag6"
+    },
+    {
+      "name": "sandbag7"
+    },
+    {
+      "name": "sandbag8"
+    },
+    {
+      "name": "sandbag9"
+    },
+    {
+      "name": "sandbag10"
+    },
+    {
+      "name": "sandbag11"
+    },
+    {
+      "name": "sandbag12"
+    },
+    {
+      "name": "sandbag13"
+    },
+    {
+      "name": "sandbag14"
+    },
+    {
+      "name": "sandbag15"
+    }
+  ]
+}

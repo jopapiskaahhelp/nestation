@@ -1,0 +1,289 @@
+# Nestation New City CC BY-NC 3.0
+- type: localizedDataset
+  id: NamesNorthLast
+  values:
+    prefix: names-north-last-dataset-
+    count: 20
+
+- type: localizedDataset
+  id: NamesNorthFirst
+  values:
+    prefix: names-north-first-dataset-
+    count: 30
+
+- type: entity
+  parent: ClothingUniformJumpsuitMercenary
+  id: ClothingUniformJumpsuitNorthKorean
+  name: enemy field uniform
+  description: A dark green field uniform with no body armor.
+  components:
+  - type: Sprite
+    sprite: _nestation/Clothing/north_korea/jumpsuit.rsi
+  - type: Clothing
+    sprite: _nestation/Clothing/north_korea/jumpsuit.rsi
+
+- type: entity
+  parent: ClothingHeadHatBeret
+  id: ClothingHeadHatBeretNorthKorean
+  name: dark green beret
+  description: A plain dark green beret.
+  components:
+  - type: Sprite
+    sprite: _nestation/Clothing/north_korea/beret.rsi
+  - type: Clothing
+    sprite: _nestation/Clothing/north_korea/beret.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetMerc
+  id: ClothingHeadHelmetNorthKorean
+  name: steel helmet
+  description: A plain matte olive steel helmet of the opposing army.
+  components:
+  - type: Sprite
+    sprite: _nestation/Clothing/north_korea/helmet.rsi
+  - type: Clothing
+    sprite: _nestation/Clothing/north_korea/helmet.rsi
+
+- type: startingGear
+  id: NorthKoreanGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitNorthKorean
+    shoes: ClothingShoesBootsMerc
+    head: ClothingHeadHelmetNorthKorean
+
+- type: entity
+  parent: CartridgeLightRifle
+  id: CartridgeLightRifleNorth
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+
+- type: entity
+  parent: BaseItem
+  id: WeaponRifleAkNorth
+  name: AKMS
+  description: A somewhat battered combat rifle of a design originating from old Earth.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,3,2
+  - type: Clothing
+    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: Gun
+    fireRate: 3.5
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    minAngle: 3
+    maxAngle: 16
+    angleIncrease: 3
+    angleDecay: 12
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rifle2.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeLightRifleNorth
+  - type: Unremoveable
+    deleteOnDrop: false
+
+- type: entity
+  parent: MobHuman
+  id: MobNorthKoreanSoldier
+  name: Pvt. Soldier
+  description: A rank-and-file soldier of the opposing army defending its positions.
+  components:
+  - type: Loadout
+    prototypes:
+    - NorthKoreanGear
+  - type: RandomMetadata
+    nameSegments:
+    - NamesNorthLast
+    - NamesNorthFirst
+    nameFormat: name-format-north
+  - type: NpcFactionMember
+    factions:
+    - Syndicate
+  - type: InputMover
+  - type: MobMover
+  - type: Marine
+    team: north
+    defender: true
+    canBuild: true
+    targetXenoStructures: false
+    gunProto: WeaponRifleAkNorth
+    criticalHealth: 30
+    deadHealth: 45
+
+- type: entity
+  parent: MarineSpawnZone
+  id: MarineSpawnZoneDefender
+  name: defender spawn zone
+  description: Spawns the opposing soldiers when the mission starts.
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanSoldier
+    group: defenders
+
+- type: entity
+  parent: MarineSpawnZoneDefender
+  id: MarineSpawnZoneNorthOfficer
+  name: officer spawn zone
+  description: Spawns an opposing army officer when the mission starts.
+  components:
+  - type: Sprite
+    layers:
+    - state: pink
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanOfficer
+    group: defenders
+
+- type: entity
+  parent: MarineSpawnZoneDefender
+  id: MarineSpawnZoneNorthElite
+  name: elite spawn zone
+  description: Spawns an opposing army elite trooper when the mission starts.
+  components:
+  - type: Sprite
+    layers:
+    - state: blue
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanElite
+    group: defenders
+
+- type: entity
+  parent: MarineSpawnZoneDefender
+  id: MarineSpawnZoneNorthGunner
+  name: machine gunner spawn zone
+  description: Spawns a standing opposing army machine gunner when the mission starts.
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanGunner
+    group: defenders
+
+- type: entity
+  parent: MobNorthKoreanSoldier
+  id: MobNorthKoreanPolice
+  name: MP Soldier
+  description: A military police soldier of the opposing army patrolling the streets.
+  components:
+  - type: RandomMetadata
+    nameSegments:
+    - NamesNorthLast
+    - NamesNorthFirst
+    nameFormat: name-format-north-police
+  - type: Marine
+    police: true
+    patrolRoute: police
+
+- type: entity
+  parent: MarineSpawnZoneDefender
+  id: MarineSpawnZoneNorthPolice
+  name: MP spawn zone
+  description: Spawns the soldier at the start of the mission.
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanPolice
+    group: defenders
+    spawnOnInit: false
+
+- type: entity
+  parent: MarineSpawnZoneDefender
+  id: MarineSpawnZoneNorthSoldierInit
+  name: soldier round start spawner
+  description: Spawns the soldier at the start of the round.
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanSoldier
+    group: defenders
+    spawnOnInit: true
+
+- type: entity
+  parent: MarineSpawnZoneDefender
+  id: MarineSpawnZoneNorthOfficerInit
+  name: officer round start spawner
+  description: Spawns the soldier at the start of the round.
+  components:
+  - type: Sprite
+    layers:
+    - state: pink
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanOfficer
+    group: defenders
+    spawnOnInit: true
+
+- type: entity
+  parent: MarineSpawnZoneDefender
+  id: MarineSpawnZoneNorthEliteInit
+  name: elite round start spawner
+  description: Spawns the soldier at the start of the round.
+  components:
+  - type: Sprite
+    layers:
+    - state: blue
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanElite
+    group: defenders
+    spawnOnInit: true
+
+- type: entity
+  parent: MarineSpawnZoneDefender
+  id: MarineSpawnZoneNorthGunnerInit
+  name: gunner round start spawner
+  description: Spawns the soldier at the start of the round.
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanGunner
+    group: defenders
+    spawnOnInit: true
+
+- type: entity
+  parent: MarineSpawnZoneDefender
+  id: MarineSpawnZoneNorthPoliceInit
+  name: police round start spawner
+  description: Spawns the soldier at the start of the round.
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanPolice
+    group: defenders
+    spawnOnInit: true

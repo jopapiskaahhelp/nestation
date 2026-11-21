@@ -1,0 +1,20 @@
+# Nestation New City CC BY-NC 3.0
+- type: gameMap
+  id: Hajin
+  mapName: Hajin
+  mapPath: /Maps/Hajin.yml
+  minPlayers: 0
+  stations:
+    Hajin:
+      stationProto: StandardNanotrasenStation
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: Hajin
+      - type: StationJobs
+        availableJobs:
+          MarineCommander: [ 1, 1 ]
+          MarineOfficer: [ 1, 1 ]
+          MarineGunner: [ 2, 2 ]
+          MarineMedic: [ 2, 2 ]
+          MarineLogistician: [ 2, 2 ]
+          MarinePrivate: [ -1, -1 ]

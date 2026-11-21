@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made for nestation",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "fridge_soda",
+      "directions": 4
+    },
+    {
+      "name": "fridge_soda_broken",
+      "directions": 4
+    },
+    {
+      "name": "fridge_juice",
+      "directions": 4
+    },
+    {
+      "name": "fridge_juice_broken",
+      "directions": 4
+    },
+    {
+      "name": "fridge_beer",
+      "directions": 4
+    },
+    {
+      "name": "fridge_beer_broken",
+      "directions": 4
+    },
+    {
+      "name": "fridge_soju",
+      "directions": 4
+    },
+    {
+      "name": "fridge_soju_broken",
+      "directions": 4
+    },
+    {
+      "name": "fridge_wine",
+      "directions": 4
+    },
+    {
+      "name": "fridge_wine_broken",
+      "directions": 4
+    }
+  ]
+}

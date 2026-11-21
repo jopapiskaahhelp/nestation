@@ -3,7 +3,7 @@
 ui-escape-tutorial = Туториал
 
 tutorial-title = Добро пожаловать
-tutorial-question = Хотите узнать об этом мире?
+tutorial-question = Хотите узнать об этом мире? (ТОЛЬКО ДЛЯ ВАНИЛЬНОГО ANARHEY)
 tutorial-yes = Да
 tutorial-no = Нет
 tutorial-next = Дальше

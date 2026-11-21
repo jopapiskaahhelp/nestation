@@ -6,6 +6,27 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._Nestation.Marines;
 
+public enum MarinePointKind : byte
+{
+    Walk,
+    Talk,
+    Bar,
+    Queue,
+    Counter,
+    Assembly,
+    Patrol,
+    Hall,
+}
+
+public enum MarineCivilianMode : byte
+{
+    Idle,
+    Route,
+    Meeting,
+    Talking,
+    Busy,
+}
+
 public enum MarineState : byte
 {
     Advance,
@@ -21,6 +42,69 @@ public sealed partial class MarineComponent : Component
 {
     [DataField]
     public string MissionId = "dday";
+
+    [DataField]
+    public string Team = "south";
+
+    [DataField]
+    public bool Defender;
+
+    [DataField]
+    public bool TargetXeno = true;
+
+    [DataField]
+    public bool TargetXenoStructures = true;
+
+    [DataField]
+    public bool Static;
+
+    [DataField]
+    public bool Passive;
+
+    [DataField]
+    public bool Neutral;
+
+    [DataField]
+    public string Route = string.Empty;
+
+    [DataField]
+    public string PatrolRoute = string.Empty;
+
+    [DataField]
+    public bool Police;
+
+    [DataField]
+    public bool Banker;
+
+    [DataField]
+    public bool Lecturer;
+
+    [DataField]
+    public bool CanBuild;
+
+    [DataField]
+    public int MaxBarricades = 2;
+
+    [DataField]
+    public EntProtoId Barricade = "MarineBarricade";
+
+    [DataField]
+    public bool DeleteGunOnDeath;
+
+    [DataField]
+    public Dictionary<EntProtoId, float> GunPool = new();
+
+    [DataField]
+    public float MemorySeconds = 25f;
+
+    [DataField]
+    public float AggroRange = 22f;
+
+    [DataField]
+    public float Leash = 30f;
+
+    [DataField]
+    public float HoldDistance = 7f;
 
     [DataField]
     public EntProtoId GunProto = "WeaponRifleLecterMarine";
@@ -83,6 +167,64 @@ public sealed partial class MarineComponent : Component
     public float RaiseRange = 2.1f;
 
     public EntityUid? Gun;
+    public EntityUid? Scene;
+    public float Hunger;
+    public float Thirst;
+    public float Fear;
+    public float Boldness = 0.5f;
+    public bool PoliceNear;
+    public Vector2 PoliceFrom;
+    public TimeSpan NextAwareness;
+    public TimeSpan NextSilence;
+    public TimeSpan NextFlinch;
+    public TimeSpan ListenUntil;
+    public TimeSpan StandUpAt;
+    public EntityUid? MemTarget;
+    public Vector2 MemPos;
+    public Vector2 MemVel;
+    public TimeSpan MemSeen;
+    public List<Vector2> MemTrail = new();
+    public Vector2? SearchPoint;
+    public TimeSpan NextSearch;
+    public Vector2? PatrolGoal;
+    public List<Vector2>? PatrolPoints;
+    public int PatrolIndex;
+    public TimeSpan PatrolWait;
+    public TimeSpan NextEncounter;
+    public EntityUid? Hunt;
+    public bool Wanted;
+    public bool Partisan;
+    public TimeSpan IgnoreRemovalUntil;
+    public int AvoidSide;
+    public TimeSpan AvoidUntil;
+    public MarineCivilianMode CivMode;
+    public EntityUid? Partner;
+    public Vector2 MeetPoint;
+    public bool Arrived;
+    public bool Speaker;
+    public TimeSpan TalkUntil;
+    public TimeSpan MeetTimeout;
+    public TimeSpan NextEmote;
+    public TimeSpan NextActivity;
+    public List<Vector2>? RoutePoints;
+    public int RouteIndex;
+    public bool Frozen;
+    public bool Running = true;
+    public bool Flanker;
+    public Vector2? ScriptGoal;
+    public Vector2? LastKnown;
+    public TimeSpan LastSeen;
+    public Vector2? HeardPoint;
+    public TimeSpan HeardUntil;
+    public Vector2? FlankPoint;
+    public TimeSpan FlankUntil;
+    public int Barricades;
+    public TimeSpan NextBuild;
+    public TimeSpan? BuildAt;
+    public Vector2 BuildPos;
+    public TimeSpan PanicUntil;
+    public Vector2 PanicFrom;
+    public EntityUid? Emplacement;
     public MarineState State = MarineState.Advance;
 
     public TimeSpan NextThink;
@@ -116,6 +258,7 @@ public sealed partial class MarineComponent : Component
     public Vector2 LastPos;
     public bool WasMoving;
     public bool Holding;
+    public Vector2? Home;
     public Dictionary<EntityUid, TimeSpan> Ignored = new();
 }
 
@@ -136,6 +279,9 @@ public sealed partial class MarineSpawnZoneComponent : Component
 
     [DataField]
     public float Spread = 0.4f;
+
+    [DataField]
+    public bool SpawnOnInit;
 }
 
 [RegisterComponent]
@@ -195,6 +341,9 @@ public sealed partial class MarineMissionConsoleComponent : Component
     [DataField]
     public int StartCreditsPerPlayer = 100;
 
+    [DataField]
+    public string DefenderGroup = "defenders";
+
     public bool Started;
     public int Spawned;
     public TimeSpan NextWave;
@@ -248,4 +397,106 @@ public sealed partial class MarineSupplyConsoleComponent : Component
 {
     [DataField]
     public string MissionId = "dday";
+}
+
+[RegisterComponent]
+public sealed partial class MarineEmplacementComponent : Component
+{
+    [DataField]
+    public EntProtoId Gunner = "MobNorthKoreanGunner";
+
+    [DataField]
+    public EntProtoId Piece = "MarineSandbag";
+
+    [DataField]
+    public EntProtoId Seat = "MarineGunSeat";
+
+    [DataField]
+    public bool Bunker;
+
+    public EntityUid? GunnerUid;
+    public EntityUid? SeatUid;
+    public bool Destroyed;
+    public List<EntityUid> Pieces = new();
+}
+
+[RegisterComponent]
+public sealed partial class MarineSandbagComponent : Component;
+
+[RegisterComponent]
+public sealed partial class MarineGunSeatComponent : Component
+{
+    [DataField]
+    public EntProtoId Gun = "WeaponHmgPlayer";
+
+    [DataField]
+    public float Radius = 0.55f;
+
+    public EntityUid? Controller;
+    public bool Active = true;
+    public TimeSpan NextCheck;
+    public Dictionary<EntityUid, EntityUid> Holders = new();
+}
+
+public enum MarineSceneKind : byte
+{
+    Search,
+    Interrogation,
+    Beating,
+    Execution,
+}
+
+[RegisterComponent]
+public sealed partial class MarineSceneComponent : Component
+{
+    [DataField]
+    public MarineSceneKind Kind = MarineSceneKind.Execution;
+
+    [DataField]
+    public float TriggerRange = 14f;
+
+    [DataField]
+    public int SoldierCount = 2;
+
+    [DataField]
+    public int CivilianCount = 3;
+
+    [DataField]
+    public bool WithOfficer = true;
+
+    [DataField]
+    public bool Dynamic;
+
+    [DataField]
+    public EntProtoId Soldier = "MobNorthKoreanSoldier";
+
+    [DataField]
+    public EntProtoId Officer = "MobNorthKoreanOfficer";
+
+    [DataField]
+    public EntProtoId Civilian = "MobMarineCivilian";
+
+    public List<EntityUid> Soldiers = new();
+    public List<EntityUid> Civilians = new();
+    public bool Started;
+    public bool Done;
+    public TimeSpan StartedAt;
+    public List<Func<bool>> Steps = new();
+    public int Step;
+}
+
+[RegisterComponent]
+public sealed partial class MarineCivilianPointComponent : Component
+{
+    [DataField]
+    public string Route = "default";
+
+    [DataField]
+    public int Order;
+
+    [DataField]
+    public bool Talk;
+
+    [DataField]
+    public MarinePointKind Kind = MarinePointKind.Walk;
 }

@@ -1,0 +1,119 @@
+# Nestation CC BY-NC 3.0
+- type: entity
+  parent: BaseNestationStructure
+  id: NestationReactorCore
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/core.rsi
+    layers:
+    - state: core_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.NestationVisuals.State:
+        base:
+          Off: { state: core_off }
+          Running: { state: core_run }
+          Hot: { state: core_hot }
+          Alarm: { state: core_alarm }
+          Broken: { state: core_broken }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.45,-1.45,1.45,1.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: NestationPorts
+    control: true
+    size: 3,3
+    ports:
+    - side: East
+      offset: 1,0
+      medium: Coolant
+      role: ReactorHot
+    - side: West
+      offset: -1,0
+      medium: Coolant
+      role: ReactorCold
+  - type: NestationReactorCore
+  - type: ItemSlots
+    slots:
+      fuel:
+        name: nestation-fuel-slot
+        whitelist:
+          components:
+          - NestationFuelAssembly
+  - type: ContainerContainer
+    containers:
+      fuel: !type:ContainerSlot
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 4000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+
+- type: entity
+  parent: BaseItem
+  id: NestationFuelAssembly
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/fuel.rsi
+    state: fuel
+  - type: Item
+    size: Large
+  - type: NestationFuelAssembly
+
+- type: entity
+  parent: NestationFuelAssembly
+  id: NestationFuelAssemblyHEU
+  components:
+  - type: Sprite
+    sprite: _nestation/Reactor/fuel.rsi
+    state: fuel_heu
+  - type: NestationFuelAssembly
+    baseReactivity: 2.4
+    reactivityLoss: 0.5
+    lifeSeconds: 7200
+
+- type: entity
+  id: NestationReactorWreck
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.45,-1.45,1.45,1.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 500
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _nestation/Reactor/wreck.rsi
+    state: wreck
+  - type: RadiationSource
+    intensity: 10
+    slope: 0.2
+  - type: PointLight
+    radius: 4
+    energy: 1.2
+    color: "#ff9a3c"

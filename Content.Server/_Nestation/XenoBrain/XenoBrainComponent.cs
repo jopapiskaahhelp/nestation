@@ -120,7 +120,7 @@ public sealed partial class XenoBrainComponent : Component
     [DataField] public float ProvokeCheckSeconds = 20f;
     [DataField] public float CallRange = 45f;
     [DataField] public int CallCount = 3;
-    [DataField] public float BuildReach = 2.6f;
+    [DataField] public float BuildReach = 3.8f;
     [DataField] public float BuildStuckSeconds = 20f;
     [DataField] public float DroneHiveAvoid = 30f;
     [DataField] public float AmbushHoldSeconds = 60f;
@@ -270,6 +270,7 @@ public sealed partial class XenoBrainComponent : Component
     public Vector2i PathGoal;
     public bool PathActive;
     public Vector2 PathGoalPos;
+    public Vector2 BuildEntryPos;
     public int PathReplans;
     public TimeSpan NextReplanAt;
     public TimeSpan RepairFleeUntil;

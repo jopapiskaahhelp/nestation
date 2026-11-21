@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-3.0",
+  "copyright": "Nestation new city",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "convenience",
+      "directions": 4
+    },
+    {
+      "name": "bank",
+      "directions": 4
+    },
+    {
+      "name": "cityhall",
+      "directions": 4
+    },
+    {
+      "name": "police",
+      "directions": 4
+    },
+    {
+      "name": "mart",
+      "directions": 4
+    },
+    {
+      "name": "bar",
+      "directions": 4
+    },
+    {
+      "name": "bar-glow",
+      "directions": 4
+    },
+    {
+      "name": "samsung",
+      "directions": 4
+    },
+    {
+      "name": "nokia",
+      "directions": 4
+    },
+    {
+      "name": "hotel",
+      "directions": 4
+    },
+    {
+      "name": "coffee",
+      "directions": 4
+    },
+    {
+      "name": "pcbang",
+      "directions": 4
+    },
+    {
+      "name": "noraebang",
+      "directions": 4
+    },
+    {
+      "name": "chicken",
+      "directions": 4
+    },
+    {
+      "name": "pharmacy",
+      "directions": 4
+    },
+    {
+      "name": "open",
+      "directions": 4
+    },
+    {
+      "name": "open-glow",
+      "directions": 4
+    }
+  ]
+}

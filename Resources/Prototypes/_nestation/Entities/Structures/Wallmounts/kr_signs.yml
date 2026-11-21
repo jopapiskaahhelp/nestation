@@ -1,0 +1,171 @@
+- type: entity
+  id: BaseSignKR
+  abstract: true
+  name: вывеска
+  description: Вывеска.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: WallMount
+    arc: 180
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Rotatable
+    rotateWhileAnchored: true
+  - type: Sprite
+    drawdepth: WallMountedItems
+    sprite: _nestation/Structures/Wallmounts/kr_signs.rsi
+    noRot: false
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRConvenience
+  name: вывеска «편의점»
+  description: Вывеска круглосуточного корейского магазина у дома, «конбини».
+  components:
+  - type: Sprite
+    state: convenience
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRBank
+  name: вывеска «해솔은행»
+  description: Вывеска южнокорейского банка «Хэсоль» («Сосновое солнце»).
+  components:
+  - type: Sprite
+    state: bank
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRCityHall
+  name: вывеска «별빛시청»
+  description: Вывеска южнокорейской мэрии «Пёльбит» («Звёздный свет»).
+  components:
+  - type: Sprite
+    state: cityhall
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRPolice
+  name: вывеска «강변경찰서»
+  description: Вывеска южнокорейского полицейского участка «Канбён» («Набережная»).
+  components:
+  - type: Sprite
+    state: police
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRMart
+  name: вывеска «행복마트»
+  description: Вывеска южнокорейского супермаркета «Хэнбок-март» («Счастливый маркет»).
+  components:
+  - type: Sprite
+    state: mart
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRBar
+  name: вывеска «달밤포차»
+  description: Неоновая вывеска корейской уличной пивной 포차 «Тарбам» («Лунная ночь»).
+  components:
+  - type: Sprite
+    layers:
+    - state: bar
+    - state: bar-glow
+      shader: unshaded
+  - type: PointLight
+    radius: 2.5
+    energy: 1.0
+    color: "#ff4fa3"
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRSamsung
+  name: вывеска «SAMSUNG»
+  description: Вывеска магазина электроники Samsung.
+  components:
+  - type: Sprite
+    state: samsung
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRNokia
+  name: вывеска «NOKIA»
+  description: Вывеска магазина мобильных телефонов Nokia.
+  components:
+  - type: Sprite
+    state: nokia
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKROpen
+  name: вывеска «OPEN»
+  description: Неоновая вывеска «OPEN 24 HOURS». Открыто круглосуточно.
+  components:
+  - type: Sprite
+    layers:
+    - state: open
+    - state: open-glow
+      shader: unshaded
+  - type: PointLight
+    radius: 2.5
+    energy: 1.0
+    color: "#ff3b3b"
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRHotel
+  name: вывеска «HOTEL»
+  description: Вывеска корейского отеля со свободными номерами.
+  components:
+  - type: Sprite
+    state: hotel
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRCoffee
+  name: вывеска «COFFEE»
+  description: Вывеска кофейни с эспрессо-баром.
+  components:
+  - type: Sprite
+    state: coffee
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRPcBang
+  name: вывеска «PC방»
+  description: Вывеска «PC-бана», корейского интернет-клуба.
+  components:
+  - type: Sprite
+    state: pcbang
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRNoraebang
+  name: вывеска «노래방»
+  description: Вывеска «норэбана», корейского караоке-клуба.
+  components:
+  - type: Sprite
+    state: noraebang
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRChicken
+  name: вывеска «치킨»
+  description: Вывеска корейской закусочной с жареной курицей.
+  components:
+  - type: Sprite
+    state: chicken
+
+- type: entity
+  parent: BaseSignKR
+  id: SignKRPharmacy
+  name: вывеска «약국»
+  description: Вывеска южнокорейской аптеки.
+  components:
+  - type: Sprite
+    state: pharmacy

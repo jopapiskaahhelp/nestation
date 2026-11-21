@@ -1,0 +1,294 @@
+# Nestation New City CC BY-NC 3.0
+- type: startingGear
+  id: CivilianGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorGrey
+    shoes: ClothingShoesColorBlack
+
+- type: entity
+  parent: MobHuman
+  id: MobMarineCivilian
+  name: Civilian
+  description: A local resident just trying to survive the war.
+  components:
+  - type: Loadout
+    prototypes:
+    - CivilianGear
+  - type: RandomMetadata
+    nameSegments:
+    - NamesNorthLast
+    - NamesNorthFirst
+    nameFormat: name-format-civilian
+  - type: NpcFactionMember
+    factions:
+    - Passive
+  - type: InputMover
+  - type: MobMover
+  - type: Marine
+    missionId: civil
+    team: civil
+    passive: true
+    neutral: true
+    criticalHealth: 45
+    deadHealth: 70
+
+- type: entity
+  id: MarineBarricade
+  name: barricade
+  description: A quickly built barricade of sandbags.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _nestation/Structures/sandbag.rsi
+    state: sandbag0
+    drawdepth: Mobs
+  - type: IconSmooth
+    mode: CardinalFlags
+    key: marine-sandbags
+    base: sandbag
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      walk:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - MobMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+        hard: true
+      cover:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        layer:
+        - BulletImpassable
+        hard: true
+
+- type: entity
+  parent: MarkerBase
+  id: MarineSceneExecution
+  name: scene - execution
+  description: Executions of civilians. Starts when a player gets in sight. Rotate the marker to set the facing of the scene.
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - state: ai
+  - type: MarineScene
+    kind: Execution
+    soldierCount: 3
+    civilianCount: 3
+
+- type: entity
+  parent: MarineSceneExecution
+  id: MarineSceneInterrogation
+  name: scene - interrogation
+  components:
+  - type: MarineScene
+    kind: Interrogation
+    soldierCount: 2
+    civilianCount: 1
+
+- type: entity
+  parent: MarineSceneExecution
+  id: MarineSceneSearch
+  name: scene - search
+  components:
+  - type: MarineScene
+    kind: Search
+    soldierCount: 2
+    civilianCount: 2
+
+- type: entity
+  parent: MarineSceneExecution
+  id: MarineSceneBeating
+  name: scene - beating
+  components:
+  - type: MarineScene
+    kind: Beating
+    soldierCount: 2
+    civilianCount: 1
+
+- type: entity
+  parent: MarkerBase
+  id: MarineCivilianWalkPoint
+  name: civilian walk point
+  description: A waypoint of a civilian walking route. Points with the same route name are walked in order.
+  components:
+  - type: Sprite
+    layers:
+    - state: blue
+    - state: ai
+  - type: MarineCivilianPoint
+
+- type: entity
+  parent: MarkerBase
+  id: MarineCivilianTalkSpot
+  name: civilian talk spot
+  description: A place where civilians like to stop and talk. Better placed under a roof.
+  components:
+  - type: Sprite
+    layers:
+    - state: pink
+    - state: ai
+  - type: MarineCivilianPoint
+    talk: true
+
+- type: entity
+  parent: MarkerBase
+  id: MarineBarPoint
+  name: bar seat point
+  description: A place where civilians sit with a drink. Put it next to a chair if you want them to sit.
+  components:
+  - type: Sprite
+    layers:
+    - state: pink
+    - state: ai
+  - type: MarineCivilianPoint
+    kind: Bar
+
+- type: entity
+  parent: MarkerBase
+  id: MarineBankQueuePoint
+  name: bank queue point
+  description: A place in the bank queue. The lowest order is the first in line, standing opposite the window. A higher order means further from the counter.
+  components:
+  - type: Sprite
+    layers:
+    - state: blue
+    - state: ai
+  - type: MarineCivilianPoint
+    kind: Queue
+
+- type: entity
+  parent: MarkerBase
+  id: MarineBankCounter
+  name: bank counter point
+  description: Where the banker puts the bread slice. Nobody stands here, the citizen takes the bread and leaves.
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: ai
+  - type: MarineCivilianPoint
+    kind: Counter
+
+- type: entity
+  parent: MarkerBase
+  id: MarineAssemblyPoint
+  name: assembly point
+  description: Officers announce the rules here and civilians gather around.
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - state: ai
+  - type: MarineCivilianPoint
+    kind: Assembly
+
+- type: entity
+  parent: MarkerBase
+  id: MarinePatrolPoint
+  name: patrol point
+  description: A waypoint of a military police patrol route. Points with the same route are walked in order.
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - state: ai
+  - type: MarineCivilianPoint
+    kind: Patrol
+    route: police
+
+- type: entity
+  parent: MarkerBase
+  id: MarineCityHall
+  name: city hall point
+  description: The target of partisan attacks. Place it by the city hall.
+  components:
+  - type: Sprite
+    layers:
+    - state: decal
+    - state: ai
+  - type: MarineCivilianPoint
+    kind: Hall
+
+- type: entity
+  parent: MarkerBase
+  id: MarineSceneDynamic
+  name: dynamic scene
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MarineScene
+    dynamic: true
+
+- type: entity
+  parent: MobMarineCivilian
+  id: MobMarineBanker
+  name: Banker
+  description: A bank employee who hands out rations.
+  components:
+  - type: RandomMetadata
+    nameSegments:
+    - NamesNorthLast
+    - NamesNorthFirst
+    nameFormat: name-format-banker
+  - type: Marine
+    static: true
+    banker: true
+
+- type: entity
+  parent: MarineSpawnZone
+  id: MarineCivilianSpawner
+  name: civilian spawner
+  description: Spawns one civilian at the start of the round.
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobMarineCivilian
+    group: civilians
+    spawnOnInit: true
+
+- type: entity
+  parent: MarineCivilianSpawner
+  id: MarineBankerSpawner
+  name: banker spawner
+  description: Spawns the banker at the start of the round. Put it behind the bank counter.
+  components:
+  - type: MarineSpawnZone
+    marine: MobMarineBanker
+    group: civilians
+    spawnOnInit: true
+
+- type: entity
+  parent: MarkerBase
+  id: MarineCivilianGhostSpawner
+  name: civilian ghost role spawner
+  description: Lets a player take the role of a civilian.
+  components:
+  - type: GhostRole
+    name: ghost-role-information-marine-civilian-name
+    description: ghost-role-information-marine-civilian-description
+    rules: ghost-role-information-marine-civilian-rules
+    mindRoles:
+    - MindRoleGhostRoleNeutral
+    raffle:
+      settings: short
+  - type: GhostRoleMobSpawner
+    prototype: MobMarineCivilian
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+    - state: green

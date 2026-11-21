@@ -1,0 +1,26 @@
+# Nestation New City CC BY-NC 3.0
+- type: entity
+  parent: MarineSpawnZoneDefender
+  id: MarineSpawnZoneNorthGuard
+  name: guard spawn zone
+  description: Spawns the opposing army guard at the start of the mission.
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - state: ai
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanGuard
+    group: defenders
+    spawnOnInit: false
+
+- type: entity
+  parent: MarineSpawnZoneNorthGuard
+  id: MarineSpawnZoneNorthGuardInit
+  name: guard round start spawner
+  description: Spawns the opposing army guard at the start of the round. The guard keeps this spot as its post.
+  components:
+  - type: MarineSpawnZone
+    marine: MobNorthKoreanGuard
+    group: defenders
+    spawnOnInit: true

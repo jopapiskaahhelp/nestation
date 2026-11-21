@@ -9,7 +9,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._Nestation.Marines;
 
-public sealed partial class MarineParachuteSystem : EntitySystem
+public sealed class MarineParachuteSystem : EntitySystem
 {
     [Dependency] private AnimationPlayerSystem _player = default!;
     [Dependency] private IGameTiming _timing = default!;

@@ -1,0 +1,368 @@
+# Nestation New City CC BY-NC 3.0
+- type: entity
+  parent: CartridgeLightRifle
+  id: CartridgeLightRifleHmg
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+
+- type: entity
+  parent: BulletLightRifle
+  id: BulletLightRifleShort
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.45
+
+- type: entity
+  parent: CartridgeLightRifle
+  id: CartridgeLightRifleHmgShort
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    proto: BulletLightRifleShort
+    deleteOnSpawn: true
+
+- type: entity
+  parent: CartridgePistol
+  id: CartridgePistolMarine
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+
+- type: entity
+  parent: CartridgeMagnum
+  id: CartridgeMagnumMarine
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+
+- type: entity
+  parent: BaseItem
+  id: WeaponHmgNorth
+  name: L6 SAW
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/LMGs/l6.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,4,1
+  - type: Gun
+    fireRate: 8
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    minAngle: 3
+    maxAngle: 16
+    angleIncrease: 3
+    angleDecay: 12
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/lmg.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeLightRifleHmg
+  - type: Unremoveable
+    deleteOnDrop: false
+
+- type: entity
+  parent: BaseItem
+  id: WeaponHmgPlayer
+  name: L6 SAW (emplacement)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/LMGs/l6.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,4,1
+  - type: Gun
+    fireRate: 8
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    minAngle: 3
+    maxAngle: 16
+    angleIncrease: 3
+    angleDecay: 12
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/lmg.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeLightRifleHmgShort
+  - type: Unremoveable
+    deleteOnDrop: false
+
+- type: entity
+  parent: BaseItem
+  id: WeaponSmgDrozdMarine
+  name: Drozd
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/SMGs/drozd.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,3,1
+  - type: Gun
+    fireRate: 6
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    minAngle: 3
+    maxAngle: 16
+    angleIncrease: 3
+    angleDecay: 12
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/atreides.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: BasicEntityAmmoProvider
+    proto: CartridgePistolMarine
+  - type: Unremoveable
+    deleteOnDrop: false
+
+- type: entity
+  parent: BaseItem
+  id: WeaponRifleEstocMarine
+  name: Estoc DMR
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Rifles/estoc.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,3,2
+  - type: Gun
+    fireRate: 3
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    minAngle: 3
+    maxAngle: 16
+    angleIncrease: 3
+    angleDecay: 12
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/estocshot.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeRifleMarine
+  - type: Unremoveable
+    deleteOnDrop: false
+
+- type: entity
+  parent: BaseItem
+  id: WeaponRevolverPythonNorth
+  name: Python
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Revolvers/python.rsi
+    layers:
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,1,1
+  - type: Gun
+    fireRate: 2
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    minAngle: 3
+    maxAngle: 16
+    angleIncrease: 3
+    angleDecay: 12
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/revolver.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeMagnumMarine
+  - type: Unremoveable
+    deleteOnDrop: false
+
+- type: startingGear
+  id: NorthKoreanOfficerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitNorthKorean
+    shoes: ClothingShoesBootsMerc
+    head: ClothingHeadHatBeretNorthKorean
+
+- type: startingGear
+  id: NorthKoreanEliteGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitNorthKorean
+    shoes: ClothingShoesBootsMerc
+    head: ClothingHeadHelmetSwat
+    outerClothing: ClothingOuterArmorBulletproof
+
+- type: entity
+  parent: MobNorthKoreanSoldier
+  id: MobNorthKoreanOfficer
+  name: Cpt. Officer
+  description: An officer of the opposing army.
+  components:
+  - type: Loadout
+    prototypes:
+    - NorthKoreanOfficerGear
+  - type: RandomMetadata
+    nameSegments:
+    - NamesNorthLast
+    - NamesNorthFirst
+    nameFormat: name-format-north-officer
+  - type: Marine
+    lecturer: true
+    gunProto: WeaponRevolverPythonNorth
+    criticalHealth: 40
+    deadHealth: 55
+
+- type: entity
+  parent: MobNorthKoreanSoldier
+  id: MobNorthKoreanElite
+  name: Sgt. Elite
+  description: An elite trooper of the opposing army in improved body armor.
+  components:
+  - type: Loadout
+    prototypes:
+    - NorthKoreanEliteGear
+  - type: RandomMetadata
+    nameSegments:
+    - NamesNorthLast
+    - NamesNorthFirst
+    nameFormat: name-format-north-elite
+  - type: Marine
+    gunProto: WeaponRifleLecterMarine
+    criticalHealth: 70
+    deadHealth: 95
+
+- type: entity
+  parent: MobNorthKoreanSoldier
+  id: MobNorthKoreanGunner
+  name: Pvt. Machine gunner
+  description: A machine gunner of the opposing army sitting in a firing position.
+  components:
+  - type: Marine
+    static: true
+    deleteGunOnDeath: true
+    gunProto: WeaponHmgNorth
+    shootRange: 20
+    burstMin: 5
+    burstMax: 9
+    shotGap: 0.1
+    burstPauseMin: 0.8
+    burstPauseMax: 1.6
+    aimDelayMin: 0.2
+    aimDelayMax: 0.5
+    criticalHealth: 55
+    deadHealth: 75
+
+- type: entity
+  parent: MobNorthKoreanGunner
+  id: MobNorthKoreanGunnerBunker
+  name: Pvt. Bunker gunner
+  components:
+  - type: Marine
+    shootRange: 16
+
+- type: entity
+  id: MarineSandbag
+  name: sandbags
+  description: A low wall of sandbags. Bullets fly over it until its gun is silenced.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _nestation/Structures/sandbag.rsi
+    state: sandbag0
+    drawdepth: Mobs
+  - type: IconSmooth
+    mode: CardinalFlags
+    key: marine-sandbags
+    base: sandbag
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      walk:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - MobMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+        hard: true
+      cover:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        layer:
+        - BulletImpassable
+        hard: false
+  - type: MarineSandbag
+
+- type: entity
+  parent: MarkerBase
+  id: MarineGunSeat
+  name: gun seat
+  description: Whoever stands here gets the emplacement machine gun while staying in place.
+  components:
+  - type: MarineGunSeat
+
+- type: entity
+  parent: MarkerBase
+  id: MarineMgNest
+  name: machine gun nest
+  description: A ring of sandbags with a machine gunner inside. Fires in every direction.
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - state: ai
+  - type: MarineEmplacement
+    gunner: MobNorthKoreanGunner
+    piece: MarineSandbag
+
+- type: entity
+  parent: MarkerBase
+  id: MarineMgBunker
+  name: pillbox
+  description: A concrete pillbox with a machine gunner. The embrasure faces the rotation direction of this marker.
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - state: ai
+  - type: MarineEmplacement
+    bunker: true
+    gunner: MobNorthKoreanGunnerBunker
+    piece: WallConcrete

@@ -1,0 +1,134 @@
+# Nestation CC BY-NC 3.0
+ent-NestationReactorCore = ядерный реактор
+    .desc = Водо-водяной реактор 3x3 тепловой мощностью 3 МВт. Топливо загружается в слот, управление с пульта.
+ent-NestationFuelAssembly = тепловыделяющая сборка
+    .desc = Стандартная сборка низкообогащённого топлива.
+ent-NestationFuelAssemblyHEU = высокообогащённая сборка
+    .desc = Опытная сборка с огромным запасом реактивности. Реактор для неё не рассчитан.
+ent-NestationReactorWreck = остатки активной зоны
+    .desc = Расплавленные обломки реактора. Сильно фонят.
+ent-NestationPrimaryPump = главный циркуляционный насос
+    .desc = Насос 3x3. Гонит теплоноситель первого контура через активную зону. Потребляет до 60 кВт.
+ent-NestationFeedPump = питательный насос
+    .desc = Возвращает конденсат в парогенератор. Потребляет до 25 кВт.
+ent-NestationCirculationPump = циркуляционный насос бассейна
+    .desc = Прокачивает воду из бассейна через конденсатор. Потребляет до 15 кВт.
+ent-NestationSteamGenerator = парогенератор
+    .desc = Сосуд 3x5. Передаёт тепло первого контура воде второго и делает пар для турбины.
+ent-NestationTurbine = паровая турбина
+    .desc = Агрегат 7x3. Превращает около 30% тепла пара в механическую работу.
+ent-NestationGenerator = турбогенератор
+    .desc = Генератор 5x3, ставится вплотную к валу турбины. Высоковольтный кабель прокладывается под его центральной клеткой.
+ent-NestationCondenser = конденсатор
+    .desc = Аппарат 5x3. Конденсирует отработанный пар, отдавая тепло воде бассейна.
+ent-NestationPoolSegment = секция охлаждающего бассейна
+    .desc = Соседние секции объединяются в один бассейн.
+ent-NestationConsole = пульт управления реактором
+    .desc = Пульт 3x1. Подключается к реактору кабелем управления или вплотную к нему.
+ent-NestationPipeCoolant = труба первого контура
+    .desc = Труба с теплоносителем. Соседние трубы одного типа соединяются между собой.
+ent-NestationPipeSteam = паровая труба
+    .desc = Труба для пара.
+ent-NestationPipeFeed = труба питательной воды
+    .desc = Труба для конденсата и питательной воды.
+ent-NestationPipeCooling = труба охлаждающей воды
+    .desc = Труба между бассейном и конденсатором.
+ent-NestationPipeControl = кабель управления
+    .desc = Слаботочный кабель между пультом и реактором.
+
+nestation-fuel-slot = топливо
+
+cmd-nestation_build-desc = Строит готовую атомную станцию вокруг вашей позиции.
+cmd-nestation_build-help = nestation_build
+
+nestation-breaker-closed = включён
+nestation-breaker-open = отключён
+
+nestation-popup-scram = Аварийная защита! Стержни сброшены.
+nestation-popup-turbine-trip = Турбина отключена защитой!
+nestation-popup-alarm = Аварийные параметры!
+nestation-popup-excursion = Разгон на мгновенных нейтронах!
+nestation-popup-meltdown = Активная зона расплавилась!
+nestation-popup-hydrogen = Взрыв водорода!
+nestation-popup-vessel = Разрыв корпуса реактора, паровой взрыв!
+nestation-popup-flash = Яркая вспышка в районе реактора!
+nestation-popup-echo = Грохот взрыва дошёл через { $seconds } с. Расстояние по звуку D = v·t = { $meters } м (на глаз t/3 = { $km } км).
+nestation-popup-sg-burst = Разрыв парогенератора!
+nestation-popup-turbine-burst = Турбина разлетелась от разгона!
+
+nestation-examine-core = Мощность: { $power }% ({ $mw } МВт). Топливо: { $fuel } °C, теплоноситель: { $coolant } °C, стержни введены на { $rods }%.
+nestation-examine-scram = [color=red]Сработала аварийная защита.[/color]
+nestation-examine-pump = Обороты: { $speed }%, потребление: { $kw } кВт.
+nestation-examine-sg = Температура: { $temp } °C, давление пара: { $pressure } бар, уровень: { $level }%.
+nestation-examine-turbine = Обороты: { $rpm } об/мин, пар: { $steam } МВт.
+nestation-examine-tripped = [color=red]Турбина отключена защитой.[/color]
+nestation-examine-generator = Брутто: { $gross } кВт, собственные нужды: { $own } кВт, в сеть: { $net } кВт. Выключатель: { $breaker }.
+nestation-examine-condenser = Температура: { $temp } °C, тепловая нагрузка: { $heat } кВт.
+nestation-examine-pool = Вода: { $temp } °C, уровень: { $level }%.
+nestation-examine-fuel = Выгорание: { $burnup }%.
+
+nestation-ui-title = Пульт реактора
+nestation-ui-no-link = Нет связи с реактором. Соедините пульт с реактором кабелем управления.
+nestation-ui-scram = АЗ-5 (СТОП)
+nestation-ui-reset-scram = Сброс защиты
+nestation-ui-rod-mode = Стержни:
+nestation-ui-mode-auto = Авто
+nestation-ui-mode-manual = Ручной
+nestation-ui-rods-out = Поднять 5%
+nestation-ui-rods-in = Опустить 5%
+nestation-ui-setpoint = Уставка мощности:
+nestation-ui-minus-5 = -5%
+nestation-ui-plus-5 = +5%
+nestation-ui-minus-10 = -10%
+nestation-ui-plus-10 = +10%
+nestation-ui-pump-primary = ГЦН:
+nestation-ui-pump-feed = Питательный:
+nestation-ui-pump-circ = Циркуляционный:
+nestation-ui-auto = Авто
+nestation-ui-auto-on = авто
+nestation-ui-auto-off = ручной
+nestation-ui-reset-turbine = Сброс отключения турбины
+nestation-ui-breaker-open = Отключить генератор от сети
+nestation-ui-breaker-close = Включить генератор в сеть
+nestation-ui-bypass-on = Вывести защиты (ОПАСНО)
+nestation-ui-bypass-off = Ввести защиты обратно
+nestation-ui-core = Реактор: { $power }% ({ $mw } МВт), уставка { $setpoint }%, стержни { $rods }%, топливо { $fuel } °C, выгорание { $burnup }%
+nestation-ui-primary = Контур 1: теплоноситель { $coolant } °C, расход { $flow }%, уставка ГЦН { $setpoint }%
+nestation-ui-steam = Контур 2: пар { $temp } °C / { $pressure } бар, уровень { $level }%, питание { $feed }% (уст. { $feedset }%, { $feedauto })
+nestation-ui-turbine = Турбина: { $rpm } об/мин, КПД { $eff }%, генератор: { $breaker }
+nestation-ui-power = Электрика: брутто { $gross } кВт, собственные нужды { $own } кВт, в сеть { $net } кВт, резерв { $reserve } МДж
+nestation-ui-heat = Бассейн: конденсатор { $cond } °C, вода { $pool } °C, уровень { $level }%, секций { $segments }, тепло в бассейн { $heat } МВт, циркуляция { $circ }% (уст. { $circset }%, { $circauto })
+nestation-ui-vessel = Корпус: целостность { $integrity }%, вода в контуре { $inventory }%, остаточное тепло { $decay } кВт, до осушения { $dryout }
+nestation-ui-hydrogen = Водород в зале: { $h2 }% об. (воспламенение от 4%)
+nestation-ui-blast = Возможный взрыв: { $tnt } кг ТНТ, безопасное расстояние R = 15·∛W = { $radius } м
+nestation-ui-countdown = [!] ДО КАТАСТРОФЫ: { $seconds } с
+
+nestation-warning-FuelOverheat = Перегрев топлива
+nestation-warning-HighPower = Превышение мощности
+nestation-warning-LowFlow = Малый расход теплоносителя
+nestation-warning-HighPressure = Высокое давление пара
+nestation-warning-HighCoolantTemp = Высокая температура теплоносителя
+nestation-warning-LowSgLevel = Низкий уровень в парогенераторе
+nestation-warning-HighSgLevel = Высокий уровень в парогенераторе
+nestation-warning-HeatSinkLoss = Потеря теплоотвода
+nestation-warning-TurbineOverspeed = Разгон турбины
+nestation-warning-Hydrogen = Накопление водорода
+nestation-warning-PoolHot = Бассейн перегрет
+nestation-warning-PoolLow = Низкий уровень бассейна
+nestation-warning-PrimaryOpen = Первый контур не замкнут
+nestation-warning-SecondaryOpen = Второй контур не замкнут
+nestation-warning-CoolingOpen = Контур бассейна не замкнут
+nestation-warning-NoFuel = Нет топлива
+nestation-warning-PowerLoss = Нехватка питания собственных нужд
+nestation-warning-ProtectionsBypassed = ЗАЩИТЫ ВЫВЕДЕНЫ
+nestation-warning-MeltImminent = Приближается катастрофа
+nestation-warning-Scram = Сработала аварийная защита
+nestation-warning-TurbineTrip = Турбина отключена защитой
+nestation-warning-ReliefOpen = Сброс пара через предохранительный клапан
+nestation-warning-CoreUncovered = Активная зона оголена
+nestation-warning-ZirconiumReaction = Пароциркониевая реакция, выделяется водород
+nestation-warning-VesselDamaged = Корпус реактора повреждён, потеря теплоносителя
+nestation-warning-ControlLost = Потеряно управление реактором
+nestation-warning-RodsJammed = Стержни заклинило
+cmd-nestation_accident-desc = Запускает аварийный сценарий реактора для проверки взрывов.
+cmd-nestation_accident-help = nestation_accident <blackout|loca|blast [кг ТНТ]|rods|turbine|steam|heat>
