@@ -11,11 +11,11 @@ using Robust.Shared.Maths;
 namespace Content.Server._Nestation.Reactor;
 
 [AdminCommand(AdminFlags.Mapping)]
-public sealed class NestationBuildCommand : LocalizedEntityCommands
+public sealed partial class NestationBuildCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly ItemSlotsSystem _slots = default!;
-    [Dependency] private readonly ITileDefinitionManager _tiles = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private ItemSlotsSystem _slots = default!;
+    [Dependency] private ITileDefinitionManager _tiles = default!;
 
     public override string Command => "nestation_build";
 

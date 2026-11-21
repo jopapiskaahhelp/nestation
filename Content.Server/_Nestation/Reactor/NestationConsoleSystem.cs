@@ -4,12 +4,12 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server._Nestation.Reactor;
 
-public sealed class NestationConsoleSystem : EntitySystem
+public sealed partial class NestationConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly NestationGraphSystem _graph = default!;
-    [Dependency] private readonly NestationPlantSystem _plant = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private NestationGraphSystem _graph = default!;
+    [Dependency] private NestationPlantSystem _plant = default!;
 
     private float _accumulator;
 

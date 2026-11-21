@@ -9,9 +9,9 @@ using Robust.Shared.GameObjects;
 namespace Content.Server._Nestation.Reactor;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed class NestationAccidentCommand : LocalizedEntityCommands
+public sealed partial class NestationAccidentCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
 
     public override string Command => "nestation_accident";
 

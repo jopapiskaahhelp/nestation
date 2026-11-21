@@ -32,7 +32,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Nestation.NorthKoreanGuard;
 
-public sealed class NorthKoreanGuardSystem : EntitySystem
+public sealed partial class NorthKoreanGuardSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -307,7 +307,7 @@ public sealed class NorthKoreanGuardSystem : EntitySystem
         if (!_compFactory.TryGetRegistration("HumanoidAppearance", out var registration))
             return true;
 
-        return EntityManager.HasComponent(uid, registration.Type);
+        return HasComp(uid, registration.Type);
     }
 
     private bool IsMarine(EntityUid uid)
