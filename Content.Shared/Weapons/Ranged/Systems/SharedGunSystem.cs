@@ -1,3 +1,4 @@
+// Nestation New City CC BY-NC 3.0
 using System.Numerics;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
@@ -68,7 +69,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     /// <summary>
     /// Default projectile speed
     /// </summary>
-    public const float ProjectileSpeed = 40f;
+    public const float ProjectileSpeed = 90f;
 
     /// <summary>
     ///     Name of the container slot used as the gun's chamber

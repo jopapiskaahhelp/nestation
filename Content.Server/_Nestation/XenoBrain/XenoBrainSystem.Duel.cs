@@ -151,11 +151,17 @@ public sealed partial class XenoBrainSystem
 
         if (b.DuelOpponent is not { } opp || !TryGetXeno(opp, x.Map, out var o))
         {
-            b.DuelOpponent = null;
-            b.Target = null;
-            b.GoalPos = null;
-            b.RecentHits.Clear();
-            SetMode(x, XenoMode.Patrol, c.Now);
+            EndDuel(x, null, c.Now);
+            return;
+        }
+
+        var over = b.DuelMaxSeconds > 0f && (c.Now - b.ModeSince).TotalSeconds > b.DuelMaxSeconds;
+        if (!over && b.DuelYieldHp > 0f)
+            over = HpFrac(x.Uid) < b.DuelYieldHp || HpFrac(opp) < b.DuelYieldHp;
+
+        if (over)
+        {
+            EndDuel(x, o, c.Now);
             return;
         }
 
@@ -165,6 +171,26 @@ public sealed partial class XenoBrainSystem
         b.TargetRanged = false;
         b.ForcedTarget = null;
         b.RecentHits.Clear();
+    }
+
+    private void EndDuel(XenoInfo x, XenoInfo? other, TimeSpan now)
+    {
+        ClearDuel(x.Brain);
+        SetMode(x, XenoMode.Patrol, now);
+
+        if (other is { } o && o.Brain.DuelOpponent == x.Uid)
+        {
+            ClearDuel(o.Brain);
+            SetMode(o, XenoMode.Patrol, now);
+        }
+    }
+
+    private static void ClearDuel(XenoBrainComponent br)
+    {
+        br.DuelOpponent = null;
+        br.Target = null;
+        br.GoalPos = null;
+        br.RecentHits.Clear();
     }
 
     private bool TryGetXeno(EntityUid uid, MapId map, out XenoInfo info)

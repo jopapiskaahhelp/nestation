@@ -1,3 +1,4 @@
+// Nestation New City CC BY-NC 3.0
 using System.Linq;
 using System.Numerics;
 using Content.Client.Animations;
@@ -336,7 +337,8 @@ public sealed partial class GunSystem : SharedGunSystem
             track.Offset = Vector2.UnitX / 2f;
         }
 
-        var lifetime = 0.4f;
+        var bulletFlash = message.Prototype == "MuzzleFlashEffect";
+        var lifetime = bulletFlash ? 0.09f : 0.4f;
 
         if (TryComp<TimedDespawnComponent>(gunUid, out var despawn))
         {
@@ -372,7 +374,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
         Lights.SetEnabled(gunUid, true, light);
         Lights.SetRadius(gunUid, 2f, light);
-        Lights.SetColor(gunUid, Color.FromHex("#cc8e2b"), light);
+        Lights.SetColor(gunUid, bulletFlash ? Color.White : Color.FromHex("#cc8e2b"), light);
         Lights.SetEnergy(gunUid, 5f, light);
 
         var animTwo = new Animation()

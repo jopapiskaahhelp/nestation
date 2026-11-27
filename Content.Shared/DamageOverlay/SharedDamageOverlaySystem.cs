@@ -87,29 +87,8 @@ public abstract partial class SharedDamageOverlaySystem : EntitySystem
         {
             case MobState.Alive:
             {
-                FixedPoint2 painLevel = 0;
                 entity.Comp.PainLevel = 0;
-
-                if (!_statusEffects.TryEffectsWithComp<PainNumbnessStatusEffectComponent>(entity, out _))
-                {
-                    foreach (var painDamageType in injurable.PainDamageGroups)
-                    {
-                        damagePerGroup.TryGetValue(painDamageType, out var painDamage);
-                        painLevel += painDamage;
-                    }
-
-                    entity.Comp.PainLevel = FixedPoint2.Min(1f, painLevel / critThreshold).Float();
-
-                    if (entity.Comp.PainLevel < 0.05f) // Don't show damage overlay if they're near enough to max.
-                    {
-                        entity.Comp.PainLevel = 0;
-                    }
-                }
-
-                if (damagePerGroup.TryGetValue("Airloss", out var oxyDamage))
-                {
-                    entity.Comp.OxygenLevel = FixedPoint2.Min(1f, oxyDamage / critThreshold).Float();
-                }
+                entity.Comp.OxygenLevel = 0;
 
                 entity.Comp.CritLevel = 0;
                 entity.Comp.DeadLevel = 0;

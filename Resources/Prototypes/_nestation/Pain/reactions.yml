@@ -1,0 +1,37 @@
+# Nestation New City CC BY-NC 3.0
+- type: reaction
+  id: Paracetamol
+  reactants:
+    Hydrogen:
+      amount: 1
+    Oxygen:
+      amount: 1
+    Carbon:
+      amount: 1
+  products:
+    Paracetamol: 3
+
+- type: reaction
+  id: Tramadol
+  reactants:
+    Inaprovaline:
+      amount: 1
+    Ethanol:
+      amount: 1
+    Oxygen:
+      amount: 1
+  products:
+    Tramadol: 3
+
+- type: reaction
+  id: Fentanyl
+  minTemp: 370
+  reactants:
+    SpaceDrugs:
+      amount: 1
+    Ethanol:
+      amount: 1
+    Phosphorus:
+      amount: 1
+  products:
+    Fentanyl: 3

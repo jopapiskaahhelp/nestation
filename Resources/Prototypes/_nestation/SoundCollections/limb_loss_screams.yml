@@ -1,0 +1,16 @@
+# Nestation New City CC BY-NC 3.0
+- type: soundCollection
+  id: NestationLimbLossScreamsMale
+  files:
+  - /Audio/_Nestation/LimbLoss/limb_loss_male_1.ogg
+  - /Audio/_Nestation/LimbLoss/limb_loss_male_2.ogg
+  - /Audio/_Nestation/LimbLoss/limb_loss_male_3.ogg
+
+- type: soundCollection
+  id: NestationLimbLossScreamsFemale
+  files:
+  - /Audio/_Nestation/LimbLoss/limb_loss_female_1.ogg
+  - /Audio/_Nestation/LimbLoss/limb_loss_female_2.ogg
+  - /Audio/_Nestation/LimbLoss/limb_loss_female_3.ogg
+  - /Audio/_Nestation/LimbLoss/limb_loss_female_4.ogg
+  - /Audio/_Nestation/LimbLoss/limb_loss_female_5.ogg

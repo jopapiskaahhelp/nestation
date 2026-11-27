@@ -177,6 +177,7 @@ public sealed partial class MarineComponent : Component
     public TimeSpan NextAwareness;
     public TimeSpan NextSilence;
     public TimeSpan NextFlinch;
+    public TimeSpan NextVoice;
     public TimeSpan ListenUntil;
     public TimeSpan StandUpAt;
     public EntityUid? MemTarget;
@@ -209,7 +210,7 @@ public sealed partial class MarineComponent : Component
     public List<Vector2>? RoutePoints;
     public int RouteIndex;
     public bool Frozen;
-    public new bool Running = true;
+    public bool Running = true;
     public bool Flanker;
     public Vector2? ScriptGoal;
     public Vector2? LastKnown;

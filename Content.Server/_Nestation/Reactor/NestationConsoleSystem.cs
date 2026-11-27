@@ -4,12 +4,12 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server._Nestation.Reactor;
 
-public sealed partial class NestationConsoleSystem : EntitySystem
+public sealed class NestationConsoleSystem : EntitySystem
 {
-    [Dependency] private SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private NestationGraphSystem _graph = default!;
-    [Dependency] private NestationPlantSystem _plant = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly NestationGraphSystem _graph = default!;
+    [Dependency] private readonly NestationPlantSystem _plant = default!;
 
     private float _accumulator;
 
@@ -152,6 +152,17 @@ public sealed partial class NestationConsoleSystem : EntitySystem
 
             case NestationCommand.ToggleBypass:
                 core.ProtectionsBypassed = !core.ProtectionsBypassed;
+                break;
+
+            case NestationCommand.RunTest:
+                core.ProtectionsBypassed = true;
+                core.Scrammed = false;
+                core.AutoMode = false;
+                core.RodInsertion = 0.1f;
+                core.RodTarget = 0.1f;
+
+                if (c.Primary != null)
+                    c.Primary.Setpoint = 0.1f;
                 break;
         }
 

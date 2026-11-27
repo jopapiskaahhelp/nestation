@@ -83,6 +83,17 @@ public sealed partial class NestationPlantSystem
         }
     }
 
+    private void StartDoom(NestationPlantContext c, float tnt, string key, bool destroys)
+    {
+        var core = c.Core;
+        core.Dooming = true;
+        core.DoomTimer = core.DoomDelay;
+        core.DoomTnt = tnt;
+        core.DoomKey = key;
+        core.DoomDestroys = destroys;
+        _popup.PopupEntity(Loc.GetString("nestation-popup-critical"), c.CoreUid, PopupType.LargeCaution);
+    }
+
     private void DestroyCore(NestationPlantContext c, float tnt, string popupKey)
     {
         c.Core.Exploded = true;
@@ -100,6 +111,35 @@ public sealed partial class NestationPlantSystem
 
         core.PotentialTnt = NestationPhysics.HydrogenTnt(core.Hydrogen, concentration);
 
+        if (core.ForcedCritical > 0f)
+            core.ForcedCritical = MathF.Max(0f, core.ForcedCritical - dt);
+
+        UpdateRates(c, dt);
+
+        if (core.Dooming)
+        {
+            core.DoomTimer -= dt;
+            core.Countdown = MathF.Max(core.DoomTimer, 0f);
+            core.Warnings |= NestationWarning.MeltImminent;
+
+            if (core.DoomTimer > 0f)
+                return;
+
+            if (core.DoomDestroys)
+            {
+                DestroyCore(c, core.DoomTnt, core.DoomKey);
+            }
+            else
+            {
+                var current = NestationPhysics.HydrogenTnt(core.Hydrogen, NestationPhysics.HydrogenConcentration(core.Hydrogen, core.HallVolume));
+                core.Hydrogen = 0f;
+                core.Dooming = false;
+                Blast(c.CoreUid, MathF.Max(MathF.Max(core.DoomTnt, current), 1f), core.DoomKey);
+            }
+
+            return;
+        }
+
         if (core.Power > NestationTuning.ExcursionPower)
             core.ExcursionTimer += dt;
         else
@@ -108,7 +148,7 @@ public sealed partial class NestationPlantSystem
         if (core.ExcursionTimer >= 0.5f)
         {
             var tnt = NestationPhysics.ExcursionTnt(core.Target, core.DelayedNeutronFraction, core.FuelMass * NestationPhysics.FuelSpecificHeat, core.TempCoefficient);
-            DestroyCore(c, MathF.Max(tnt, 5f), "nestation-popup-excursion");
+            StartDoom(c, MathF.Max(tnt, 5f), "nestation-popup-excursion", true);
             return;
         }
 
@@ -123,7 +163,7 @@ public sealed partial class NestationPlantSystem
         if (core.PressureTimer >= 1f)
         {
             var tnt = NestationPhysics.VesselBurstTnt(core.Inventory, core.CoolantTemp, primaryPressure, 4f);
-            DestroyCore(c, MathF.Max(tnt, 5f), "nestation-popup-vessel");
+            StartDoom(c, MathF.Max(tnt, 5f), "nestation-popup-vessel", true);
             return;
         }
 
@@ -132,7 +172,7 @@ public sealed partial class NestationPlantSystem
         else
             core.MeltTimer = MathF.Max(0f, core.MeltTimer - dt);
 
-        if (core.MeltTimer >= 5f)
+        if (core.MeltTimer >= 1f)
         {
             var water = core.Inventory + core.CavityWater;
             var tnt = NestationPhysics.SteamExplosionTnt(core.FuelMass, core.FuelTemp, water);
@@ -140,19 +180,17 @@ public sealed partial class NestationPlantSystem
             if (concentration >= 0.04f)
                 tnt += core.PotentialTnt;
 
-            DestroyCore(c, MathF.Max(tnt, 2f), "nestation-popup-meltdown");
+            StartDoom(c, MathF.Max(tnt, 2f), "nestation-popup-meltdown", true);
             return;
         }
 
         if (concentration >= 0.04f)
         {
-            var ignition = 0.005f + (core.FuelTemp > 560f ? 0.01f : 0f) + 0.25f * concentration;
+            var ignition = 0.03f + 0.5f * concentration;
 
             if (_random.NextFloat() < 1f - MathF.Exp(-ignition * dt))
             {
-                var tnt = core.PotentialTnt;
-                core.Hydrogen = 0f;
-                Blast(c.CoreUid, MathF.Max(tnt, 1f), "nestation-popup-hydrogen");
+                StartDoom(c, MathF.Max(core.PotentialTnt, 1f), "nestation-popup-hydrogen", false);
                 return;
             }
 
@@ -165,7 +203,7 @@ public sealed partial class NestationPlantSystem
         }
 
         if (core.MeltTimer > 0f)
-            Soonest(ref countdown, 5f - core.MeltTimer);
+            Soonest(ref countdown, 1f - core.MeltTimer);
 
         if (core.PressureTimer > 0f)
             Soonest(ref countdown, 1f - core.PressureTimer);
@@ -174,7 +212,7 @@ public sealed partial class NestationPlantSystem
         {
             var sgDamage = DamageFraction(c.SteamGeneratorUid.Value, c.Sg.DamageLimit);
             var burst = c.Sg.BurstPressure * (1f - 0.6f * sgDamage);
-            var limit = sgDamage > 0.5f ? 1f : 4f;
+            var limit = sgDamage > 0.5f ? 0.5f : 2f;
 
             if (c.Sg.Pressure > burst)
                 c.Sg.BurstTimer += dt;
@@ -216,9 +254,77 @@ public sealed partial class NestationPlantSystem
             }
         }
 
+        PredictCatastrophe(c, closed, ref countdown);
+
+        if (countdown > 600f)
+            countdown = -1f;
+
         core.Countdown = countdown;
 
         if (countdown >= 0f)
             core.Warnings |= NestationWarning.MeltImminent;
+    }
+
+    private static void Smooth(ref float rate, float now, ref float previous, float dt)
+    {
+        var instant = (now - previous) / dt;
+        rate += (instant - rate) * (1f - MathF.Exp(-dt / 8f));
+        previous = now;
+    }
+
+    private void UpdateRates(NestationPlantContext c, float dt)
+    {
+        var core = c.Core;
+
+        if (!core.RatesReady)
+        {
+            core.RatesReady = true;
+            core.PrevFuelTemp = core.FuelTemp;
+            core.PrevCoolantTemp = core.CoolantTemp;
+            core.PrevPower = core.Power;
+
+            if (c.Sg != null)
+                c.Sg.PrevPressure = c.Sg.Pressure;
+
+            if (c.Turbine != null)
+                c.Turbine.PrevRpm = c.Turbine.Rpm;
+
+            return;
+        }
+
+        Smooth(ref core.FuelTempRate, core.FuelTemp, ref core.PrevFuelTemp, dt);
+        Smooth(ref core.CoolantTempRate, core.CoolantTemp, ref core.PrevCoolantTemp, dt);
+        Smooth(ref core.PowerRate, core.Power, ref core.PrevPower, dt);
+
+        if (c.Sg != null)
+            Smooth(ref c.Sg.PressureRate, c.Sg.Pressure, ref c.Sg.PrevPressure, dt);
+
+        if (c.Turbine != null)
+            Smooth(ref c.Turbine.RpmRate, c.Turbine.Rpm, ref c.Turbine.PrevRpm, dt);
+    }
+
+    private void PredictCatastrophe(NestationPlantContext c, bool closed, ref float countdown)
+    {
+        var core = c.Core;
+
+        if (core.FuelTemp > 900f && core.FuelTemp < core.MeltTemp && core.FuelTempRate > 0.3f)
+            Soonest(ref countdown, (core.MeltTemp - core.FuelTemp) / core.FuelTempRate + 1f);
+
+        if (closed && core.CoolantTemp > 330f && core.CoolantTemp < 370f && core.CoolantTempRate > 0.2f)
+            Soonest(ref countdown, (370f - core.CoolantTemp) / core.CoolantTempRate + 1f);
+
+        if (core.Power > 1.15f && core.Power < NestationTuning.ExcursionPower && core.PowerRate > 0.003f)
+            Soonest(ref countdown, (NestationTuning.ExcursionPower - core.Power) / core.PowerRate + 0.5f);
+
+        if (c.Sg != null && c.Sg.Pressure > 60f && c.Sg.PressureRate > 0.02f)
+        {
+            var burst = c.Sg.BurstPressure;
+
+            if (c.Sg.Pressure < burst)
+                Soonest(ref countdown, (burst - c.Sg.Pressure) / c.Sg.PressureRate + 2f);
+        }
+
+        if (c.Turbine != null && c.Turbine.Rpm > 1.05f && c.Turbine.Rpm < NestationTuning.ExplodeRpm && c.Turbine.RpmRate > 0.0005f)
+            Soonest(ref countdown, (NestationTuning.ExplodeRpm - c.Turbine.Rpm) / c.Turbine.RpmRate + 0.5f);
     }
 }

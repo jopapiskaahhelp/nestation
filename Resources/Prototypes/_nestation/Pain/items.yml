@@ -1,0 +1,98 @@
+# Nestation New City CC BY-NC 3.0
+- type: entity
+  name: pill
+  suffix: Paracetamol 5u
+  parent: Pill
+  id: PillParacetamol
+  components:
+  - type: Pill
+    pillType: 2
+  - type: Sprite
+    state: pill3
+  - type: Label
+    localizedLabel: pill-label-paracetamol-5u
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Paracetamol
+        Quantity: 5
+
+- type: entity
+  name: pill canister
+  parent: PillCanister
+  id: PillCanisterParacetamol
+  suffix: Paracetamol 5u, 6
+  components:
+  - type: Label
+    localizedLabel: pill-label-paracetamol-5u
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: PillParacetamol
+        amount: 6
+
+- type: entity
+  parent: ChemicalMedipen
+  id: TramadolAutoInjector
+  name: tramadol auto-injector
+  description: A single-dose auto-injector with tramadol for moderate pain.
+  components:
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: base-needle-inhand-left
+      - state: base-colorA-inhand-left
+        color: "#8f7bd1"
+      - state: base-colorB-inhand-left
+      right:
+      - state: base-needle-inhand-right
+      - state: base-colorA-inhand-right
+        color: "#8f7bd1"
+      - state: base-colorB-inhand-right
+  - type: Sprite
+    sprite: Objects/Specific/Medical/medipen.rsi
+    layers:
+    - state: penacid
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: penacid_empty
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Tramadol
+        Quantity: 10
+
+- type: entity
+  parent: ChemicalMedipen
+  id: FentanylAutoInjector
+  name: fentanyl auto-injector
+  description: A single-dose auto-injector with fentanyl for severe pain. Dangerous without need and at low blood pressure.
+  components:
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: base-needle-inhand-left
+      - state: base-colorA-inhand-left
+        color: "#c9d6e8"
+      - state: base-colorB-inhand-left
+      right:
+      - state: base-needle-inhand-right
+      - state: base-colorA-inhand-right
+        color: "#c9d6e8"
+      - state: base-colorB-inhand-right
+  - type: Sprite
+    sprite: Objects/Specific/Medical/medipen.rsi
+    layers:
+    - state: bicpen
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: bicpen_empty
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Fentanyl
+        Quantity: 5

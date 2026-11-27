@@ -65,6 +65,7 @@ public sealed class NestationConsoleWindow : DefaultWindow
         var bypass = Row(root);
         bypass.AddChild(_bypassButton);
         _bypassButton.OnPressed += _ => Send(NestationCommand.ToggleBypass);
+        bypass.AddChild(Make("nestation-ui-test", () => Send(NestationCommand.RunTest), Color.Red));
 
         Contents.AddChild(root);
     }

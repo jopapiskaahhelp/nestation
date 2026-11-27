@@ -9,10 +9,10 @@ namespace Content.Server._Nestation.Reactor;
 
 public readonly record struct NestationLink(EntityUid Device, NestationPortRole Role);
 
-public sealed partial class NestationGraphSystem : EntitySystem
+public sealed class NestationGraphSystem : EntitySystem
 {
-    [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     private EntityQuery<NestationPipeComponent> _pipes;
     private EntityQuery<NestationPortsComponent> _ports;

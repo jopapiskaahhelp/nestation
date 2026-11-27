@@ -1,10 +1,12 @@
 // Nestation New City CC BY-NC 3.0
 using System.Numerics;
 using Content.Server._Nestation.XenoHive;
+using Content.Server.Chat.Systems;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Light.Components;
 using Content.Server.Light.EntitySystems;
 using Content.Shared._Nestation.SupportStrike;
+using Content.Shared.Chat;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Prototypes;
@@ -14,7 +16,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Physics.Systems;
+using Robust.Shared.Maths;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -24,6 +26,7 @@ namespace Content.Server._Nestation.SupportStrike;
 public sealed partial class SupportStrikeSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ChatSystem _chat = default!;
     [Dependency] private ConcussionSystem _concussion = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private ExplosionSystem _explosion = default!;
@@ -32,7 +35,6 @@ public sealed partial class SupportStrikeSystem : EntitySystem
     [Dependency] private NpcFactionSystem _faction = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedMapSystem _maps = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
@@ -87,7 +89,13 @@ public sealed partial class SupportStrikeSystem : EntitySystem
 
         ent.Comp.NextUse = now + TimeSpan.FromSeconds(ent.Comp.Cooldown);
         QueueDel(flare);
-        LaunchRocket(ent.Comp.RocketProto, target, user);
+        var proto = ent.Comp.RocketProto;
+        Robust.Shared.Timing.Timer.Spawn(TimeSpan.FromSeconds(ent.Comp.LaunchDelay), () => LaunchRocket(proto, target, user));
+
+        _chat.TrySendInGameICMessage(user, Loc.GetString("support-tablet-request"), InGameICChatType.Speak, hideChat: false, checkRadioPrefix: false);
+
+        if (ent.Comp.ResponseSound != null)
+            _audio.PlayGlobal(ent.Comp.ResponseSound, Filter.Entities(user), false);
 
         _popup.PopupEntity(Loc.GetString("support-tablet-popup-launched"), ent, user);
         RefreshTablets();
@@ -128,14 +136,16 @@ public sealed partial class SupportStrikeSystem : EntitySystem
         var comp = EnsureComp<SupportRocketComponent>(rocket);
         var map = _maps.GetMapOrInvalid(target.MapId);
 
-        _transform.SetCoordinates(rocket, new EntityCoordinates(map, target.Position + new Vector2(0f, comp.SpawnHeight)));
+        var start = target.Position + new Vector2(0f, comp.SpawnHeight);
+
+        _transform.SetCoordinates(rocket, new EntityCoordinates(map, start));
+        _transform.SetWorldRotation(rocket, Angle.Zero);
 
         comp.Target = target.Position;
         comp.Map = target.MapId;
-        comp.Launcher = launcher;
-        comp.ImpactAt = _timing.CurTime + TimeSpan.FromSeconds(comp.FlightTime);
-
-        _physics.SetLinearVelocity(rocket, new Vector2(0f, -comp.SpawnHeight / comp.FlightTime));
+        comp.Launcher = Exists(launcher) ? launcher : null;
+        comp.StartPos = start;
+        comp.StartedAt = _timing.CurTime;
 
         if (comp.FlightSound != null)
             _audio.PlayPvs(comp.FlightSound, rocket);
@@ -150,18 +160,26 @@ public sealed partial class SupportStrikeSystem : EntitySystem
 
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (comp.Impacted || now < comp.ImpactAt)
+            if (comp.Impacted)
                 continue;
 
-            comp.Impacted = true;
-            Impact(uid, comp);
+            var t = Math.Clamp((float) (now - comp.StartedAt).TotalSeconds / comp.FlightTime, 0f, 1f);
+
+            if (t >= 1f)
+            {
+                comp.Impacted = true;
+                Impact(uid, comp);
+                continue;
+            }
+
+            var eased = 0.5f * t + 0.5f * t * t;
+            _transform.SetWorldPosition(uid, Vector2.Lerp(comp.StartPos, comp.Target, eased));
         }
     }
 
     private void Impact(EntityUid uid, SupportRocketComponent comp)
     {
         _transform.SetWorldPosition(uid, comp.Target);
-        _physics.SetLinearVelocity(uid, Vector2.Zero);
 
         Concuss(new MapCoordinates(comp.Target, comp.Map), comp);
         _explosion.TriggerExplosive(uid, user: comp.Launcher);

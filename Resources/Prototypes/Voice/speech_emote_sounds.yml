@@ -31,6 +31,8 @@
       collection: MaleSigh
     Crying:
       collection: MaleCry
+    PainMoan:
+      collection: MaleCry
     Whistle:
       collection: Whistles
     Weh:
@@ -74,6 +76,8 @@
       collection: FemaleSigh
     Crying:
       collection: FemaleCry
+    PainMoan:
+      collection: FemaleCry
     Whistle:
       collection: Whistles
     Weh:
@@ -101,6 +105,8 @@
       collection: Whistles
     Crying:
       collection: MaleCry
+    PainMoan:
+      collection: MaleCry
     Weh:
       collection: Weh
     Hew:
@@ -125,6 +131,8 @@
     Whistle:
       collection: Whistles
     Crying:
+      collection: FemaleCry
+    PainMoan:
       collection: FemaleCry
     Weh:
       collection: Weh
@@ -166,6 +174,8 @@
     Sigh:
       collection: MaleSigh
     Crying:
+      collection: MaleCry
+    PainMoan:
       collection: MaleCry
     Whistle:
       collection: Whistles
@@ -212,6 +222,8 @@
       collection: FemaleSigh
     Crying:
       collection: FemaleCry
+    PainMoan:
+      collection: FemaleCry
     Whistle:
       collection: Whistles
     Weh:
@@ -246,6 +258,8 @@
     Honk:
       collection: BikeHorn
     Crying:
+      path: /Audio/Voice/Vox/vox_cry.ogg
+    PainMoan:
       path: /Audio/Voice/Vox/vox_cry.ogg
     Weh:
       collection: Weh
@@ -339,6 +353,8 @@
       collection: BikeHorn
     Crying:
       collection: MaleCry
+    PainMoan:
+      collection: MaleCry
     Whistle:
       collection: Whistles
     Weh:
@@ -382,6 +398,8 @@
     Honk:
       collection: BikeHorn
     Crying:
+      collection: FemaleCry
+    PainMoan:
       collection: FemaleCry
     Whistle:
       collection: Whistles
@@ -519,6 +537,8 @@
       collection: VulpkaninWhines
     Crying:
       collection: VulpkaninWhines
+    PainMoan:
+      collection: VulpkaninWhines
     Howl:
       collection: VulpkaninHowls
     Weh:
@@ -561,6 +581,8 @@
     Whine:
       collection: VulpkaninWhines
     Crying:
+      collection: VulpkaninWhines
+    PainMoan:
       collection: VulpkaninWhines
     Howl:
       collection: VulpkaninHowls
@@ -759,6 +781,8 @@
     Yawn:
       collection: WawaYawn
     Crying:
+      collection: WawaCry
+    PainMoan:
       collection: WawaCry
     Snore:
       collection: Snores

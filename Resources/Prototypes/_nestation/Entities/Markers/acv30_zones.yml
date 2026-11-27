@@ -1,0 +1,55 @@
+# Nestation New City CC BY-NC 3.0
+- type: entity
+  id: Acv30ZoneBase
+  parent: MarkerBase
+  abstract: true
+  components:
+  - type: Acv30Zone
+
+- type: entity
+  id: Acv30ZoneSpawn
+  parent: Acv30ZoneBase
+  name: ACV-30 spawn zone
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+  - type: Acv30Zone
+    kind: Spawn
+    size: 4,3
+
+- type: entity
+  id: Acv30ZoneRoute
+  parent: Acv30ZoneBase
+  name: ACV-30 route point
+  components:
+  - type: Sprite
+    layers:
+    - state: blue
+  - type: Acv30Zone
+    kind: Route
+    size: 1,1
+
+- type: entity
+  id: Acv30ZoneFire
+  parent: Acv30ZoneBase
+  name: ACV-30 fire zone
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+  - type: Acv30Zone
+    kind: Fire
+    size: 20,20
+
+- type: entity
+  id: Acv30ZoneDetonation
+  parent: Acv30ZoneBase
+  name: ACV-30 detonation zone
+  components:
+  - type: Sprite
+    layers:
+    - state: pink
+  - type: Acv30Zone
+    kind: Detonation
+    size: 6,6

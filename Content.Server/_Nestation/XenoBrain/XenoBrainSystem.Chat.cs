@@ -337,5 +337,17 @@ public sealed partial class XenoBrainSystem
         {
             _chatCooldown.Remove(k);
         }
+
+        _tmpKeys.Clear();
+        foreach (var k in _trust.Keys)
+        {
+            if (Deleted(k))
+                _tmpKeys.Add(k);
+        }
+
+        foreach (var k in _tmpKeys)
+        {
+            _trust.Remove(k);
+        }
     }
 }

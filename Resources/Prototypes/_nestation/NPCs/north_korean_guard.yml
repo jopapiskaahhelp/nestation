@@ -2,7 +2,7 @@
 - type: startingGear
   id: NorthKoreanGuardGear
   equipment:
-    jumpsuit: ClothingUniformJumpsuitMercenary
+    jumpsuit: ClothingUniformJumpsuitNorthKorean
     shoes: ClothingShoesBootsMercFilled
     gloves: ClothingHandsGlovesMercFingerless
     head: ClothingHeadHatUshanka

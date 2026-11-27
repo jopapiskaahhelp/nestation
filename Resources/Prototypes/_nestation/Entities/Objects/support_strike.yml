@@ -13,7 +13,12 @@
     size: Small
   - type: SupportTablet
     cooldown: 90
+    launchDelay: 2.9
     rocketProto: SupportRocket
+    responseSound:
+      path: /Audio/_Nestation/SupportStrike/support_call.ogg
+      params:
+        volume: -8
   - type: ActivatableUI
     inHandsOnly: true
     singleUser: true
@@ -54,39 +59,25 @@
   - type: Sprite
     sprite: _nestation/Objects/Misc/support_rocket.rsi
     drawdepth: Overlays
-    noRot: true
     layers:
     - state: rocket
   - type: PointLight
     radius: 8
     energy: 3
     color: "#FF9A3C"
-  - type: Physics
-    bodyType: Dynamic
-    linearDamping: 0
-    angularDamping: 0
-  - type: Fixtures
-    fixtures:
-      rocket:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.1,-0.1,0.1,0.1"
-        hard: false
-        mask: []
-        layer: []
   - type: Explosive
     explosionType: Default
     totalIntensity: 2000
     intensitySlope: 4
     maxIntensity: 100
   - type: SupportRocket
-    flightTime: 2.6
-    spawnHeight: 28
+    flightTime: 0.3
+    spawnHeight: 20
     concussionRange: 30
     concussionMaxSeconds: 25
     concussionMinSeconds: 3
     flightSound:
-      path: /Audio/Weapons/Guns/Gunshots/rocket1.ogg
+      path: /Audio/_Nestation/SupportStrike/rocket_flight.ogg
       params:
-        volume: 4
+        volume: -12
         maxDistance: 60

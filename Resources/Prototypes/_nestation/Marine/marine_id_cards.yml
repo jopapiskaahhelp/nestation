@@ -33,14 +33,14 @@
       color: "#4b6b3a"
     - state: stripe_bottom
       color: "#2f4524"
-    - sprite: Interface/Misc/job_icons.rsi
+    - sprite: _nestation/Interface/Misc/marine_job_icons.rsi
       offset: -0.09375, 0.0625
-      state: Captain
+      state: MarineOfficer
   - type: Item
     heldPrefix: gold
   - type: IdCard
     jobTitle: job-title-marine-officer
-    jobIcon: JobIconCaptain
+    jobIcon: JobIconMarineOfficer
   - type: Access
     groups:
     - AllAccess
@@ -93,12 +93,12 @@
       color: "#4b6b3a"
     - state: stripe_bottom
       color: "#2f4524"
-    - sprite: Interface/Misc/job_icons.rsi
+    - sprite: _nestation/Interface/Misc/marine_job_icons.rsi
       offset: -0.09375, 0.0625
-      state: SecurityOfficer
+      state: MarineGunner
   - type: IdCard
     jobTitle: job-title-marine-gunner
-    jobIcon: JobIconSecurityOfficer
+    jobIcon: JobIconMarineGunner
   - type: Access
     groups:
     - Security
@@ -127,14 +127,14 @@
       color: "#4b6b3a"
     - state: stripe_bottom
       color: "#2f4524"
-    - sprite: Interface/Misc/job_icons.rsi
+    - sprite: _nestation/Interface/Misc/marine_job_icons.rsi
       offset: -0.09375, 0.0625
-      state: HeadOfSecurity
+      state: MarineCommander
   - type: Item
     heldPrefix: silver
   - type: IdCard
     jobTitle: job-title-marine-commander
-    jobIcon: JobIconHeadOfSecurity
+    jobIcon: JobIconMarineCommander
   - type: Access
     groups:
     - Security
@@ -163,12 +163,12 @@
       color: "#4b6b3a"
     - state: stripe_bottom
       color: "#2f4524"
-    - sprite: Interface/Misc/job_icons.rsi
+    - sprite: _nestation/Interface/Misc/marine_job_icons.rsi
       offset: -0.09375, 0.0625
-      state: SecurityCadet
+      state: MarinePrivate
   - type: IdCard
     jobTitle: job-title-marine-private
-    jobIcon: JobIconSecurityCadet
+    jobIcon: JobIconMarinePrivate
   - type: Access
     groups:
     - Security
@@ -197,12 +197,12 @@
       color: "#4b6b3a"
     - state: stripe_bottom
       color: "#2f4524"
-    - sprite: Interface/Misc/job_icons.rsi
+    - sprite: _nestation/Interface/Misc/marine_job_icons.rsi
       offset: -0.09375, 0.0625
-      state: MedicalDoctor
+      state: MarineMedic
   - type: IdCard
     jobTitle: job-title-marine-medic
-    jobIcon: JobIconMedicalDoctor
+    jobIcon: JobIconMarineMedic
   - type: Access
     groups:
     - Security
@@ -235,12 +235,12 @@
       color: "#4b6b3a"
     - state: stripe_bottom
       color: "#2f4524"
-    - sprite: Interface/Misc/job_icons.rsi
+    - sprite: _nestation/Interface/Misc/marine_job_icons.rsi
       offset: -0.09375, 0.0625
-      state: CargoTechnician
+      state: MarineLogistician
   - type: IdCard
     jobTitle: job-title-marine-logistician
-    jobIcon: JobIconCargoTechnician
+    jobIcon: JobIconMarineLogistician
   - type: Access
     groups:
     - Security

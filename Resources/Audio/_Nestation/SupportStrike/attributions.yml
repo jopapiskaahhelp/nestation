@@ -1,0 +1,9 @@
+- files: ["rocket_flight.ogg"]
+  license: "CC-BY-NC-3.0"
+  copyright: "Synthesized for Nestation"
+  source: "https://github.com/jopapiskaahhelp/nestation"
+
+- files: ["support_call.ogg"]
+  license: "CC-BY-NC-3.0"
+  copyright: "Speech cut from the start of air-raid.mp3 supplied by the project owner, with synthesized radio squelch, riser and sub swell added"
+  source: "https://github.com/jopapiskaahhelp/nestation"

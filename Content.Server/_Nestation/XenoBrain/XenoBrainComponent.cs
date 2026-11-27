@@ -91,9 +91,12 @@ public sealed partial class XenoBrainComponent : Component
     [DataField] public float StalkDistance = 8f;
     [DataField] public float StalkWatchSeconds = 45f;
     [DataField] public float StalkCooldown = 120f;
+    [DataField] public float StalkWaitSeconds = 90f;
     [DataField] public float StalkPounceDist = 3.5f;
 
     [DataField] public float DuelChaseRange = 30f;
+    [DataField] public float DuelMaxSeconds = 60f;
+    [DataField] public float DuelYieldHp = 0.25f;
 
     [DataField] public float SmashMaxSeconds = 20f;
 
@@ -217,6 +220,7 @@ public sealed partial class XenoBrainComponent : Component
     public Vector2? StalkWaitSpot;
     public TimeSpan StalkSince;
     public TimeSpan NoStalkUntil;
+    public TimeSpan StalkWaitSince;
     public TimeSpan StalkRollReset;
     public bool StalkRolled;
 

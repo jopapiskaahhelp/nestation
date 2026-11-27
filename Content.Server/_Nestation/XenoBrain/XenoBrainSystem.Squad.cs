@@ -510,38 +510,37 @@ public sealed partial class XenoBrainSystem
                     break;
                 }
 
-                if (now >= squad.NextPatrol && ready && StartPatrol(squad, tank, now))
-                    break;
-
-                if (now < squad.NextRaid)
-                    break;
-
-                if (!ready || readyMembers < RaidMinMembers)
+                if (now >= squad.NextRaid)
                 {
-                    squad.NextRaid = now + TimeSpan.FromSeconds(20);
-                    break;
+                    if (!ready || readyMembers < RaidMinMembers)
+                    {
+                        squad.NextRaid = now + TimeSpan.FromSeconds(20);
+                    }
+                    else if (TryNearestPlayer(tank.Map, tank.Pos, RaidRange, out var target))
+                    {
+                        squad.State = SquadState.Advance;
+                        squad.Play = ChoosePlay(readyMembers);
+                        squad.StateSince = now;
+                        squad.Target = target.Uid;
+                        squad.Goal = target.Pos;
+                        tb.BuildStand = null;
+                        break;
+                    }
+                    else
+                    {
+                        squad.NextRaid = now + TimeSpan.FromSeconds(RaidIntervalSeconds / 2f);
+                    }
                 }
 
-                if (TryNearestPlayer(tank.Map, tank.Pos, RaidRange, out var target))
-                {
-                    squad.State = SquadState.Advance;
-                    squad.Play = ChoosePlay(readyMembers);
-                    squad.StateSince = now;
-                    squad.Target = target.Uid;
-                    squad.Goal = target.Pos;
-                    tb.BuildStand = null;
-                }
-                else
-                {
-                    squad.NextRaid = now + TimeSpan.FromSeconds(RaidIntervalSeconds / 2f);
-                }
+                if (now >= squad.NextPatrol && ready)
+                    StartPatrol(squad, tank, now);
 
                 break;
 
             case SquadState.Patrol:
                 if (!ready || now >= squad.PatrolEnd)
                 {
-                    EndRaid(squad, now);
+                    EndRaid(squad, now, true);
                     squad.NextPatrol = now + TimeSpan.FromSeconds(15 + _random.NextFloat() * 25f);
                     break;
                 }
@@ -556,7 +555,7 @@ public sealed partial class XenoBrainSystem
                     }
                     else
                     {
-                        EndRaid(squad, now);
+                        EndRaid(squad, now, true);
                         squad.NextPatrol = now + TimeSpan.FromSeconds(15 + _random.NextFloat() * 25f);
                         break;
                     }
@@ -763,13 +762,15 @@ public sealed partial class XenoBrainSystem
         Leap(mi, now);
     }
 
-    private void EndRaid(Squad squad, TimeSpan now)
+    private void EndRaid(Squad squad, TimeSpan now, bool keepRaidTimer = false)
     {
         squad.State = SquadState.Guard;
         squad.StateSince = now;
         squad.Target = null;
         squad.Pounced = false;
-        squad.NextRaid = now + TimeSpan.FromSeconds(RaidIntervalSeconds + _random.NextFloat() * 60f);
+
+        if (!keepRaidTimer)
+            squad.NextRaid = now + TimeSpan.FromSeconds(RaidIntervalSeconds + _random.NextFloat() * 60f);
 
         if (FindXeno(squad.Tank, out var tank))
         {

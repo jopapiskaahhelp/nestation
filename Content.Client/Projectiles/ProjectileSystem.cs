@@ -1,7 +1,9 @@
+// Nestation New City CC BY-NC 3.0
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
+using Robust.Shared.Random;
 using TimedDespawnComponent = Robust.Shared.Spawners.TimedDespawnComponent;
 
 namespace Content.Client.Projectiles;
@@ -10,6 +12,7 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
 {
     [Dependency] private AnimationPlayerSystem _player = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -25,6 +28,9 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
             return;
 
         var ent = Spawn(ev.Prototype, coords);
+
+        if (ev.Prototype == "BulletImpactEffect")
+            Transform(ent).LocalRotation = _random.NextAngle();
 
         if (TryComp<SpriteComponent>(ent, out var sprite))
         {

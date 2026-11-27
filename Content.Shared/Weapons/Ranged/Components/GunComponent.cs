@@ -1,3 +1,4 @@
+// Nestation New City CC BY-NC 3.0
 using System.Numerics;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -206,7 +207,7 @@ public sealed partial class GunComponent : Component
     /// Starts fire cooldown when equipped if true.
     /// </summary>
     [DataField]
-    public bool ResetOnHandSelected = true;
+    public bool ResetOnHandSelected = false;
 
     /// <summary>
     /// The base value for how fast the projectile moves.

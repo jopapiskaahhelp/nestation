@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from Colonial Marines at commit https://gitlab.com/cmdevs/colonial-warfare/-/commit/f6b3c61fcbfe73a3f0f92edd5fc441ef845017e5 Sprites centered by metalgearsloth",
+  "copyright": "https://gitlab.com/cmdevs/colonial-warfare/-/tree/dev/icons/mob/xenonids",
   "size": {
     "x": 64,
     "y": 64
@@ -12,17 +12,13 @@
       "directions": 4
     },
     {
-      "name": "walking",
-      "directions": 4
-    },
-    {
-      "name": "dead"
-    },
-    {
       "name": "sleeping"
     },
     {
       "name": "crit"
+    },
+    {
+      "name": "dead"
     }
   ]
 }

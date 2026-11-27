@@ -881,8 +881,8 @@ public sealed partial class XenoHiveSystem : EntitySystem
             entry.State = XenoEntryState.Removed;
             entry.RetryAt = now + TimeSpan.FromSeconds(90);
             plan.Claims.Remove(entry.Offset);
-            plan.Open.Add(entry.Offset);
-            plan.OpenList.Add(entry.Offset);
+            if (plan.Open.Add(entry.Offset))
+                plan.OpenList.Add(entry.Offset);
         }
 
         plan.EnclosedSince = TimeSpan.Zero;

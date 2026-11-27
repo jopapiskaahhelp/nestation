@@ -37,7 +37,7 @@ public static class NestationPhysics
     public static float ZirconiumRate(float tempC)
     {
         var tk = MathF.Max(tempC + 273.15f, 1000f);
-        return 5e-5f * MathF.Exp(22853f * (1f / 1473.15f - 1f / tk));
+        return 2e-4f * MathF.Exp(22853f * (1f / 1473.15f - 1f / tk));
     }
 
     public static float HydrogenConcentration(float massKg, float hallVolume)

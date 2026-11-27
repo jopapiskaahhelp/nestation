@@ -29,7 +29,7 @@ public sealed partial class NestationReactorCoreComponent : Component
     public float TempCoefficient = 0.0007f;
 
     [DataField]
-    public float VoidCoefficient = 0.5f;
+    public float VoidCoefficient = -1.0f;
 
     [DataField]
     public float BoilingTemp = 335f;
@@ -38,7 +38,7 @@ public sealed partial class NestationReactorCoreComponent : Component
     public float CrisisTemp = 340f;
 
     [DataField]
-    public float MeltTemp = 2800f;
+    public float MeltTemp = 1800f;
 
     [DataField]
     public float ZirconiumMass = 600f;
@@ -50,7 +50,7 @@ public sealed partial class NestationReactorCoreComponent : Component
     public float CavityWater = 3000f;
 
     [DataField]
-    public float HallVolume = 2500f;
+    public float HallVolume = 1000f;
 
     [DataField]
     public float DecayTimeScale = 5f;
@@ -60,6 +60,15 @@ public sealed partial class NestationReactorCoreComponent : Component
 
     [DataField]
     public float DamageLimit = 4000f;
+
+    [DataField]
+    public float DoomDelay = 20f;
+
+    [DataField]
+    public float WarningTime = 60f;
+
+    [DataField]
+    public float UncoveredHeatBoost = 8f;
 
     [DataField]
     public float DelayedNeutronFraction = 0.0065f;
@@ -92,6 +101,19 @@ public sealed partial class NestationReactorCoreComponent : Component
     public float Breach;
     public float ForcedBreach;
     public bool ForcedJam;
+    public bool RatesReady;
+    public float PrevFuelTemp;
+    public float PrevCoolantTemp;
+    public float PrevPower;
+    public float FuelTempRate;
+    public float CoolantTempRate;
+    public float PowerRate;
+    public float ForcedCritical;
+    public bool Dooming;
+    public bool DoomDestroys;
+    public float DoomTimer;
+    public float DoomTnt;
+    public string DoomKey = string.Empty;
     public float MeltTimer;
     public float ExcursionTimer;
     public float PressureTimer;

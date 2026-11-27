@@ -103,7 +103,15 @@ public sealed partial class XenoBrainSystem
             if (b.StalkPhase != XenoStalkPhase.Wait)
             {
                 b.StalkPhase = XenoStalkPhase.Wait;
+                b.StalkWaitSince = now;
                 b.StalkWaitSpot = FindWaitSpot(x, st, p.Pos);
+            }
+            else if (b.StalkWaitSeconds > 0f && (now - b.StalkWaitSince).TotalSeconds > b.StalkWaitSeconds)
+            {
+                b.StalkTarget = null;
+                b.StalkWaitSpot = null;
+                b.NoStalkUntil = now + TimeSpan.FromSeconds(b.StalkCooldown);
+                SetMode(x, XenoMode.Patrol, now);
             }
 
             return;

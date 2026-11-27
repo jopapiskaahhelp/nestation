@@ -1,0 +1,13 @@
+# Nestation New City CC BY-NC 3.0
+- type: emote
+  id: PainMoan
+  name: chat-emote-name-pain-moan
+  category: Vocal
+  available: false
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    tags:
+    - SiliconEmotes
+  chatMessages: ["chat-emote-msg-pain-moan"]

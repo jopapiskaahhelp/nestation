@@ -38,6 +38,12 @@ public sealed partial class XenoBrainSystem
         if (b.ForcedTarget != null)
             return false;
 
+        if (!b.ProvokeOnSight && !(b.LastPlayerAttacker != null
+                                   && (now - b.LastPlayerAttackTime).TotalSeconds < 2.5))
+        {
+            return false;
+        }
+
         PlayerInfo? victim = null;
         var hit = false;
         if (b.LastPlayerAttacker is { } attacker

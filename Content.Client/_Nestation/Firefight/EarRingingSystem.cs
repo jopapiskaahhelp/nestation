@@ -1,5 +1,6 @@
 // Nestation New City CC BY-NC 3.0
 using Content.Shared._Nestation.Firefight;
+using Content.Shared._Nestation.Pain;
 using Robust.Client.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -31,7 +32,8 @@ public sealed partial class EarRingingSystem : EntitySystem
     {
         base.FrameUpdate(frameTime);
 
-        var strength = GetStrength();
+        var ringing = GetStrength();
+        var strength = MathF.Max(ringing, GetPainMuffle());
 
         if (strength <= 0f)
         {
@@ -41,8 +43,28 @@ public sealed partial class EarRingingSystem : EntitySystem
             return;
         }
 
-        UpdateRing(strength);
+        if (ringing > 0f)
+        {
+            UpdateRing(ringing);
+        }
+        else if (_ringStream is { } stream)
+        {
+            _audio.Stop(stream);
+            _ringStream = null;
+        }
+
         UpdateMuffle(strength);
+    }
+
+    private float GetPainMuffle()
+    {
+        if (_player.LocalEntity is not { } local ||
+            !TryComp(local, out PainComponent? pain))
+        {
+            return 0f;
+        }
+
+        return pain.Muffle;
     }
 
     private float GetStrength()

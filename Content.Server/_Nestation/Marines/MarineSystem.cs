@@ -34,6 +34,7 @@ using Content.Shared.SSDIndicator;
 using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Popups;
+using Content.Shared.Explosion.Components;
 using Content.Shared.Standing;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
@@ -75,6 +76,7 @@ public sealed partial class MarineSystem : EntitySystem
     [Dependency] private SharedRoofSystem _roof = default!;
     [Dependency] private MarineReactionSystem _reaction = default!;
     [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private MarineCivilianLifeSystem _life = default!;
 
     private const int BlockMask = (int) CollisionGroup.MobMask;
     private const int ShotMask = (int) CollisionGroup.BulletImpassable;
@@ -116,6 +118,7 @@ public sealed partial class MarineSystem : EntitySystem
         SubscribeLocalEvent<MarineComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<MarineComponent, MobStateChangedEvent>(OnMobState);
         SubscribeLocalEvent<GunComponent, AmmoShotEvent>(OnAnyShot);
+        SubscribeLocalEvent<ExplosiveComponent, EntityTerminatingEvent>(OnExplosiveGone);
     }
 
     private void OnMapInit(Entity<MarineComponent> ent, ref MapInitEvent args)
@@ -1324,6 +1327,7 @@ public sealed partial class MarineSystem : EntitySystem
             comp.Fear = MathF.Min(1f, comp.Fear + 0.15f);
             comp.PanicUntil = now + TimeSpan.FromSeconds(8f + 8f * comp.Fear);
             comp.PanicFrom = _lastShotPos;
+            GunReaction(uid, comp, now);
         }
         else if (comp.Scene == null && shotAge < TimeSpan.FromSeconds(1.5) && shotDist >= 18f && shotDist < 35f
                  && now >= comp.NextFlinch)
@@ -1444,6 +1448,86 @@ public sealed partial class MarineSystem : EntitySystem
             _transform.SetWorldRotation(uid, comp.MoveDir.ToWorldAngle());
 
         CheckStuck(uid, comp, pos, map, now);
+    }
+
+    private static readonly string[] GunPhrases =
+    {
+        "Бежим!",
+        "Стреляют! Бежим отсюда!",
+        "Прячьтесь!",
+        "Скорее, уходим!",
+        "Не стойте, бегите!",
+        "Только не пули, бегите!",
+    };
+
+    private static readonly string[] BlastNearPhrases =
+    {
+        "Мои уши...",
+        "Я ничего не слышу!",
+        "Боже, что это было?!",
+        "В ушах звенит...",
+    };
+
+    private static readonly string[] BlastFarPhrases =
+    {
+        "Они бомбят нас!",
+        "Это взрыв! Прячьтесь!",
+        "Они опять бомбят город!",
+        "Всё трясётся! Бежим!",
+    };
+
+    private void GunReaction(EntityUid uid, MarineComponent comp, TimeSpan now)
+    {
+        _life.PanicDrop(uid);
+
+        if (now < comp.NextVoice || !_random.Prob(0.7f))
+            return;
+
+        comp.NextVoice = now + TimeSpan.FromSeconds(6);
+        _chat.TrySendInGameICMessage(uid, _random.Pick(GunPhrases), InGameICChatType.Speak, false);
+    }
+
+    private void OnExplosiveGone(Entity<ExplosiveComponent> ent, ref EntityTerminatingEvent args)
+    {
+        if (!ent.Comp.Exploded)
+            return;
+
+        OnExplosion(_transform.GetWorldPosition(ent), Transform(ent).MapID);
+    }
+
+    public void OnExplosion(Vector2 pos, MapId map)
+    {
+        var now = _timing.CurTime;
+
+        foreach (var (uid, comp) in _lookup.GetEntitiesInRange<MarineComponent>(new MapCoordinates(pos, map), 40f, LookupFlags.Dynamic | LookupFlags.Uncontained))
+        {
+            if (!comp.Passive || comp.Static || comp.Scene != null || HasComp<ActorComponent>(uid) || _mobState.IsDead(uid))
+                continue;
+
+            var dist = (_transform.GetWorldPosition(uid) - pos).Length();
+
+            _life.PanicDrop(uid);
+
+            if (comp.CivMode == MarineCivilianMode.Busy)
+                comp.CivMode = MarineCivilianMode.Idle;
+
+            comp.ScriptGoal = null;
+            comp.Fear = MathF.Min(1f, comp.Fear + (dist < 14f ? 0.6f : 0.3f));
+            comp.PanicUntil = now + TimeSpan.FromSeconds(14);
+            comp.PanicFrom = pos;
+
+            if (dist < 14f)
+            {
+                comp.StandUpAt = now + TimeSpan.FromSeconds(2);
+                _standing.Down(uid, false, false);
+            }
+
+            if (now < comp.NextVoice)
+                continue;
+
+            comp.NextVoice = now + TimeSpan.FromSeconds(6);
+            _chat.TrySendInGameICMessage(uid, _random.Pick(dist < 14f ? BlastNearPhrases : BlastFarPhrases), InGameICChatType.Speak, false);
+        }
     }
 
     private void ScanSurroundings(EntityUid uid, MarineComponent comp, Vector2 pos, MapId map, TimeSpan now)

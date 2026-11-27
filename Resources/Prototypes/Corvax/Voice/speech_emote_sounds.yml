@@ -22,6 +22,8 @@
       path: /Audio/Corvax/Effects/Tajaran/sigh.ogg
     Crying:
       path: /Audio/Corvax/Effects/Tajaran/cry.ogg
+    PainMoan:
+      path: /Audio/Corvax/Effects/Tajaran/cry.ogg
     Whistle:
       collection: Whistles
     Weh:
@@ -54,6 +56,8 @@
       path: /Audio/Corvax/Effects/Tajaran/sigh.ogg
     Crying:
       path: /Audio/Corvax/Effects/Tajaran/cry.ogg
+    PainMoan:
+      path: /Audio/Corvax/Effects/Tajaran/cry.ogg
     Whistle:
       collection: Whistles
     Weh:
@@ -76,6 +80,8 @@
     Snore:
       path: /Audio/Machines/buzz-two.ogg
     Crying:
+      path: /Audio/Corvax/Effects/Ipc/cry.ogg
+    PainMoan:
       path: /Audio/Corvax/Effects/Ipc/cry.ogg
     Weh:
       collection: Weh

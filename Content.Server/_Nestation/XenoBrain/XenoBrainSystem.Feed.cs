@@ -2,6 +2,7 @@
 using System.Numerics;
 using Content.Shared.Body;
 using Content.Shared.Mobs;
+using Content.Shared._Nestation.XenoHive;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -45,7 +46,7 @@ public sealed partial class XenoBrainSystem
             if (x.Map != xf.MapID || b.DuelOpponent != null || b.FeedTarget != null || now < b.NoFeedUntil)
                 continue;
 
-            if (b.Mode is XenoMode.Retreat or XenoMode.Ambush)
+            if (b.Caste == XenoCaste.Burrower || b.Mode is XenoMode.Retreat or XenoMode.Ambush)
                 continue;
 
             var d = (x.Pos - pos).Length();

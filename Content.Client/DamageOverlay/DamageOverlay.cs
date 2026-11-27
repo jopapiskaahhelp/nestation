@@ -148,42 +148,9 @@ public sealed partial class DamageOverlay : Overlay
          * innerCircleMaxRadius is what we start at for 0 level for the inner circle
          */
 
-        // Makes debugging easier don't @ me
         float level = 0f;
-        level = _oldPainLevel;
 
-        // TODO: Lerping
-        if (level > 0f && _oldCritLevel <= 0f)
-        {
-            var pulseRate = 3f;
-            var adjustedTime = time * pulseRate;
-            float outerMaxLevel = 2.0f * distance;
-            float outerMinLevel = 0.8f * distance;
-            float innerMaxLevel = 0.6f * distance;
-            float innerMinLevel = 0.2f * distance;
-
-            var outerRadius = outerMaxLevel - level * (outerMaxLevel - outerMinLevel);
-            var innerRadius = innerMaxLevel - level * (innerMaxLevel - innerMinLevel);
-
-            var pulse = MathF.Max(0f, MathF.Sin(adjustedTime));
-
-            _bruteShader.SetParameter("time", pulse);
-            _bruteShader.SetParameter("color", new Vector3(1f, 0f, 0f));
-            _bruteShader.SetParameter("darknessAlphaOuter", 0.8f);
-
-            _bruteShader.SetParameter("outerCircleRadius", outerRadius);
-            _bruteShader.SetParameter("outerCircleMaxRadius", outerRadius + 0.2f * distance);
-            _bruteShader.SetParameter("innerCircleRadius", innerRadius);
-            _bruteShader.SetParameter("innerCircleMaxRadius", innerRadius + 0.02f * distance);
-            handle.UseShader(_bruteShader);
-            handle.DrawRect(viewport, Color.White);
-        }
-        else
-        {
-            _oldPainLevel = PainLevel;
-        }
-
-        level = State != MobState.Critical ? _oldOxygenLevel : 1f;
+        level = State == MobState.Critical ? 1f : 0f;
 
         if (level > 0f)
         {

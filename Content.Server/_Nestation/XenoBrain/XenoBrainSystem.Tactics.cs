@@ -35,14 +35,14 @@ public sealed partial class XenoBrainSystem
     {
         var b = x.Brain;
         var score = dist;
-        var others = CountOthers(p.Uid, p.Map, p.Pos, 9f);
+        var others = p.Crowd;
 
         if (others == 0)
             score -= 6f;
         else if (others >= 2 && b.Boldness < 0.8f)
             score += 8f * others;
 
-        if (HpFrac(p.Uid) < 0.5f)
+        if (p.Hp < 0.5f)
             score -= 5f;
 
         if (IsRangedDanger(p.Uid, now))

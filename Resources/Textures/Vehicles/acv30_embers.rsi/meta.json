@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-3.0",
+  "copyright": "Created for Nestation New City",
+  "size": {
+    "x": 96,
+    "y": 128
+  },
+  "states": [
+    {
+      "name": "embers",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    }
+  ]
+}

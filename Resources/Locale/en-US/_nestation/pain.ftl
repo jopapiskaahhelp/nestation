@@ -1,0 +1,19 @@
+# Nestation New City CC BY-NC 3.0
+pain-weak-popup = You feel weak pain.
+chat-emote-name-pain-moan = Moan of pain
+chat-emote-msg-pain-moan = moans in pain.
+pill-label-paracetamol-5u = paracetamol 5u
+reagent-name-paracetamol = paracetamol
+reagent-desc-paracetamol = A weak painkiller. Does not hinder combat but acts slowly and cannot handle medium or strong pain. Overdose is toxic.
+reagent-name-tramadol = tramadol
+reagent-desc-tramadol = A painkiller for medium pain. Causes dizziness on sharp turns and slows stamina recovery. Overdose causes seizures and nausea. Useless against strong pain.
+reagent-name-fentanyl = fentanyl
+reagent-desc-fentanyl = A potent opioid that instantly removes any pain. Clouds consciousness, muffles sounds and slows greatly. Depresses breathing when used on weak pain or overdosed, and can stop the heart at heavy blood loss.
+entity-effect-guidebook-painkiller-paracetamol = Relieves weak pain after 15-20 seconds.
+entity-effect-guidebook-painkiller-tramadol = Relieves medium pain after 5-10 seconds.
+entity-effect-guidebook-painkiller-fentanyl = Relieves any pain after 2-3 seconds.
+entity-effect-guidebook-pain-overdose-tramadolseizure = Causes seizures, the character drops items.
+entity-effect-guidebook-pain-overdose-fentanyldepression = Depresses breathing.
+entity-effect-guidebook-pain-overdose-fentanylpressure = Dangerously lowers blood pressure at blood loss.
+entity-effect-guidebook-pain-cure-respiratoryantidote = Relieves respiratory depression.
+entity-effect-guidebook-pain-cure-heartrestart = Restarts a stopped heart.

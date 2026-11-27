@@ -37,7 +37,7 @@ public sealed partial class XenoBrainSystem : EntitySystem
     public const int BlockMask = (int) CollisionGroup.MobMask;
     public const int OpaqueMask = (int) CollisionGroup.Opaque;
 
-    private readonly record struct PlayerInfo(EntityUid Uid, MapId Map, Vector2 Pos);
+    private readonly record struct PlayerInfo(EntityUid Uid, MapId Map, Vector2 Pos, int Crowd = 0, float Hp = 1f);
     private readonly record struct XenoInfo(EntityUid Uid, XenoBrainComponent Brain, MapId Map, Vector2 Pos);
     private readonly record struct Ctx(
         XenoInfo X, TimeSpan Now, int PackSize, XenoInfo Leader,
@@ -438,6 +438,12 @@ public sealed partial class XenoBrainSystem : EntitySystem
                 continue;
 
             _players.Add(new PlayerInfo(uid, xf.MapID, _transform.GetWorldPosition(xf)));
+        }
+
+        for (var i = 0; i < _players.Count; i++)
+        {
+            var p = _players[i];
+            _players[i] = p with { Crowd = CountOthers(p.Uid, p.Map, p.Pos, 9f), Hp = HpFrac(p.Uid) };
         }
 
         var xq = EntityQueryEnumerator<XenoBrainComponent, TransformComponent>();

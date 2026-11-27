@@ -1,9 +1,10 @@
+# Nestation New City CC BY-NC 3.0
 - type: entity
   id: MuzzleFlashEffect
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    drawdepth: BelowMobs
+    drawdepth: Effects
     layers:
     - shader: unshaded
       map: [ "enum.EffectLayers.Unshaded" ]

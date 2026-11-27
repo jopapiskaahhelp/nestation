@@ -109,7 +109,7 @@ public sealed partial class NestationPlantSystem
         }
 
         var decayTarget = core.Power < 0.02f && fuel != null
-            ? NestationPhysics.DecayHeatFraction(core.ShutdownTime, core.OperatingTime) * core.PrePower * core.DecayHeatBoost
+            ? NestationPhysics.DecayHeatFraction(core.ShutdownTime, core.OperatingTime) * core.PrePower * core.DecayHeatBoost * (wetted < 0.5f ? core.UncoveredHeatBoost : 1f)
             : 0f;
 
         core.DecayHeat += (decayTarget - core.DecayHeat) * (1f - MathF.Exp(-dt / 3f));

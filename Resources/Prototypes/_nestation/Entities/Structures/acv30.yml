@@ -1,0 +1,144 @@
+# Nestation New City CC BY-NC 3.0
+- type: entity
+  id: Acv30Vehicle
+  name: ACV-30
+  description: Плавающая бронированная машина огневой поддержки.
+  components:
+  - type: Transform
+  - type: Clickable
+  - type: Sprite
+    sprite: Vehicles/acv30.rsi
+    noRot: false
+    drawdepth: OverMobs
+    layers:
+    - state: acv30
+  - type: Physics
+    bodyType: Kinematic
+    sleepingAllowed: false
+  - type: Fixtures
+    fixtures:
+      hull:
+        shape: !type:PolygonShape
+          vertices:
+            - -1.5,-2
+            - 1.5,-2
+            - 1.5,2
+            - -1.5,2
+        density: 2000
+        mask:
+        - LargeMobMask
+        layer:
+        - LargeMobLayer
+  - type: Acv30Vehicle
+    speed: 1
+    fireRate: 8
+    projectile: BulletLightRifle
+    shootSound:
+      path: /Audio/Weapons/Guns/Gunshots/lmg.ogg
+    crushSound:
+      path: /Audio/Effects/metal_break1.ogg
+    detonationSound:
+      path: /Audio/Effects/explosion1.ogg
+    wreck: Acv30Wreck
+
+- type: entity
+  id: Acv30Wreck
+  name: горящий остов ACV-30
+  description: Выгоревший корпус бронемашины. Внутри ещё кто-то кричит.
+  components:
+  - type: Transform
+  - type: Clickable
+  - type: Sprite
+    sprite: Vehicles/acv30.rsi
+    noRot: false
+    drawdepth: LargeObjects
+    layers:
+    - state: wreck
+    - state: wreck-glow
+      shader: unshaded
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      hull:
+        shape: !type:PolygonShape
+          vertices:
+            - -1.5,-2
+            - 1.5,-2
+            - 1.5,2
+            - -1.5,2
+        density: 2000
+        mask:
+        - LargeMobMask
+        layer:
+        - LargeMobLayer
+  - type: PointLight
+    color: "#ff6a1a"
+    radius: 10
+    energy: 3
+    softness: 1
+    castShadows: false
+  - type: Acv30Wreck
+    screamSound:
+      path: /Audio/_Nestation/Acv30/crew_screams_muffled.ogg
+    effects:
+    - proto: Acv30Smoke
+      offset: 0,0.3
+    - proto: Acv30Smoke
+      offset: 0.35,-1.2
+    - proto: Acv30Smoke
+      offset: -0.7,-0.5
+    - proto: Acv30Embers
+      offset: 0,0.3
+    - proto: Acv30Embers
+      offset: 0.3,-1.1
+
+- type: entity
+  id: Acv30EffectBase
+  abstract: true
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+  - type: Acv30Effect
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: Acv30Smoke
+  parent: Acv30EffectBase
+  name: дым
+  components:
+  - type: Sprite
+    sprite: Vehicles/acv30_smoke.rsi
+    noRot: true
+    drawdepth: Effects
+    layers:
+    - state: smoke
+      offset: 0,2.5
+
+- type: entity
+  id: Acv30Embers
+  parent: Acv30EffectBase
+  name: искры
+  components:
+  - type: Sprite
+    sprite: Vehicles/acv30_embers.rsi
+    noRot: true
+    drawdepth: Effects
+    layers:
+    - state: embers
+      shader: unshaded
+      offset: 0,2
+
+- type: entity
+  id: Acv30FireAmbience
+  parent: Acv30EffectBase
+  name: рёв огня
+  components:
+  - type: AmbientSound
+    enabled: true
+    sound:
+      path: /Audio/Effects/fire.ogg
+    range: 10
+    volume: -8

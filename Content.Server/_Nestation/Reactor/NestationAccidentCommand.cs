@@ -9,9 +9,9 @@ using Robust.Shared.GameObjects;
 namespace Content.Server._Nestation.Reactor;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed partial class NestationAccidentCommand : LocalizedEntityCommands
+public sealed class NestationAccidentCommand : LocalizedEntityCommands
 {
-    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private readonly ExplosionSystem _explosion = default!;
 
     public override string Command => "nestation_accident";
 
@@ -19,7 +19,7 @@ public sealed partial class NestationAccidentCommand : LocalizedEntityCommands
     {
         if (args.Length < 1)
         {
-            shell.WriteLine("Сценарии: blackout, loca, blast [кг ТНТ], rods, turbine, steam, heat");
+            shell.WriteLine("Сценарии: animation, chernobyl, blackout, loca, blast [кг ТНТ], rods, turbine, steam, heat");
             return;
         }
 
@@ -84,6 +84,21 @@ public sealed partial class NestationAccidentCommand : LocalizedEntityCommands
 
                 if (c.Cond != null)
                     c.Cond.Temp = 130f;
+                break;
+
+            case "chernobyl":
+                core.ProtectionsBypassed = true;
+                core.Scrammed = false;
+                core.AutoMode = false;
+                core.RodInsertion = 0.1f;
+                core.RodTarget = 0.1f;
+
+                if (c.Primary != null)
+                    c.Primary.Setpoint = 0.1f;
+                break;
+
+            case "animation":
+                core.ForcedCritical = 30f;
                 break;
 
             case "heat":

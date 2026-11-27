@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-3.0",
+  "copyright": "Created for Nestation New City",
+  "size": {
+    "x": 96,
+    "y": 160
+  },
+  "states": [
+    {
+      "name": "smoke",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    }
+  ]
+}

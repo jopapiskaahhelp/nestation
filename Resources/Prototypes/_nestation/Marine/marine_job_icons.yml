@@ -1,0 +1,48 @@
+# Nestation New City CC BY-NC 3.0
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconMarineCommander
+  icon:
+    sprite: /Textures/_nestation/Interface/Misc/marine_job_icons.rsi
+    state: MarineCommander
+  jobName: job-name-marine-commander
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconMarineOfficer
+  icon:
+    sprite: /Textures/_nestation/Interface/Misc/marine_job_icons.rsi
+    state: MarineOfficer
+  jobName: job-name-marine-officer
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconMarineGunner
+  icon:
+    sprite: /Textures/_nestation/Interface/Misc/marine_job_icons.rsi
+    state: MarineGunner
+  jobName: job-name-marine-gunner
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconMarineMedic
+  icon:
+    sprite: /Textures/_nestation/Interface/Misc/marine_job_icons.rsi
+    state: MarineMedic
+  jobName: job-name-marine-medic
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconMarineLogistician
+  icon:
+    sprite: /Textures/_nestation/Interface/Misc/marine_job_icons.rsi
+    state: MarineLogistician
+  jobName: job-name-marine-logistician
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconMarinePrivate
+  icon:
+    sprite: /Textures/_nestation/Interface/Misc/marine_job_icons.rsi
+    state: MarinePrivate
+  jobName: job-name-marine-private

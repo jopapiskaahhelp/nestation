@@ -17,12 +17,13 @@
           Hot: { state: core_hot }
           Alarm: { state: core_alarm }
           Broken: { state: core_broken }
+          Critical: { state: core_critical }
   - type: Fixtures
     fixtures:
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-1.45,-1.45,1.45,1.45"
+          bounds: "-2.45,-2.45,2.45,2.45"
         mask:
         - MachineMask
         layer:
@@ -30,14 +31,14 @@
         density: 200
   - type: NestationPorts
     control: true
-    size: 3,3
+    size: 5,5
     ports:
     - side: East
-      offset: 1,0
+      offset: 2,0
       medium: Coolant
       role: ReactorHot
     - side: West
-      offset: -1,0
+      offset: -2,0
       medium: Coolant
       role: ReactorCold
   - type: NestationReactorCore
@@ -98,7 +99,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-1.45,-1.45,1.45,1.45"
+          bounds: "-2.45,-2.45,2.45,2.45"
         mask:
         - MachineMask
         layer:

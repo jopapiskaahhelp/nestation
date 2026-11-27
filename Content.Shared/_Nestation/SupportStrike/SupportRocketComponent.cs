@@ -9,10 +9,10 @@ namespace Content.Shared._Nestation.SupportStrike;
 public sealed partial class SupportRocketComponent : Component
 {
     [DataField]
-    public float FlightTime = 2.6f;
+    public float FlightTime = 0.3f;
 
     [DataField]
-    public float SpawnHeight = 28f;
+    public float SpawnHeight = 20f;
 
     [DataField]
     public float ConcussionRange = 30f;
@@ -26,7 +26,9 @@ public sealed partial class SupportRocketComponent : Component
     [DataField]
     public SoundSpecifier? FlightSound;
 
-    public TimeSpan ImpactAt;
+    public TimeSpan StartedAt;
+
+    public Vector2 StartPos;
 
     public Vector2 Target;
 

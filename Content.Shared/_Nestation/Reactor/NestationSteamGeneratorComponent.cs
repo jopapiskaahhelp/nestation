@@ -46,4 +46,6 @@ public sealed partial class NestationSteamGeneratorComponent : Component
     public float ReliefPower;
     public float SteamFlow;
     public float BurstTimer;
+    public float PrevPressure;
+    public float PressureRate;
 }

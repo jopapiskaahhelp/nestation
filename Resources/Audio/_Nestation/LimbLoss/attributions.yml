@@ -1,0 +1,22 @@
+- files:
+  - limb_loss_male_1.ogg
+  - limb_loss_female_1.ogg
+  - limb_loss_female_2.ogg
+  license: "Custom"
+  copyright: "Pixabay Content License (universfield, freesound_community). Trimmed, compressed, loudness-normalized for Nestation New City"
+  source: "https://pixabay.com/"
+
+- files:
+  - limb_loss_male_2.ogg
+  - limb_loss_male_3.ogg
+  license: "Custom"
+  copyright: "Provided by the Nestation New City project author (anguished-scream-of-terror, pronzitelnyiy-vozglas). Trimmed, compressed, loudness-normalized"
+  source: "https://github.com/jopapiskaahhelp/nestation"
+
+- files:
+  - limb_loss_female_3.ogg
+  - limb_loss_female_4.ogg
+  - limb_loss_female_5.ogg
+  license: "CC-BY-SA-3.0"
+  copyright: "/tg/station. Modified for Nestation New City: pitch, layering, compression, saturation"
+  source: "https://github.com/tgstation/tgstation/commit/3d049e69fe71a0be2133005e65ea469135d648c8"

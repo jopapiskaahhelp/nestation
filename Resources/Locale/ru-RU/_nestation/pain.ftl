@@ -1,0 +1,19 @@
+# Nestation New City CC BY-NC 3.0
+pain-weak-popup = Вы чувствуете слабую боль.
+chat-emote-name-pain-moan = Стон от боли
+chat-emote-msg-pain-moan = стонет от боли.
+pill-label-paracetamol-5u = парацетамол 5 ед
+reagent-name-paracetamol = парацетамол
+reagent-desc-paracetamol = Слабое обезболивающее. Не мешает в бою, но действует медленно и не справляется со средней и сильной болью. Передозировка отравляет.
+reagent-name-tramadol = трамадол
+reagent-desc-tramadol = Обезболивающее для средней боли. Вызывает головокружение при резких поворотах и замедляет восстановление выносливости. При передозировке вызывает судороги и тошноту. От сильной боли не помогает.
+reagent-name-fentanyl = фентанил
+reagent-desc-fentanyl = Мощный опиоид, мгновенно снимающий любую боль. Затуманивает сознание, приглушает звуки и сильно замедляет. На слабую боль и при передозировке угнетает дыхание, при большой кровопотере может остановить сердце.
+entity-effect-guidebook-painkiller-paracetamol = Снимает слабую боль через 15-20 секунд.
+entity-effect-guidebook-painkiller-tramadol = Снимает среднюю боль через 5-10 секунд.
+entity-effect-guidebook-painkiller-fentanyl = Снимает любую боль через 2-3 секунды.
+entity-effect-guidebook-pain-overdose-tramadolseizure = Вызывает судороги, персонаж роняет предметы.
+entity-effect-guidebook-pain-overdose-fentanyldepression = Угнетает дыхание.
+entity-effect-guidebook-pain-overdose-fentanylpressure = Опасно снижает давление при кровопотере.
+entity-effect-guidebook-pain-cure-respiratoryantidote = Снимает угнетение дыхания.
+entity-effect-guidebook-pain-cure-heartrestart = Запускает остановившееся сердце.

@@ -1,0 +1,98 @@
+# Nestation New City CC BY-NC 3.0
+- type: reagent
+  id: Paracetamol
+  name: reagent-name-paracetamol
+  group: Medicine
+  desc: reagent-desc-paracetamol
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: bitter
+  color: "#e8e8f0"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.04
+      effects:
+      - !type:Painkiller
+        drug: Paracetamol
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Paracetamol
+          min: 11
+        damage:
+          types:
+            Poison: 0.4
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Paracetamol
+          min: 16
+        damage:
+          types:
+            Poison: 0.7
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Paracetamol
+          min: 21
+        damage:
+          types:
+            Poison: 1.0
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Paracetamol
+          min: 26
+        damage:
+          types:
+            Poison: 1.4
+
+- type: reagent
+  id: Tramadol
+  name: reagent-name-tramadol
+  group: Medicine
+  desc: reagent-desc-tramadol
+  physicalDesc: reagent-physical-desc-opaque
+  flavor: bitter
+  color: "#8f7bd1"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.08
+      effects:
+      - !type:Painkiller
+        drug: Tramadol
+      - !type:PainOverdose
+        kind: TramadolSeizure
+        probability: 0.12
+        conditions:
+        - !type:ReagentCondition
+          reagent: Tramadol
+          min: 15
+      - !type:Vomit
+        probability: 0.12
+        conditions:
+        - !type:ReagentCondition
+          reagent: Tramadol
+          min: 15
+
+- type: reagent
+  id: Fentanyl
+  name: reagent-name-fentanyl
+  group: Medicine
+  desc: reagent-desc-fentanyl
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#c9d6e8"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.06
+      effects:
+      - !type:Painkiller
+        drug: Fentanyl
+      - !type:PainOverdose
+        kind: FentanylPressure
+      - !type:PainOverdose
+        kind: FentanylDepression
+        conditions:
+        - !type:ReagentCondition
+          reagent: Fentanyl
+          min: 8

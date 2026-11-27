@@ -8,6 +8,7 @@ support-tablet-no-signal = Сигнал флаера поддержки: нет
 support-tablet-popup-reload = Ракета ещё не готова.
 support-tablet-popup-no-signal = Нет сигнала флаера поддержки. Сначала бросьте флаер.
 support-tablet-popup-launched = Ракета запущена!
+support-tablet-request = Запрашиваю поддержку с воздуха!
 
 ent-SupportTablet = планшет поддержки
     .desc = Планшет целеуказания. Запускает ракету по месту, где лежит брошенный флаер поддержки. Перезарядка 90 секунд.

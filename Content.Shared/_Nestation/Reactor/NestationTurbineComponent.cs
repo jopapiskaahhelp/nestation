@@ -29,4 +29,6 @@ public sealed partial class NestationTurbineComponent : Component
     public float Gross;
     public bool Tripped;
     public float OverspeedTimer;
+    public float PrevRpm;
+    public float RpmRate;
 }

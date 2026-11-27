@@ -267,6 +267,8 @@
   metabolisms:
     Bloodstream:
       effects:
+      - !type:PainCure
+        kind: RespiratoryAntidote
       - !type:HealthChange
         damage:
           types:
@@ -293,6 +295,8 @@
   metabolisms:
     Bloodstream:
       effects:
+      - !type:PainCure
+        kind: RespiratoryAntidote
       - !type:HealthChange
         damage:
           types:
@@ -327,6 +331,10 @@
   metabolisms:
     Bloodstream:
       effects:
+      - !type:PainCure
+        kind: RespiratoryAntidote
+      - !type:PainCure
+        kind: HeartRestart
       - !type:AdjustReagent
         conditions:
         - !type:ReagentCondition
@@ -458,6 +466,8 @@
     Bloodstream:
       metabolismRate: 0.1 # Smaller doses stabilize critical people for longer. Gives it a specific usecase as to not be entirely outclassed by dex+
       effects:
+      - !type:PainCure
+        kind: RespiratoryAntidote
       - !type:HealthChange
         conditions:
           # they gotta be in crit first

@@ -25,7 +25,7 @@ public static class NestationTuning
     public const float TripRpm = 1.10f;
     public const float TripSgLevel = 0.92f;
     public const float ExplodeRpm = 1.25f;
-    public const float ExcursionPower = 2.0f;
+    public const float ExcursionPower = 1.6f;
 
     public static float SaturationPressure(float tempC)
     {

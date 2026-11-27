@@ -36,6 +36,7 @@ public sealed partial class MarineTownSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private MarineSceneSystem _scene = default!;
     [Dependency] private MarineSystem _marines = default!;
+    [Dependency] private MarineCivilianLifeSystem _life = default!;
 
     private sealed class Activity
     {
@@ -52,6 +53,7 @@ public sealed partial class MarineTownSystem : EntitySystem
     private readonly List<(EntityUid Partisan, TimeSpan Until)> _hunts = new();
 
     private TimeSpan _nextTick;
+    private TimeSpan _nextCivEvent;
     private TimeSpan _nextBar;
     private TimeSpan _nextBankJoin;
     private TimeSpan _nextAssembly;
@@ -118,6 +120,7 @@ public sealed partial class MarineTownSystem : EntitySystem
         _nextBankJoin = TimeSpan.Zero;
         _nextAssembly = TimeSpan.Zero;
         _nextPartisan = TimeSpan.Zero;
+        _nextCivEvent = TimeSpan.Zero;
     }
 
     private struct PointInfo
@@ -325,6 +328,12 @@ public sealed partial class MarineTownSystem : EntitySystem
         if (now >= _nextAssembly)
             _nextAssembly = now + TimeSpan.FromSeconds(StartAssembly(now) ? _random.NextFloat(240f, 420f) : 15f);
 
+        if (now >= _nextCivEvent)
+        {
+            var started = _random.Prob(0.6f) ? StartWallChat(now) : StartSmokeBreak(now);
+            _nextCivEvent = now + TimeSpan.FromSeconds(started ? _random.NextFloat(70f, 140f) : 15f);
+        }
+
         if (now >= _nextPartisan)
         {
             _nextPartisan = now + TimeSpan.FromSeconds(_random.NextFloat(300f, 480f));
@@ -332,6 +341,170 @@ public sealed partial class MarineTownSystem : EntitySystem
             if (_random.Prob(0.10f))
                 StartPartisan(now);
         }
+    }
+
+    private static readonly string[] WallEmotes =
+    {
+        "что-то тихо говорит",
+        "кивает",
+        "жестикулирует",
+        "качает головой",
+        "негромко смеётся",
+        "вздыхает и пожимает плечами",
+    };
+
+    private EntityUid? RandomIdleCivilian(TimeSpan now)
+    {
+        var list = new List<EntityUid>();
+        var query = EntityQueryEnumerator<MarineComponent>();
+
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (IsIdleCivilian(uid, comp, now))
+                list.Add(uid);
+        }
+
+        return list.Count == 0 ? null : _random.Pick(list);
+    }
+
+    private bool WallAhead(MapId map, Vector2 from, Vector2 dir, float len)
+    {
+        var ray = new CollisionRay(from, dir, (int) CollisionGroup.BulletImpassable);
+
+        foreach (var result in _physics.IntersectRay(map, ray, len, null, false))
+        {
+            if (!HasComp<MobStateComponent>(result.HitEntity) && result.Distance < len)
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool TryWallSpot(EntityUid civilian, out Vector2 spot, out Vector2 tangent)
+    {
+        spot = default;
+        tangent = default;
+
+        var pos = _transform.GetWorldPosition(civilian);
+        var map = Transform(civilian).MapID;
+        var dirs = new[] { new Vector2(1f, 0f), new Vector2(-1f, 0f), new Vector2(0f, 1f), new Vector2(0f, -1f) };
+
+        for (var i = 0; i < 30; i++)
+        {
+            var candidate = pos + new Vector2(_random.NextFloat(-14f, 14f), _random.NextFloat(-14f, 14f));
+            var dir = _random.Pick(dirs);
+
+            if (!WallAhead(map, candidate, dir, 1.3f) || WallAhead(map, candidate, -dir, 0.9f))
+                continue;
+
+            if (!HasSight(map, pos, candidate, civilian))
+                continue;
+
+            spot = candidate;
+            tangent = new Vector2(-dir.Y, dir.X);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool StartWallChat(TimeSpan now)
+    {
+        if (RandomIdleCivilian(now) is not { } first || !TryWallSpot(first, out var spot, out var tangent))
+            return false;
+
+        var people = IdleCivilians(spot, Transform(first).MapID, 30f, 2, now);
+
+        if (!people.Contains(first))
+            people.Insert(0, first);
+
+        if (people.Count < 2)
+            return false;
+
+        people.RemoveRange(2, people.Count - 2);
+
+        var targets = new List<(EntityUid, Vector2)>
+        {
+            (people[0], spot + tangent * 0.7f),
+            (people[1], spot - tangent * 0.7f),
+        };
+
+        foreach (var person in people)
+            Claim(person);
+
+        var activity = new Activity { People = people };
+        activity.Steps.Add(MoveAll(targets, 50f));
+        activity.Steps.Add(Do(() =>
+        {
+            FacePoint(people[0], _transform.GetWorldPosition(people[1]));
+            FacePoint(people[1], _transform.GetWorldPosition(people[0]));
+
+            foreach (var person in people)
+                _life.GiveDrink(person, false, false);
+        }));
+
+        var rounds = _random.Next(6, 11);
+        for (var i = 0; i < rounds; i++)
+        {
+            activity.Steps.Add(Wait(9f));
+            activity.Steps.Add(Do(() => Emote(_random.Pick(people), _random.Pick(WallEmotes))));
+        }
+
+        activity.End = () =>
+        {
+            foreach (var person in people)
+                _life.Clear(person, true);
+        };
+
+        StartActivity(activity);
+        return true;
+    }
+
+    private bool StartSmokeBreak(TimeSpan now)
+    {
+        if (RandomIdleCivilian(now) is not { } first || !TryWallSpot(first, out var spot, out var tangent))
+            return false;
+
+        var people = IdleCivilians(spot, Transform(first).MapID, 30f, 2, now);
+
+        if (!people.Contains(first))
+            people.Insert(0, first);
+
+        if (people.Count > 2)
+            people.RemoveRange(2, people.Count - 2);
+
+        var targets = new List<(EntityUid, Vector2)>();
+        for (var i = 0; i < people.Count; i++)
+        {
+            Claim(people[i]);
+            targets.Add((people[i], spot + tangent * (i == 0 ? 0.6f : -0.6f)));
+        }
+
+        var activity = new Activity { People = people };
+        activity.Steps.Add(MoveAll(targets, 50f));
+        activity.Steps.Add(Do(() =>
+        {
+            foreach (var person in people)
+                _life.GiveCigarette(person);
+        }));
+
+        var rounds = _random.Next(4, 8);
+        for (var i = 0; i < rounds; i++)
+        {
+            activity.Steps.Add(Wait(9f));
+
+            if (people.Count > 1)
+                activity.Steps.Add(Do(() => Emote(_random.Pick(people), _random.Pick(WallEmotes))));
+        }
+
+        activity.End = () =>
+        {
+            foreach (var person in people)
+                _life.Clear(person, true);
+        };
+
+        StartActivity(activity);
+        return true;
     }
 
     private bool StartBar(TimeSpan now)
@@ -372,7 +545,10 @@ public sealed partial class MarineTownSystem : EntitySystem
         activity.Steps.Add(Do(() =>
         {
             foreach (var (civilian, _) in targets)
+            {
                 TrySit(civilian);
+                _life.GiveBarItems(civilian);
+            }
         }));
 
         var rounds = _random.Next(4, 8);
@@ -389,6 +565,8 @@ public sealed partial class MarineTownSystem : EntitySystem
 
             foreach (var (civilian, _) in targets)
             {
+                _life.Clear(civilian, false);
+
                 if (Exists(civilian) && TryComp<MarineComponent>(civilian, out var comp))
                     comp.Thirst = 0f;
             }
@@ -402,7 +580,7 @@ public sealed partial class MarineTownSystem : EntitySystem
     {
         var coords = _transform.GetMapCoordinates(civilian);
 
-        foreach (var (strap, comp) in _lookup.GetEntitiesInRange<StrapComponent>(coords, 1.4f, LookupFlags.Static | LookupFlags.Dynamic | LookupFlags.Uncontained))
+        foreach (var (strap, comp) in _lookup.GetEntitiesInRange<StrapComponent>(coords, 2f, LookupFlags.Static | LookupFlags.Dynamic | LookupFlags.Uncontained))
         {
             if (!comp.Enabled || comp.BuckledEntities.Count > 0)
                 continue;
@@ -670,10 +848,7 @@ public sealed partial class MarineTownSystem : EntitySystem
         {
             if (bomb is { } device && Exists(device))
             {
-                var blastPos = _transform.GetWorldPosition(device);
-                var blastMap = Transform(device).MapID;
                 _trigger.Trigger(device, partisan);
-                _marines.Frighten(blastPos, blastMap, 30f, 0.6f, partisan, true);
             }
         }));
         activity.Steps.Add(Wait(1f));

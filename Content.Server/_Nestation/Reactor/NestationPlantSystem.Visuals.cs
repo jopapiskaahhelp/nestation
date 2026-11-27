@@ -16,7 +16,9 @@ public sealed partial class NestationPlantSystem
         var core = c.Core;
         var coreState = NestationVisualState.Off;
 
-        if (core.Integrity < 0.5f)
+        if (core.Dooming || core.ForcedCritical > 0f || (core.Countdown >= 0f && core.Countdown <= core.WarningTime))
+            coreState = NestationVisualState.Critical;
+        else if (core.Integrity < 0.5f)
             coreState = NestationVisualState.Broken;
         else if ((core.Warnings & (NestationWarning.MeltImminent | NestationWarning.Hydrogen | NestationWarning.Scram)) != 0)
             coreState = NestationVisualState.Alarm;

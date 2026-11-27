@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-3.0",
+  "copyright": "Created for Nestation New City",
+  "size": {
+    "x": 160,
+    "y": 160
+  },
+  "states": [
+    {
+      "name": "acv30",
+      "directions": 8
+    },
+    {
+      "name": "wreck",
+      "directions": 8
+    },
+    {
+      "name": "wreck-glow",
+      "directions": 8
+    }
+  ]
+}

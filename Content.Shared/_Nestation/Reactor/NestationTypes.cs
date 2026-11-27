@@ -59,6 +59,7 @@ public enum NestationVisualState : byte
     Hot,
     Alarm,
     Broken,
+    Critical,
 }
 
 [Flags, Serializable, NetSerializable]
@@ -113,6 +114,7 @@ public enum NestationCommand : byte
     ToggleBreaker,
     ResetTurbine,
     ToggleBypass,
+    RunTest,
 }
 
 [Serializable, NetSerializable]

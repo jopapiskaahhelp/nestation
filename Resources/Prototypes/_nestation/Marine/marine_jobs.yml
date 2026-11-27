@@ -23,9 +23,13 @@
   description: job-description-marine-officer
   playTimeTracker: JobMarineOfficer
   startingGear: MarineOfficerGear
-  icon: JobIconCaptain
+  icon: JobIconMarineOfficer
   supervisors: job-supervisors-marine-commander
   canBeAntag: false
+  accessGroups:
+  - AllAccess
+  access:
+  - EmergencyShuttleRepealAll
 
 - type: job
   id: MarineGunner
@@ -33,9 +37,23 @@
   description: job-description-marine-gunner
   playTimeTracker: JobMarineGunner
   startingGear: MarineGunnerGear
-  icon: JobIconSecurityOfficer
+  icon: JobIconMarineGunner
   supervisors: job-supervisors-marine-commander
   canBeAntag: false
+  accessGroups:
+  - Security
+  access:
+  - HeadOfSecurity
+  - Security
+  - Armory
+  - Brig
+  - Detective
+  - Cryogenics
+  - Command
+  - Maintenance
+  - External
+  - GenpopEnter
+  - GenpopLeave
 
 - type: job
   id: MarineCommander
@@ -43,9 +61,23 @@
   description: job-description-marine-commander
   playTimeTracker: JobMarineCommander
   startingGear: MarineCommanderGear
-  icon: JobIconHeadOfSecurity
+  icon: JobIconMarineCommander
   supervisors: job-supervisors-marine-officer
   canBeAntag: false
+  accessGroups:
+  - Security
+  access:
+  - HeadOfSecurity
+  - Security
+  - Armory
+  - Brig
+  - Detective
+  - Cryogenics
+  - Command
+  - Maintenance
+  - External
+  - GenpopEnter
+  - GenpopLeave
 
 - type: job
   id: MarinePrivate
@@ -53,9 +85,23 @@
   description: job-description-marine-private
   playTimeTracker: JobMarinePrivate
   startingGear: MarinePrivateGear
-  icon: JobIconSecurityCadet
+  icon: JobIconMarinePrivate
   supervisors: job-supervisors-marine-commander
   canBeAntag: false
+  accessGroups:
+  - Security
+  access:
+  - HeadOfSecurity
+  - Security
+  - Armory
+  - Brig
+  - Detective
+  - Cryogenics
+  - Command
+  - Maintenance
+  - External
+  - GenpopEnter
+  - GenpopLeave
 
 - type: job
   id: MarineMedic
@@ -63,9 +109,27 @@
   description: job-description-marine-medic
   playTimeTracker: JobMarineMedic
   startingGear: MarineMedicGear
-  icon: JobIconMedicalDoctor
+  icon: JobIconMarineMedic
   supervisors: job-supervisors-marine-commander
   canBeAntag: false
+  accessGroups:
+  - Security
+  - Medical
+  access:
+  - HeadOfSecurity
+  - Security
+  - Armory
+  - Brig
+  - Detective
+  - Cryogenics
+  - Command
+  - Maintenance
+  - External
+  - GenpopEnter
+  - GenpopLeave
+  - Medical
+  - Chemistry
+  - ChiefMedicalOfficer
 
 - type: job
   id: MarineLogistician
@@ -73,9 +137,27 @@
   description: job-description-marine-logistician
   playTimeTracker: JobMarineLogistician
   startingGear: MarineLogisticianGear
-  icon: JobIconCargoTechnician
+  icon: JobIconMarineLogistician
   supervisors: job-supervisors-marine-commander
   canBeAntag: false
+  accessGroups:
+  - Security
+  - Cargo
+  access:
+  - HeadOfSecurity
+  - Security
+  - Armory
+  - Brig
+  - Detective
+  - Cryogenics
+  - Command
+  - Maintenance
+  - External
+  - GenpopEnter
+  - GenpopLeave
+  - Cargo
+  - Salvage
+  - Quartermaster
 
 - type: startingGear
   id: MarineOfficerGear
