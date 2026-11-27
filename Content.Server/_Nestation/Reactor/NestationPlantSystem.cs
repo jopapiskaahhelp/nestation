@@ -12,15 +12,15 @@ namespace Content.Server._Nestation.Reactor;
 
 public sealed partial class NestationPlantSystem : EntitySystem
 {
-    [Dependency] private readonly NestationGraphSystem _graph = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly ItemSlotsSystem _slots = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ISharedPlayerManager _players = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private NestationGraphSystem _graph = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private ItemSlotsSystem _slots = default!;
+    [Dependency] private ExplosionSystem _explosion = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ISharedPlayerManager _players = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private const float Step = 0.5f;
     public const string FuelSlot = "fuel";

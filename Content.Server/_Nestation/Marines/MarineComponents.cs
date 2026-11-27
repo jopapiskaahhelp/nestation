@@ -210,7 +210,7 @@ public sealed partial class MarineComponent : Component
     public List<Vector2>? RoutePoints;
     public int RouteIndex;
     public bool Frozen;
-    public bool Running = true;
+    public new bool Running = true;
     public bool Flanker;
     public Vector2? ScriptGoal;
     public Vector2? LastKnown;

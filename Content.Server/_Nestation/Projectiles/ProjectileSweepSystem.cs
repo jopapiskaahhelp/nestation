@@ -11,7 +11,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Nestation.Projectiles;
 
-public sealed class ProjectileSweepSystem : EntitySystem
+public sealed partial class ProjectileSweepSystem : EntitySystem
 {
     private const float MinSweepDistance = 0.5f;
     private const float MinHitDistance = 0.01f;
